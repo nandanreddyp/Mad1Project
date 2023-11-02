@@ -1,0 +1,110 @@
+* {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+}
+a.normal {
+    text-decoration: none;
+    color: black;
+}
+.disable-select {
+    user-select: none;
+}
+
+/* header */
+header .logo-main {
+    width: 50px;
+}
+header {
+    position: fixed;
+    left: 0; top: 0; right: 0;
+    height: 50px; width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+    border-bottom: 1px solid rgb(194, 190, 190);
+    z-index: 2;
+}
+header .logo-container {
+    display: flex;
+    align-items: center;
+}
+header .sign-in {
+    background-color: red;
+    color: white;
+    width: 60; border-radius: 9px;
+    margin: 12px;
+    display: flex; justify-content: center; align-items: center;
+}
+
+/* main */
+main {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 50px);
+    text-align: center;
+}
+main .content-main {
+    position: fixed;
+    left: 0; right: 0;
+    padding: 0 25px;
+    z-index: 1;
+    margin-top: 15%;
+    display: flex;
+    align-items: center; justify-content: center;
+}
+main .content-img {
+    position: fixed;
+    left: 0; right: 0;
+    opacity: 0.2;
+    height: calc(100% - 50px);
+    background-image: url('https://img.freepik.com/free-vector/musical-pentagram-sound-waves-notes-background_1017-33911.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+main .form {
+    background-color: rgb(255, 255, 255);
+    padding: 20 30px;
+    height: max-content; width: 500px;
+    border-radius: 18px;
+    border: 1px solid grey;
+}
+main .form .input-main {
+    position: relative;
+}
+main .form .input {
+    margin: 10px 0;
+    padding: 12px;
+    width: 100%; height: 30px;
+    outline: none;
+    border-radius: 3px; border: 1px solid black;
+}
+main .form .input:not(:placeholder-shown,.file) {
+    border: 2px solid green;
+}
+main .form .input.file {
+    height: 42px;
+}
+main .form .placeholder {
+    position: absolute;
+    top: 15px;left: 10px;
+    pointer-events: none;
+}
+main .form .input:not(:placeholder-shown) + .placeholder {
+    top: -10px; margin-top: 10px;
+    color: black; background-color: white;
+
+}
+main .form .submit {
+    width: 115px; height: 30px;
+    background-color: red; color: white;
+    display: inline-flex; align-items: center;
+    border: 1px solid green;
+    border-radius: 9px;
+    cursor: pointer;
+    margin-top: 30px;
+    justify-content: center;
+}
+.input:read-only {
+    cursor: not-allowed;
+}

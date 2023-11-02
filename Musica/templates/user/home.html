@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="http://127.0.0.1:3000/Musica/static/css/template.css">
+<script src="http://127.0.0.1:3000/Musica/static/js/template.js"></script>
+
+<body>
+
+    <header>
+    <header>
+        <div class="logo-container" >
+            <img onclick="open_close_sidebar()" style="width: 48px;" src="http://127.0.0.1:3000/Musica/static/images/logos/menu.svg">
+            <img id="logo" src="http://127.0.0.1:3000/Musica/static/images/musicaLogo.jpg">
+            <h2 class="logo-text">Musica</h2>
+        </div>
+        <div class="search-user">
+            <div class="search-form">
+                <form action="/search" method="post">
+                    <input class="search-box" type="text" name="query" placeholder="Search for songs, albums & playlists">
+                    <button class="search-button" type="submit">&#128269;</button>
+                </form>
+            </div>
+            <div class="user-id">
+                <h3>user@gmail.com</h3>
+            </div>
+        </div>
+    </header>
+
+    <aside id="menu" class="expand-aside">
+        <div class="main-side">
+            <div class="user-section">
+                <h1 class="premiumUser-label label">Premium User</h1>
+                <h1 class="basicUser-label label">Basic User</h1>
+                    <nav class="nav-links">
+                        <ul class="user-links">
+                            <li  ><a href="/home">Home</a></li>
+                            <li  ><a href="/songs">Explore</a></li>
+                            <li id="current-page" ><a href="/albums">Library</a></li>
+                            <li  ><a href="/playlists">Upgrade</a></li>
+                        </ul>
+                    </nav>
+            </div>
+            <div class="creator-section">  
+                <h1 class="creator-label label">Creator Zone</h1>
+                    <nav class="nav-links">
+                        <ul class="creator-links">
+                            <li  ><a href="/creator/upload">Upload songs</a></li>
+                            <li  ><a href="/creator/uploads">Uploads</a></li>
+                            <li  ><a href="/creator/albums">Albums</a></li>
+                            <li  ><a href="/creato/analytics">Analytics</a></li>
+                        </ul>
+                    </nav>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <ul class="tools">
+                    <li id="premium"><a href="/premium-apply">Get Premium</a></li>
+                    <li id="creator"><a href="/creator-apply">Become Creator</a></li>
+                    <li id='logout' onclick="logout()"><a>Logout</a></li>          
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="main" class=".contract-main">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis suscipit optio eum. Aut, distinctio at illum, sapiente sed maxime id fugiat nesciunt officia provident similique repudiandae. Vero assumenda voluptatum aut.</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, qui voluptatem. Nihil reiciendis voluptatem pariatur distinctio earum itaque, rerum repudiandae eaque id blanditiis sequi mollitia fuga cupiditate eligendi aut officia?</p>
+        <h1>The End</h1>
+    </main>
+
+</body>
