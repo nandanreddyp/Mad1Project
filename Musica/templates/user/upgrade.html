@@ -1,6 +1,24 @@
 {% extends "user/base.html" %}
 {% block content %}
-<h1>Start</h1>
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque nobis rem sunt, aut impedit saepe iusto neque quis quam libero ullam, ex minus vel modi distinctio deserunt necessitatibus ad ab eligendi at porro incidunt reiciendis. Iste corrupti repellendus quo velit animi quidem a alias ducimus optio minima veritatis vero, dicta sapiente blanditiis nam, dolore tenetur distinctio ea. Commodi magnam cum quo numquam inventore nam officia soluta voluptas quas saepe! Iste esse molestias praesentium impedit error enim officiis obcaecati, eligendi cupiditate voluptatibus, quis beatae debitis sint saepe asperiores. Reprehenderit, ullam excepturi nulla eius odit cumque nobis iure aspernatur tempora, autem necessitatibus.</p>
-<h1>End</h1>
+
+{% if current_user.premium %}
+<div class="float-middle">
+    <h1>You are a premium user!</h1>
+    <h3>Download unlimited songs and watch no ads...:-)</h3>
+</div>
+{% else %}
+<div class="float-middle">
+    <h1>Get premium and download unlimited songs!</h1>
+    <h3>Send 420₹ to upi 944***490*@axl and submit transaction id below.</h3>
+    <form>
+        <div class="input-main">
+            <input type="text" placeholder=" " name="transaction_id">
+            <label for="transaction_id">Transaction id</label>
+        </div>
+        <input type="submit">
+    </form>
+    <h4>Please contact admin if any issues.</h4>
+</div>
+{% endif %}
+
 {% endblock %}

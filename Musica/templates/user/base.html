@@ -30,6 +30,7 @@
                          <li><a class="normal" href="/profile">Edit profile</a></li>
                          {% if current_user.role!='creator' %}<li><a class="normal" href="/get_creator_role">Become creator</a></li>{% endif %}
                          {% if current_user.role=='creator' %}<li><a class="normal" href="/creator">Creator zone</a></li>{% endif %}
+                         {% if current_user.role=='admin' %}<li><a class="normal" href="/admin">Admin zone</a></li>{% endif %}
                          <li class="logout">
                              <a class="normal" href="/logout">
                                  <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

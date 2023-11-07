@@ -64,9 +64,9 @@ def login():
         user = User.query.get(session['id'])
         from Musica.functions import password_check
         if user and password_check(user.password, data['password']):
-            flash('Correct password entered!','success')
+            flash('Successfully logged in to your account.','success')
             login_user(user)
-            return redirect(url_for('user_home'))
+            return redirect(url_for('home'))
         flash('Wrong password entered!','warning')
         return redirect(url_for('login'))
     elif User.query.get(session.get('id')):

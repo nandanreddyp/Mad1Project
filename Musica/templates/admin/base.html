@@ -44,22 +44,22 @@
     </div>
 </header>
 <aside class="noSelect" >
-    <li {% if session['currentPage'] == 'creator_home' %} class="currentPage" {% endif %} ><a class="normal" href="">
+    <li {% if session['currentPage'] == 'admin_home' %} class="currentPage" {% endif %} ><a class="normal" href="/admin">
         <svg width="30px" height="30px"  fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M4.18753 11.3788C4.03002 11.759 4 11.9533 4 12V20.0018C4 20.5529 4.44652 21 5 21H8V15C8 13.8954 8.89543 13 10 13H14C15.1046 13 16 13.8954 16 15V21H19C19.5535 21 20 20.5529 20 20.0018V12C20 11.9533 19.97 11.759 19.8125 11.3788C19.6662 11.0256 19.4443 10.5926 19.1547 10.1025C18.5764 9.1238 17.765 7.97999 16.8568 6.89018C15.9465 5.79788 14.9639 4.78969 14.0502 4.06454C13.5935 3.70204 13.1736 3.42608 12.8055 3.2444C12.429 3.05862 12.1641 3 12 3C11.8359 3 11.571 3.05862 11.1945 3.2444C10.8264 3.42608 10.4065 3.70204 9.94978 4.06454C9.03609 4.78969 8.05348 5.79788 7.14322 6.89018C6.23505 7.97999 5.42361 9.1238 4.8453 10.1025C4.55568 10.5926 4.33385 11.0256 4.18753 11.3788ZM10.3094 1.45091C10.8353 1.19138 11.4141 1 12 1C12.5859 1 13.1647 1.19138 13.6906 1.45091C14.2248 1.71454 14.7659 2.07921 15.2935 2.49796C16.3486 3.33531 17.4285 4.45212 18.3932 5.60982C19.3601 6.77001 20.2361 8.0012 20.8766 9.08502C21.1963 9.62614 21.4667 10.1462 21.6602 10.6134C21.8425 11.0535 22 11.5467 22 12V20.0018C22 21.6599 20.6557 23 19 23H16C14.8954 23 14 22.1046 14 21V15H10V21C10 22.1046 9.10457 23 8 23H5C3.34434 23 2 21.6599 2 20.0018V12C2 11.5467 2.15748 11.0535 2.33982 10.6134C2.53334 10.1462 2.80369 9.62614 3.12345 9.08502C3.76389 8.0012 4.63995 6.77001 5.60678 5.60982C6.57152 4.45212 7.65141 3.33531 8.70647 2.49796C9.2341 2.07921 9.77521 1.71454 10.3094 1.45091Z" fill="#0F0F0F"/>
         </svg>
         Home</a></li>
-    <li {% if session['currentPage'] == 'creator_home' %} class="currentPage" {% endif %} ><a class="normal" href="">
+    <li {% if session['currentPage'] == 'premium_req' %} class="currentPage" {% endif %} ><a class="normal" href="/admin/premium_requests">
         <svg fill="#000000" width="30px" height="30px" viewBox="0 0 16 16" id="request-send-16px" xmlns="http://www.w3.org/2000/svg">
             <path id="Path_44" data-name="Path 44" d="M-18,11a2,2,0,0,0,2-2,2,2,0,0,0-2-2,2,2,0,0,0-2,2A2,2,0,0,0-18,11Zm0-3a1,1,0,0,1,1,1,1,1,0,0,1-1,1,1,1,0,0,1-1-1A1,1,0,0,1-18,8Zm2.5,4h-5A2.5,2.5,0,0,0-23,14.5,1.5,1.5,0,0,0-21.5,16h7A1.5,1.5,0,0,0-13,14.5,2.5,2.5,0,0,0-15.5,12Zm1,3h-7a.5.5,0,0,1-.5-.5A1.5,1.5,0,0,1-20.5,13h5A1.5,1.5,0,0,1-14,14.5.5.5,0,0,1-14.5,15ZM-7,2.5v5A2.5,2.5,0,0,1-9.5,10h-2.793l-1.853,1.854A.5.5,0,0,1-14.5,12a.493.493,0,0,1-.191-.038A.5.5,0,0,1-15,11.5v-2a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5v.793l1.146-1.147A.5.5,0,0,1-12.5,9h3A1.5,1.5,0,0,0-8,7.5v-5A1.5,1.5,0,0,0-9.5,1h-7A1.5,1.5,0,0,0-18,2.5v3a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5v-3A2.5,2.5,0,0,1-16.5,0h7A2.5,2.5,0,0,1-7,2.5Zm-7.854,3.646L-12.707,4H-14.5a.5.5,0,0,1-.5-.5.5.5,0,0,1,.5-.5h3a.5.5,0,0,1,.191.038.506.506,0,0,1,.271.271A.5.5,0,0,1-11,3.5v3a.5.5,0,0,1-.5.5.5.5,0,0,1-.5-.5V4.707l-2.146,2.147A.5.5,0,0,1-14.5,7a.5.5,0,0,1-.354-.146A.5.5,0,0,1-14.854,6.146Z" transform="translate(23)"/>
         </svg>
         Premium<br>requests</a></li>
-    <li {% if session['currentPage'] == 'creator_home' %} class="currentPage" {% endif %} ><a class="normal" href="">
+    <li {% if session['currentPage'] == 'flag_content' %} class="currentPage" {% endif %} ><a class="normal" href="/admin/flagged">
         <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M5 1C4.44772 1 4 1.44772 4 2V22C4 22.5523 4.44772 23 5 23C5.55228 23 6 22.5523 6 22V15.693L18.8542 10.8727C20.5846 10.2238 20.5846 7.77627 18.8542 7.12739L6 2.30705V2C6 1.44772 5.55228 1 5 1ZM6 4.44305V13.557L17.6526 9.18732C17.8256 9.12243 17.8256 8.87767 17.6526 8.81278L6 4.44305Z" fill="#0F0F0F"/>
         </svg>
         Flag<br>content</a></li>
-    <li {% if session['currentPage'] == 'creator_home' %} class="currentPage" {% endif %} ><a class="normal" href="">
+    <li {% if session['currentPage'] == 'creator_blacklist' %} class="currentPage" {% endif %} ><a class="normal" href="/admin/blacklist">
         <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
         width="30px" height="30px">
         <path d="M25.098,0.586h-0.734v2.02c0,0.67-0.545,1.212-1.213,1.212s-1.211-0.542-1.211-1.212v-2.02H19.87v2.02
@@ -78,8 +78,61 @@
 </aside>
 <main>
 
+    {% block content %}
 
+    {% endblock %}
 
+<!-- flash-messages -->
+<style>
+.flash-container {
+    position: absolute; top: 0;
+    width: 100%; height: max-content;
+    padding: 10px 10px 10px 0px;
+    z-index: 12; list-style: none;
+    display: flex; align-items: center; justify-content: space-between; flex-direction: column; gap: 6px;
+}
+.flash-container li {
+    width: 100% ; padding: 5px 10px; margin-right: 18px;
+    display: flex; align-items: center; justify-content: space-between; box-shadow: 7px 5px black;
+}
+.flash-container li.success {
+    background-color: green; color: white;
+}
+.flash-container li.error {
+    background-color: yellow; color: red;
+}
+.flash-container li.warning {
+    background-color: red; color: white;
+}
+.flash-container li.info {
+    background-color: lightblue; color: black;
+}
+</style>
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div class="flash-container">
+<script>
+    function hide(id) {
+        var element = document.getElementById(`flash-${id}`);
+        if (element) {element.style.display = 'none';}
+    }
+</script>
+{% set flash = namespace(count=0) %}
+{% for message in messages %}
+    {% set flash.count = flash.count + 1 %}
+    <li class="{{message[0]}}" id="flash-{{flash.count}}">
+        <strong>{{message[1]}}</strong>
+        <div onclick="hide({{flash.count}})" style="cursor: pointer;">
+            <svg width="30px" height="30px" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.99486 7.00636C6.60433 7.39689 6.60433 8.03005 6.99486 8.42058L10.58 12.0057L6.99486 15.5909C6.60433 15.9814 6.60433 16.6146 6.99486 17.0051C7.38538 17.3956 8.01855 17.3956 8.40907 17.0051L11.9942 13.4199L15.5794 17.0051C15.9699 17.3956 16.6031 17.3956 16.9936 17.0051C17.3841 16.6146 17.3841 15.9814 16.9936 15.5909L13.4084 12.0057L16.9936 8.42059C17.3841 8.03007 17.3841 7.3969 16.9936 7.00638C16.603 6.61585 15.9699 6.61585 15.5794 7.00638L11.9942 10.5915L8.40907 7.00636C8.01855 6.61584 7.38538 6.61584 6.99486 7.00636Z" fill="#0F0F0F"/>
+            </svg>
+        </div>
+    </li>
+{% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+<!--End flask-->
 </main>
 </body>
 </html>

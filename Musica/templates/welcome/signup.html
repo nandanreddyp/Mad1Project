@@ -2,7 +2,7 @@
 {% block content %}
     <div class="content-main noSelect">
         <h1 style="margin-bottom: 18;">Fill details to create an account</h1>
-        <form class="login-form" action="/signup" method="post">
+        <form class="login-form" action="/signup" method="post" enctype="multipart/form-data">
                 <div class="input-main">
                     <input class="input" type="email" name="email" placeholder=" " required value="{{session['id']}}">
                     <label class="placeholder">Email *</label>

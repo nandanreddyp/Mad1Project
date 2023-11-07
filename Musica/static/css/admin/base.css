@@ -92,4 +92,5 @@ aside .currentPage {
 main {
     position: fixed; bottom: 0; right: 0;
     width: calc(100% - 90px); height: calc(100% - 60px);
+    padding: 0 10px;
 }

@@ -2,6 +2,9 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 
+# for time song and palylist added:
+from datetime import datetime
+
 db = SQLAlchemy()
 
 # models
@@ -10,14 +13,16 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.String,primary_key=True); password = db.Column(db.String,nullable=False)
     f_name = db.Column(db.String,nullable=False); l_name = db.Column(db.String)
-    premium = db.Column(db.Boolean,default=False); role = db.Column(db.String,default='user')
-    library = db.relationship('Library',backref='user',uselist=False)
+    premium = db.Column(db.Boolean,default=False); cover = db.Column(db.String)
+    role = db.Column(db.String,default='user'); library = db.relationship('Library',backref='user',uselist=False)
     # one-to-many relationship with songs
     songs = db.relationship('Song', backref='uploader', lazy=True, cascade="all, delete-orphan")
     # one-to-many relationship with albums
     albums = db.relationship('Album', backref='creator',lazy=True,cascade='all, delete-orphan')
     # one-to-many relationship with playlists
     playlists = db.relationship('Playlist',backref='creator',lazy=True,cascade="all, delete-orphan")
+    # one to many relationship with ratings
+    ratings = db.relationship('Rating',back_populates='user',cascade="all, delete-orphan")
 
 # many to many relationship declaration
 album_song_association = db.Table('album_song_association',
@@ -44,7 +49,11 @@ library_palylist_association = db.Table('library_playlist_associatin',
 class Song(db.Model):
     __tablename__ = 'songs'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True); title = db.Column(db.String,nullable=False); duration = db.Column(db.String,nullable=False)
-    upload_time = db.Column(db.Time,default=func.current_time()); artist = db.Column(db.String); lyrics = db.Column(db.Boolean)
+    time_added = db.Column(db.DateTime, default=datetime.utcnow); artist = db.Column(db.String); 
+    lyrics = db.Column(db.String); cover = db.Column(db.String); 
+    # analytics useage
+    play_count = db.Column(db.Integer, default=0)
+    ratings = db.relationship('Rating',back_populates='song',cascade="all, delete-orphan")
     # foreign key relationship to user
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     # Define the many-to-many relationship with playlists and enable cascade
@@ -53,6 +62,15 @@ class Song(db.Model):
     playlists = db.relationship('Playlist', secondary=playlist_song_association, single_parent=True, back_populates='songs', lazy=True)
     # Define the many-to-one relationship with library 
     library = db.relationship('Library',secondary=library_song_association, single_parent=True, back_populates='songs', lazy=True)
+
+class Rating(db.Model):
+    __tablename__ = 'Song_ratings'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User',back_populates='ratings')
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song = db.relationship('Song',back_populates='ratings')
+    rating = db.Column(db.Boolean, nullable=False)
 
 class Blacklist(db.Model):
     __tablename__ = 'blaklist'

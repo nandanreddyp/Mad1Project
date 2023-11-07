@@ -3,6 +3,7 @@ from Musica.database.models import *
 from flask import session, render_template, flash, redirect, url_for, request
 
 from Musica.routes.permissions import *
+from Musica.functions import save_file, remove_file
 
 ## Main views ##
 ################
@@ -212,4 +213,13 @@ def library_remove_playlist():
 ### others ###
 @app.route('/profile',methods=['get','post'])
 def profile():
-    return 'edit profile page.....'
+    if request.method == 'POST':
+        data = request.form; file = request.files.get('dp')
+        f_name = data['f_name']; l_name = data['l_name']
+        delete = data.get('delete_dp')
+        if file and not(delete):
+            image_loc = save_file('image/profile',current_user.id,file)
+            print(image_loc)
+        if current_user.dp and delete:
+            remove_file('image/profile','user@gmail.com.jpg')
+    return render_template('user/sub-temp/profile.html')
