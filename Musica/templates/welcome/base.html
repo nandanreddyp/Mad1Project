@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musica</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/welcome/base.css')}}">
+</head>
+<body>
+    <header>
+    <a href="/" class="main-logo normal noSelect">
+        <img src="{{url_for('static',filename='images/musica.svg')}}">
+        <h1>Musica</h1>
+    </a>
+    {% if login %}
+    <a class="normal noSelect button" href="/login">
+        Login
+    </a>
+    {% elif signup %}
+    <a class="button normal noSelect" href="/signup">
+        Sign up
+    </a>
+    {% endif %}
+    </header>
+    <main>
+    <div class="background"></div>
+    <!-- block content -->
+    <div style="display: flex; align-items: center; justify-content: center;">
+    {% block content %}
+
+    {% endblock %}
+    </div>
+    <!-- block ends -->
+    </main>
+    <!-- flash-messages -->
+    <style>
+        .flash-container {
+            position: absolute;
+            top: 0;
+            width: 100%; height: max-content;
+            margin-top: 60px; padding: 10px;
+            z-index: 12; list-style: none;
+            display: flex; align-items: center; justify-content: space-between; flex-direction: column; gap: 6px;
+        }
+        .flash-container li {
+            width: 100% ;padding: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .flash-container li.success {
+            background-color: green; color: white;
+        }
+        .flash-container li.error {
+            background-color: yellow; color: red;
+        }
+        .flash-container li.warning {
+            background-color: red; color: white;
+        }
+        .flash-container li.info {
+            background-color: lightblue; color: black;
+        }
+    </style>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div class="flash-container">
+        <script>
+            function hide(id) {
+                var element = document.getElementById(`flash-${id}`);
+                if (element) {element.style.display = 'none';}
+            }
+        </script>
+        {% set flash = namespace(count=0) %}
+        {% for message in messages %}
+            {% set flash.count = flash.count + 1 %}
+            <li class="{{message[0]}}" id="flash-{{flash.count}}">
+                <strong>{{message[1]}}</strong>
+                <div onclick="hide({{flash.count}})" style="cursor: pointer;">
+                    <svg width="30px" height="30px" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.99486 7.00636C6.60433 7.39689 6.60433 8.03005 6.99486 8.42058L10.58 12.0057L6.99486 15.5909C6.60433 15.9814 6.60433 16.6146 6.99486 17.0051C7.38538 17.3956 8.01855 17.3956 8.40907 17.0051L11.9942 13.4199L15.5794 17.0051C15.9699 17.3956 16.6031 17.3956 16.9936 17.0051C17.3841 16.6146 17.3841 15.9814 16.9936 15.5909L13.4084 12.0057L16.9936 8.42059C17.3841 8.03007 17.3841 7.3969 16.9936 7.00638C16.603 6.61585 15.9699 6.61585 15.5794 7.00638L11.9942 10.5915L8.40907 7.00636C8.01855 6.61584 7.38538 6.61584 6.99486 7.00636Z" fill="#0F0F0F"/>
+                    </svg>
+                </div>
+            </li>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <!--End flask-->
+</body>
+</html>

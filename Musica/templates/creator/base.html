@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musica</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/creator/base.css')}}">
+</head>
+<body>
+    <header>
+        <a href="/" class="main-logo normal noSelect">
+            <img style="width: 50px; height: 50px;" src="{{url_for('static',filename='images/musica.svg')}}">
+            <h1>Musica</h1>
+        </a>
+        <div class="separator">
+            <form action="" method="post">
+                <input class="noSelect" type="text" placeholder="Search for songs, albums & playlists">
+                <button type="submit">
+                    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+            <h2>Creator Zone</h2>
+            <div class="profile noSelect">
+                <div id="dropMenu" >
+                    <img src="http://127.0.0.1:3000/logos/KeerthiMukha.jpg">
+                    <h3 >{{current_user.id}}</h3>
+                </div>
+                <div id="Menu">
+                        <li><a class="normal" href="/profile">Edit profile</a></li>
+                        <li><a class="normal" href="/home">User zone</a></li>
+                        <li class="logout">
+                            <a class="normal" href="/logout">
+                                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8.25 5.25L9 4.5H18L18.75 5.25V18.75L18 19.5H9L8.25 18.75V16.5H9.75V18H17.25V6H9.75V7.5H8.25V5.25Z" fill="#080341"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.06068 12.7499L14.25 12.7499L14.25 11.2499L7.06068 11.2499L8.78035 9.53027L7.71969 8.46961L4.18936 11.9999L7.71969 15.5303L8.78035 14.4696L7.06068 12.7499Z" fill="#080341"/>
+                                </svg>
+                                Logout
+                            </a>
+                        </li>
+                </div>
+            </div>
+        </div>
+    </header>
+    <aside class="noSelect" >
+    <li {% if session['currentPage'] == 'creator_home' %} class="currentPage" {% endif %} ><a class="normal" href="/creator">
+        <svg width="30px" height="30px"  fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.18753 11.3788C4.03002 11.759 4 11.9533 4 12V20.0018C4 20.5529 4.44652 21 5 21H8V15C8 13.8954 8.89543 13 10 13H14C15.1046 13 16 13.8954 16 15V21H19C19.5535 21 20 20.5529 20 20.0018V12C20 11.9533 19.97 11.759 19.8125 11.3788C19.6662 11.0256 19.4443 10.5926 19.1547 10.1025C18.5764 9.1238 17.765 7.97999 16.8568 6.89018C15.9465 5.79788 14.9639 4.78969 14.0502 4.06454C13.5935 3.70204 13.1736 3.42608 12.8055 3.2444C12.429 3.05862 12.1641 3 12 3C11.8359 3 11.571 3.05862 11.1945 3.2444C10.8264 3.42608 10.4065 3.70204 9.94978 4.06454C9.03609 4.78969 8.05348 5.79788 7.14322 6.89018C6.23505 7.97999 5.42361 9.1238 4.8453 10.1025C4.55568 10.5926 4.33385 11.0256 4.18753 11.3788ZM10.3094 1.45091C10.8353 1.19138 11.4141 1 12 1C12.5859 1 13.1647 1.19138 13.6906 1.45091C14.2248 1.71454 14.7659 2.07921 15.2935 2.49796C16.3486 3.33531 17.4285 4.45212 18.3932 5.60982C19.3601 6.77001 20.2361 8.0012 20.8766 9.08502C21.1963 9.62614 21.4667 10.1462 21.6602 10.6134C21.8425 11.0535 22 11.5467 22 12V20.0018C22 21.6599 20.6557 23 19 23H16C14.8954 23 14 22.1046 14 21V15H10V21C10 22.1046 9.10457 23 8 23H5C3.34434 23 2 21.6599 2 20.0018V12C2 11.5467 2.15748 11.0535 2.33982 10.6134C2.53334 10.1462 2.80369 9.62614 3.12345 9.08502C3.76389 8.0012 4.63995 6.77001 5.60678 5.60982C6.57152 4.45212 7.65141 3.33531 8.70647 2.49796C9.2341 2.07921 9.77521 1.71454 10.3094 1.45091Z" fill="#0F0F0F"/>
+        </svg>
+        Home</a></li>
+    <li {% if session['currentPage'] == 'upload' %} class="currentPage" {% endif %} ><a class="normal" href='/creator/uploads/upload'>
+        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C12.6345 21.25 13.2534 21.1862 13.8508 21.065C14.2567 20.9826 14.6526 21.2448 14.735 21.6508C14.8174 22.0567 14.5551 22.4526 14.1492 22.535C13.4541 22.6761 12.7353 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 12.7353 22.6761 13.4541 22.535 14.1492C22.4526 14.5551 22.0567 14.8174 21.6508 14.735C21.2448 14.6526 20.9826 14.2567 21.065 13.8508C21.1862 13.2534 21.25 12.6345 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM13 7C13.4142 7 13.7378 7.345 13.8733 7.73642C14.1783 8.6174 15.0153 9.25 16 9.25C16.4142 9.25 16.75 9.58579 16.75 10C16.75 10.4142 16.4142 10.75 16 10.75C15.1558 10.75 14.3767 10.471 13.75 10.0003V15C13.75 16.5188 12.5188 17.75 11 17.75C9.48122 17.75 8.25 16.5188 8.25 15C8.25 13.4812 9.48122 12.25 11 12.25C11.4501 12.25 11.875 12.3581 12.25 12.5499V7.75C12.25 7.33579 12.5858 7 13 7ZM12.25 15C12.25 14.3096 11.6904 13.75 11 13.75C10.3096 13.75 9.75 14.3096 9.75 15C9.75 15.6904 10.3096 16.25 11 16.25C11.6904 16.25 12.25 15.6904 12.25 15ZM17.4697 14.4697C17.7626 14.1768 18.2374 14.1768 18.5303 14.4697L21.0303 16.9697C21.3232 17.2626 21.3232 17.7374 21.0303 18.0303C20.7374 18.3232 20.2626 18.3232 19.9697 18.0303L18.75 16.8107V22C18.75 22.4142 18.4142 22.75 18 22.75C17.5858 22.75 17.25 22.4142 17.25 22V16.8107L16.0303 18.0303C15.7374 18.3232 15.2626 18.3232 14.9697 18.0303C14.6768 17.7374 14.6768 17.2626 14.9697 16.9697L17.4697 14.4697Z" fill="#1C274C"/>
+            </svg>
+        Upload</a></li>
+    <li {% if session['currentPage'] == 'uploads' %} class="currentPage" {% endif %} ><a class="normal" href='/creator/uploads/'>
+        <svg width="25px" height="30px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path fill="var(--ci-primary-color, #000000)" d="M472,16H168a24,24,0,0,0-24,24V344a24,24,0,0,0,24,24H472a24,24,0,0,0,24-24V40A24,24,0,0,0,472,16Zm-8,320H176V48H464Z" class="ci-primary"/>
+            <path fill="var(--ci-primary-color, #000000)" d="M112,400V80H80V408a24,24,0,0,0,24,24H432V400Z" class="ci-primary"/>
+            <path fill="var(--ci-primary-color, #000000)" d="M48,464V144H16V472a24,24,0,0,0,24,24H368V464Z" class="ci-primary"/>
+            </svg>
+        Uploads</a></li>
+    <li {% if session['currentPage'] == 'albums' %} class="currentPage" {% endif %} ><a class="normal" href="/creator/albums/">
+        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 17.4V2.6C2 2.26863 2.26863 2 2.6 2H17.4C17.7314 2 18 2.26863 18 2.6V17.4C18 17.7314 17.7314 18 17.4 18H2.6C2.26863 18 2 17.7314 2 17.4Z" stroke="#000000" stroke-width="1.5"/>
+            <path d="M8 22H21.4C21.7314 22 22 21.7314 22 21.4V8" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5Z" fill="#000000"/>
+            <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5ZM11 12.5V6.6C11 6.26863 11.2686 6 11.6 6H13" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Albums</a></li>
+    </aside>
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+    
+<!-- flash-messages -->
+<style>
+    .flash-container {
+        position: absolute; top: 0;
+        width: 100%; height: max-content;
+        padding: 10px 10px 10px 0px;
+        z-index: 12; list-style: none;
+        display: flex; align-items: center; justify-content: space-between; flex-direction: column; gap: 6px;
+    }
+    .flash-container li {
+        width: 100% ; padding: 5px 10px; margin-right: 18px;
+        display: flex; align-items: center; justify-content: space-between; box-shadow: 7px 5px black;
+    }
+    .flash-container li.success {
+        background-color: green; color: white;
+    }
+    .flash-container li.error {
+        background-color: yellow; color: red;
+    }
+    .flash-container li.warning {
+        background-color: red; color: white;
+    }
+    .flash-container li.info {
+        background-color: lightblue; color: black;
+    }
+</style>
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div class="flash-container">
+    <script>
+        function hide(id) {
+            var element = document.getElementById(`flash-${id}`);
+            if (element) {element.style.display = 'none';}
+        }
+    </script>
+    {% set flash = namespace(count=0) %}
+    {% for message in messages %}
+        {% set flash.count = flash.count + 1 %}
+        <li class="{{message[0]}}" id="flash-{{flash.count}}">
+            <strong>{{message[1]}}</strong>
+            <div onclick="hide({{flash.count}})" style="cursor: pointer;">
+                <svg width="30px" height="30px" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.99486 7.00636C6.60433 7.39689 6.60433 8.03005 6.99486 8.42058L10.58 12.0057L6.99486 15.5909C6.60433 15.9814 6.60433 16.6146 6.99486 17.0051C7.38538 17.3956 8.01855 17.3956 8.40907 17.0051L11.9942 13.4199L15.5794 17.0051C15.9699 17.3956 16.6031 17.3956 16.9936 17.0051C17.3841 16.6146 17.3841 15.9814 16.9936 15.5909L13.4084 12.0057L16.9936 8.42059C17.3841 8.03007 17.3841 7.3969 16.9936 7.00638C16.603 6.61585 15.9699 6.61585 15.5794 7.00638L11.9942 10.5915L8.40907 7.00636C8.01855 6.61584 7.38538 6.61584 6.99486 7.00636Z" fill="#0F0F0F"/>
+                </svg>
+            </div>
+        </li>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+<!--End flask-->
+    </main>
+</body>
+</html>
