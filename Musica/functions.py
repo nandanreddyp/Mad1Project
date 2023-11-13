@@ -49,10 +49,10 @@ def save_file(type, id, file):
         return image_name
     elif type=='lyrics':
         file_path = os.path.join(cwd,'Musica','static','uploads','lyrics',str(id)+'.txt')
-        file_to_write = open(file_path, 'w')
+        file_to_write = open(file_path, 'w', encoding="utf-8", newline='')
         file_to_write.write(file)
         file_to_write.close()
-        return os.path.join('Musica','static','uploads','lyrics',str(id)+'.txt')
+        return str(id)+'.txt'
     elif type=='song':
         file_extension = os.path.splitext(file.filename)[1]
         song_name = str(id)+file_extension
@@ -79,3 +79,9 @@ def remove_file(type,file_name):
         file_path = os.path.join(cwd,'Musica','static','uploads','songs',file_name)
         os.remove(file_path)
     return 
+
+def get_lyrics(file_name):
+    import os; cwd = os.getcwd();
+    file_path = os.path.join(cwd,'Musica','static','uploads','lyrics',file_name)
+    lines = ('').join(open(file_path,'r',encoding='utf-8').readlines())
+    return lines

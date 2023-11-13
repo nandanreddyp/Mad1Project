@@ -1,0 +1,67 @@
+{% extends "creator/base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+
+<h1 style="text-align: center; margin: 10px;">Song update form</h1>
+<form class="form" enctype="multipart/form-data" action="/creator/uploads/{{song.id}}/update" method="post">
+    <h4 style="color: red; text-align: end;">Fields marked with * are mandatory</h4>
+    <div class="inputFile">
+        <input type="file" class="file" id="song" name="song" accept=".mp3, .aac, .ogg, .wav, .alac" required>
+        <label for="song" class="file-ph"><strong>Select song</strong></label>
+    </div>
+    <div class="inputFile">
+        <input type="file" class="file" id="cover" name="cover" accept=".jpeg, .jpg, .png">
+        <label for="cover" class="file-ph">Select cover image</label>
+    </div>
+    <div class="inputText">
+        <input type="text" class="text" id="title" name="title" required placeholder=" " value="{{song.title}}">
+        <label for="title" class="box-ph">Song title *</label>
+    </div>
+    <div class="inputText">
+        <input type="text" class="text" id="artist" name="artist" placeholder=" " value="{{song.artist}}">
+        <label for="artist" class="box-ph">Song artist</label>
+    </div>
+    <div class="inputSelect">
+        <select name="language" id="language" required>
+            <option value="" selected disabled hidden>Select language</option>
+            <option {% if song.language == 'none' %}selected{% endif %} value="none">No language</option>
+            <option {% if song.language == 'english' %}selected{% endif %} value="english">English</option>
+            <option {% if song.language == 'hindi' %}selected{% endif %} value="hindi">Hindi</option>
+            <option {% if song.language == 'kannada' %}selected{% endif %} value="kannada">Kannada</option>
+            <option {% if song.language == 'malayalam' %}selected{% endif %} value="malayalam">Malayalam</option>
+            <option {% if song.language == 'tamil' %}selected{% endif %} value="tamil">Tamil</option>
+            <option {% if song.language == 'telugu' %}selected{% endif %} value="telugu">Telugu</option>
+            <option {% if song.language == 'urdu' %}selected{% endif %} value="urdu">Urdu</option>
+            <option {% if song.language == 'foreign' %}selected{% endif %} value="foreign">Rest-Foreign</option>
+        </select>
+        <label for="language" class="select-ph">Language *</label>
+    </div>
+    <div class="inputSelect">
+        <select name="genre" id="genre" required>
+            <option value="" selected disabled hidden>Select genre</option>
+            <option {% if song.language == 'classical' %}selected{% endif %} value="classical">Classical</option>
+            <option {% if song.language == 'devotional' %}selected{% endif %} value="devotional">Devotional</option>
+            <option {% if song.language == 'dj' %}selected{% endif %} value="dj">DJ</option>
+            <option {% if song.language == 'folk' %}selected{% endif %} value="folk">Folk</option>
+            <option {% if song.language == 'item' %}selected{% endif %} value="item">Item</option>
+            <option {% if song.language == 'love' %}selected{% endif %} value="love">Love</option>
+            <option {% if song.language == 'motivational' %}selected{% endif %} value="motivational">Motivational</option>
+            <option {% if song.language == 'music' %}selected{% endif %} value="music">Music</option>
+            <option {% if song.language == 'patriotic' %}selected{% endif %} value="patriotic">Patriotic</option>
+            <option {% if song.language == 'ringtone' %}selected{% endif %} value="ringtone">Ringtone</option>
+            <option {% if song.language == 'romantic' %}selected{% endif %} value="romantic">Romantic</option>
+            <option {% if song.language == 'sad' %}selected{% endif %} value="sad">Sad</option>
+        </select>
+        <label for="genre" class="select-ph">Genre *</label>
+    </div>
+    <div class="inputText">
+        <textarea id="lyrics" name="lyrics" placeholder=" " cols="30" rows="10">
+{% if lyrics %}{{lyrics}}{% endif %}
+        </textarea>
+        <label for="lyrics" class="box-ph">Song's lyrics</label>
+    </div>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

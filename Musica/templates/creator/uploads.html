@@ -60,7 +60,7 @@
 <div class="songs-container">
     {% if current_user.songs %}
         {% for song in current_user.songs %}
-        <a class="song normal" href="{{url_for("static",filename='uploads/songs/')}}{{song.filename}}">
+        <a class="song normal" href="/creator/uploads/{{song.id}}"> 
             {% if song.cover %}
             <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}">
             {% else %}

@@ -85,10 +85,9 @@
             <h3>No of songs: {{album.songs | length}}</h3>
         </a>
         {% endfor %}
-        </div>
     {% else %}
+    <h1 style="width: 600px;">No albums created yet, create now!</h1>
     </div>
-    <h1>No albums created yet, create now</h1>
     {% endif %}
 
 {% endblock %}

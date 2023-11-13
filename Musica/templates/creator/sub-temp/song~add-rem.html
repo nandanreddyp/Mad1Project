@@ -1,0 +1,89 @@
+{% extends "creator/base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/albums.css')}}">
+<script>
+    function popmenu(id) {
+        var element = document.getElementById(id);
+        element.style.visibility = 'visible';
+    }
+    function hidemenu(id) {
+        var element = document.getElementById(id);
+        element.style.visibility = 'hidden';
+    }
+</script>
+<div class="heading">
+    <h1>Assign song - {{song.title}}</h1>
+    <button onclick="popmenu('filter-form')"><h2>Apply filter</h2></button>
+</div>
+<form id="filter-form" action="/creator/uploads" method="post">
+    <div class="heading"><h3>Filters to apply</h3><button onclick="hidemenu('filter-form')">X</button></div>
+        <input type="text" name="song" placeholder="Song name">
+        <input type="text" name="artist" placeholder="Artist name">
+        <select name="language" id="language" required>
+            <option value="" selected disabled hidden>Select language</option>
+            <option value="none">No language</option>
+            <option value="english">English</option>
+            <option value="hindi">Hindi</option>
+            <option value="kannada">Kannada</option>
+            <option value="malayalam">Malayalam</option>
+            <option value="tamil">Tamil</option>
+            <option value="telugu">Telugu</option>
+            <option value="urdu">Urdu</option>
+            <option value="foreign">Rest-Foreign</option>
+        </select>
+        <select name="genre" id="genre" required>
+            <option value="" selected disabled hidden>Select genre</option>
+            <option value="classical">Classical</option>
+            <option value="devotional">Devotional</option>
+            <option value="dj">DJ</option>
+            <option value="folk">Folk</option>
+            <option value="item">Item</option>
+            <option value="love">Love</option>
+            <option value="motivational">Motivational</option>
+            <option value="music">Music</option>
+            <option value="patriotic">Patriotic</option>
+            <option value="ringtone">Ringtone</option>
+            <option value="romantic">Romantic</option>
+            <option value="sad">Sad</option>
+        </select>
+        <select name="sortby" id="sort">
+            <option value="" selected disabled hidden>Sort by</option>
+            <option value="new">Newest</option>
+            <option value="old">Oldest</option>
+            <option value="rating_high">Ratings high</option>
+            <option value="rating_low">Ratings low</option>
+            <option value="alphabetical">Alphabetical</option>
+        </select>
+        <input type="submit" value="Filter">
+</form>
+
+<div class="albums-container">
+{% if albums %}
+    {% for album in albums %}
+    <a href="" class="album normal">
+        {% if album.cover %}
+        <img class="album-cover" src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}">
+        {% else %}
+        <svg class="album-cover" width="100px" height="100px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 17.4V2.6C2 2.26863 2.26863 2 2.6 2H17.4C17.7314 2 18 2.26863 18 2.6V17.4C18 17.7314 17.7314 18 17.4 18H2.6C2.26863 18 2 17.7314 2 17.4Z" stroke="#000000" stroke-width="1.5"/>
+            <path d="M8 22H21.4C21.7314 22 22 21.7314 22 21.4V8" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5Z" fill="#000000"/>
+            <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5ZM11 12.5V6.6C11 6.26863 11.2686 6 11.6 6H13" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        {% endif %}
+        <h2>{{album.title}}</h2>
+        <h3>No of songs: {{album.songs | length}}</h3>
+        {% if song in album.songs %}
+        <form action="/creator/uploads/{{song.id}}/remove/albums/{{album.id}}" method="post"><button type="submit">Remove</button></form>
+        {% else %}
+        <form action="/creator/uploads/{{song.id}}/add/albums/{{album.id}}" method="post"><button type="submit">Add</button></form>
+        {% endif %}
+    </a>
+    {% endfor %}
+    </div>
+{% else %}
+</div>
+<h1>No albums to add!</h1>
+{% endif %}
+
+{% endblock %}

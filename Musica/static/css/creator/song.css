@@ -1,0 +1,30 @@
+.heading {
+    display: flex; justify-content:space-between; padding: 6px;
+}
+a.button {
+    padding: 3px; text-align: center; display: flex; align-items: center;
+    background-color: red; color: white; border-radius: 9px;
+}
+/** main **/
+
+.song-main {
+    display: flex; width: 100%; padding: 10px 0px;
+    height: calc(100% - 60px); background-color: rgb(211, 211, 255);
+}
+.song {
+    width: 60%; 
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+}
+.song .button {
+    width: 200px; display: flex; justify-content: center;
+    margin: 10px;
+}
+.song-cover {
+    width: 300px; height: 300px; object-fit: cover;
+    border-radius: 30px;
+}
+.lyrics {
+    width: 40%; border: 1px solid black;
+    padding-left: 10px; overflow: auto;
+    padding-bottom: 50px;
+}

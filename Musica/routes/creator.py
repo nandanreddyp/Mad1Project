@@ -3,7 +3,7 @@ from Musica.database.models import *
 from flask import session, render_template, flash, redirect, url_for, request
 
 from Musica.routes.permissions import *
-from Musica.functions import save_file, remove_file
+from Musica.functions import save_file, remove_file, get_lyrics
 
 
 ##Become Creator##
@@ -60,18 +60,21 @@ def upload():
 @not_in_blacklist
 def all_uploads(song_id):
     session['currentPage']='uploads'
-    # if request.method == 'GET' and song_id:
-    #     song = Song.query.get(song_id)
-    #     if song.user_id == session['user_id']:
-    #         return render_template('creator/song_view.html',song=song)
-    #     return redirect(url_for('creator_home'))
-    # elif request.method == 'POST':
-    #     # return queried results
-    #     pass
-    # else:
-    #     songs = Song.query.filter_by(Song.user_id==session['user_id']).all()
-    #     return render_template('creator/songs.html', songs=songs)
-    return render_template('creator/uploads.html')
+    song = Song.query.get(song_id)
+    if request.method == 'GET' and song:
+        if song.user_id == current_user.id:
+            if song.lyrics:
+                lyrics = get_lyrics(song.lyrics)
+            else:
+                lyrics = None
+            return render_template('creator/sub-temp/song.html',song=song,lyrics=lyrics)
+        flash('You are not owner of that song!','warning')
+        return redirect(url_for('all_uploads'))
+    elif request.method == 'POST' and not(song):
+        # return queried results
+        pass
+    else:
+        return render_template('creator/uploads.html')
 
 @app.route('/creator/albums/', defaults={'album_id': None}, methods=['GET', 'POST'])
 @app.route('/creator/albums/<int:album_id>',methods=['GET','POST'])
@@ -87,9 +90,6 @@ def albums_creator(album_id):
     elif request.method == 'POST' and not(album_id):
         # return filtered results
         pass
-    elif request.method == 'POST' and album_id:
-        # save edited form
-        pass
     else :
         # albums = db.select(Album).filter_by(user_id=current_user.id)
         albums = Album.query.filter_by(user_id=current_user.id).all()
@@ -101,42 +101,74 @@ def albums_creator(album_id):
 #update & delete
 @app.route('/creator/uploads/<int:song_id>/<way>',methods=['GET','POST'])
 @not_in_blacklist
-def upload_edit(song_id):
+def upload_edit(song_id,way):
     song = Song.query.get(song_id)
     if way == 'update' and song:
         if request.method == 'GET':
-            return render_template('creator/song_update.html',song=song)
+            if song.lyrics: lyrics = get_lyrics(song.lyrics)
+            else: lyrics = None
+            return render_template('creator/sub-temp/song-update.html',song=song,lyrics=lyrics)
         elif request.method == 'POST':
-            # update song details
-            pass
-        pass
+            data = request.form; files = request.files; song_file = files['song']; cover = files.get('cover'); lyrics = data.get('lyrics')
+            song.title = data.get('title')
+            song.artist = data.get('artist')
+            song.language = data.get('language')
+            song.genre = data.get('genre')
+            from Musica.functions import mp3_duration_cal, save_file, remove_file
+            if song_file:
+                remove_file('song',song.filename)
+                song.duration = mp3_duration_cal(song_file)
+                filename = save_file('song',song.id, song_file)
+                song.filename = filename
+            if cover:
+                if song.cover: remove_file('image/song',song.cover)
+                filename = save_file('image/song',song.id, cover)
+                song.cover = filename
+            if lyrics:
+                filename = save_file('lyrics',song.id,lyrics)
+                song.lyrics = filename
+            db.session.commit()
+            flash('Song updated successfully','success')
+        return redirect(f'/creator/uploads/{song_id}')
     elif way == 'delete' and song:
-        if song_id and song:
+        if song and song.user_id == current_user.id:
+            from Musica.functions import mp3_duration_cal, save_file, remove_file
+            if song.cover: remove_file('image/song',song.cover)
+            if song.lyrics: remove_file('lyrics',song.lyrics)
+            remove_file('song',song.filename)
             db.session.delete(song); db.session.commit()
-            remove_file('image/profile',current_user.cover)
-            # remove file in uploads also
             flash('Successfully deleted song','success')
         else:
             flash('Error deleting song!','error')
-    return redirect('/uploads')
+    return redirect('/creator/uploads')
+
 #assign a song to a particular album
-@app.route('/creator/uploads/<int:song_id>/<way>/albums/<int:album_id>')
+@app.route('/creator/uploads/<int:song_id>/<way>/albums/',defaults={'album_id':None})
+@app.route('/creator/uploads/<int:song_id>/<way>/albums/<int:album_id>',methods=['GET','POST'])
 @allowed_for(['creator'])
 @not_in_blacklist
-def from_song_add_album(song_id,album_id):
+def from_song_add_album(song_id,album_id,way):
     song = Song.query.get(song_id); album = Album.query.get(album_id)
-    if album_id and not(song_id) and request.method=='GET':
+    if song and not(album) and request.method=='GET':
         # show not added user albums in pagination format
-        pass
-    elif album_id and not(song_id) and request.method=='POST':
+        albums = Album.query.filter_by(user_id=current_user.id).all()
+        return render_template('creator/sub-temp/song~add-rem.html',song=song,albums=albums)
+    elif song and not(album) and request.method=='POST':
         # show filtered not added user albums in pagination format
         pass
-    elif album_id and song_id and request.method=='POST':
-        # add song in album
-        pass
+    elif song and album and request.method=='POST':
+        if way == 'add':
+            album.songs.append(song)
+            db.session.commit()
+            flash('Song added into album','success')
+        elif way == 'remove':
+            album.songs.remove(song)
+            db.session.commit()
+            flash('Song removed from album','success')
+        return redirect(f'/creator/uploads/{song_id}')
     else:
-        flash('Error while adding song into album','error')
-        return redirect(url_for('creatorhome'))
+        flash('Error while adding/removing song from album','error')
+        return redirect(url_for('creator_home'))
 
 
 ##Album routes##
@@ -152,7 +184,7 @@ def create_album():
         data = request.form; cover = request.files.get('cover')
         title = data.get('title'); artist = data.get('artist')
         album = Album(title=title, artist=artist, user_id=current_user.id)
-        db.session.add(album)
+        db.session.add(album); db.session.commit()
         if cover:
             from Musica.functions import save_file
             cover = save_file('image/album',album.id,cover); album.cover = cover

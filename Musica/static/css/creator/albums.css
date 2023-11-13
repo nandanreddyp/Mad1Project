@@ -17,6 +17,7 @@
     padding: 6px; border-radius: 9px;
     display: grid; gap: 10px;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    min-height: calc(100% - 60px); padding-bottom: 100px;
 }
 .album {
     background-color: rgb(182, 182, 255);

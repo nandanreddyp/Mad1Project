@@ -15,7 +15,7 @@ a.button {
     display: flex; flex-direction: column; align-items: center;
 }
 img.album-cover {
-    width: 300px; height: 300px;
+    width: 300px; height: 300px; object-fit: cover;
 }
 .album-img .button {
     width: 200px; display: flex; justify-content: center;
