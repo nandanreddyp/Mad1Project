@@ -50,7 +50,12 @@ def signup():
             return redirect(url_for('login'))
         from Musica.functions import hash
         user = User(id=data['email'],password=hash(data['password']),f_name=data['f_name'],l_name=data['l_name'])
-        db.session.add(user); db.session.commit()
+        library = Library(user_id=user.id)
+        db.session.add(user, library); db.session.commit()
+        dp = request.files['dp']
+        if dp:
+            from Musica.functions import save_file
+            cover = save_file('image/profile',user.id,dp); user.cover = cover; db.session.commit()
         flash('Account created successfully','success')
         flash('Login to your account','info')
         return redirect(url_for('login'))

@@ -1,0 +1,36 @@
+.heading {
+    display: flex; justify-content:space-between; padding: 6px;
+}
+#filter-form {
+    visibility: hidden;
+    position: fixed;
+    z-index: 10; width: 100%; height: 100%;
+    top: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px;
+    background-color: violet;
+}
+
+/** albums container and albums **/
+.songs-container {
+    background-color: rgb(233, 233, 252);
+    padding: 6px; border-radius: 9px;
+    display: flex; flex-direction: column; gap: 10px;
+    width: 100%; min-height: calc(100% - 60px);
+    padding-bottom: 100px;
+}
+.song {
+    display: flex; gap: 10px; width: 100%;
+    background-color: rgb(191, 191, 250);
+}
+.song-details {
+    width: 100%;
+}
+.song-cover {
+    width: 60px; height: 60px; object-fit: cover; padding: 6px;
+    border-radius: 9px;
+}
+.song .row1, .song .row2 {
+    width: 100%; padding: 0 6px;
+    display: flex; justify-content: space-between;
+}

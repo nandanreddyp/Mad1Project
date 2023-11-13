@@ -1,0 +1,27 @@
+.heading {
+    display: flex; justify-content:space-between; padding: 6px;
+}
+a.button {
+    padding: 3px; text-align: center; display: flex; align-items: center;
+    background-color: red; color: white; border-radius: 9px;
+}
+.album-main {
+    display: flex; justify-content: space-between;
+    background-color: rgb(218, 218, 255); width: 100%;
+    height: calc(100% - 60px);
+}
+.album-img {
+    width: 30%; padding: 10px 0px;
+    display: flex; flex-direction: column; align-items: center;
+}
+img.album-cover {
+    width: 300px; height: 300px;
+}
+.album-img .button {
+    width: 200px; display: flex; justify-content: center;
+    margin: 10px;
+}
+.album-songs {
+    width: 70%;
+    overflow: auto;
+}

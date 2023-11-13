@@ -1,6 +1,64 @@
 {% extends "creator/base.html" %}
 {% block content %}
-<h1>Start</h1>
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque nobis rem sunt, aut impedit saepe iusto neque quis quam libero ullam, ex minus vel modi distinctio deserunt necessitatibus ad ab eligendi at porro incidunt reiciendis. Iste corrupti repellendus quo velit animi quidem a alias ducimus optio minima veritatis vero, dicta sapiente blanditiis nam, dolore tenetur distinctio ea. Commodi magnam cum quo numquam inventore nam officia soluta voluptas quas saepe! Iste esse molestias praesentium impedit error enim officiis obcaecati, eligendi cupiditate voluptatibus, quis beatae debitis sint saepe asperiores. Reprehenderit, ullam excepturi nulla eius odit cumque nobis iure aspernatur tempora, autem necessitatibus.</p>
-<h1>End</h1>
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+<h1 style="text-align: center; margin: 10px;">Song upload form</h1>
+<form class="form" enctype="multipart/form-data" action="/creator/uploads/upload" method="post">
+    <h4 style="color: red; text-align: end;">Fields marked with * are mandatory</h4>
+    <div class="inputFile">
+        <input type="file" class="file" id="song" name="song" accept=".mp3, .aac, .ogg, .wav, .alac" required>
+        <label for="song" class="file-ph"><strong>Select song *</strong></label>
+    </div>
+    <div class="inputFile">
+        <input type="file" class="file" id="cover" name="cover" accept=".jpeg, .jpg, .png">
+        <label for="cover" class="file-ph">Select cover image</label>
+    </div>
+    <div class="inputText">
+        <input type="text" class="text" id="title" name="title" required placeholder=" ">
+        <label for="title" class="box-ph">Song title *</label>
+    </div>
+    <div class="inputText">
+        <input type="text" class="text" id="artist" name="artist" placeholder=" ">
+        <label for="artist" class="box-ph">Song artist</label>
+    </div>
+    <div class="inputSelect">
+        <select name="language" id="language" required>
+            <option value="" selected disabled hidden>Select language</option>
+            <option value="none">No language</option>
+            <option value="english">English</option>
+            <option value="hindi">Hindi</option>
+            <option value="kannada">Kannada</option>
+            <option value="malayalam">Malayalam</option>
+            <option value="tamil">Tamil</option>
+            <option value="telugu">Telugu</option>
+            <option value="urdu">Urdu</option>
+            <option value="foreign">Rest-Foreign</option>
+        </select>
+        <label for="language" class="select-ph">Language *</label>
+    </div>
+    <div class="inputSelect">
+        <select name="genre" id="genre" required>
+            <option value="" selected disabled hidden>Select genre</option>
+            <option value="classical">Classical</option>
+            <option value="devotional">Devotional</option>
+            <option value="dj">DJ</option>
+            <option value="folk">Folk</option>
+            <option value="item">Item</option>
+            <option value="love">Love</option>
+            <option value="motivational">Motivational</option>
+            <option value="music">Music</option>
+            <option value="patriotic">Patriotic</option>
+            <option value="ringtone">Ringtone</option>
+            <option value="romantic">Romantic</option>
+            <option value="sad">Sad</option>
+        </select>
+        <label for="genre" class="select-ph">Genre *</label>
+    </div>
+    <div class="inputText">
+        <textarea id="lyrics" name="lyrics" placeholder=" " cols="30" rows="10"></textarea>
+        <label for="lyrics" class="box-ph">Song's lyrics</label>
+    </div>
+    <input type="submit" value="Submit">
+
+
+</form>
 {% endblock %}

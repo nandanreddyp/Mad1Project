@@ -1,0 +1,80 @@
+{% extends "creator/base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/album.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/songs.css')}}">
+
+<div class="heading">
+    <h1>{{album.title}} by artist {{album.artist}}</h1>
+    <a class="normal button" href="/creator/albums/{{album.id}}/add/songs">Add songs</a>
+</div>
+<div class="album-main">
+    <div class="album-songs">
+        <div class="songs-container">
+        {% if album.songs %}
+            {% for song in album.songs %}
+            <div class="song">
+                {% if song.cover %}
+                <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}">
+                {% else %}
+                <svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                width="60px" height="60px" viewBox="0 0 32 32" xml:space="preserve">
+                <style type="text/css">
+                    .linesandangles_een{fill:#111918;}
+                </style>
+                <path class="linesandangles_een" d="M26,3.674L10,8.246v13.933c-0.383-0.135-0.797-0.215-1.231-0.215
+                    c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804c0.348,1.299,1.639,2.131,3.112,2.131
+                    c0.342,0,0.693-0.045,1.045-0.139C10.792,27.492,11.886,26.292,12,25l0,0V13.754l12-3.429v7.853
+                    c-0.383-0.135-0.797-0.215-1.231-0.215c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804
+                    c0.348,1.299,1.639,2.131,3.112,2.131c0.342,0,0.693-0.045,1.045-0.139C24.792,23.492,25.886,22.292,26,21l0,0V3.674z M9.789,25.279
+                    c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                    c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                    c0.583,0,1.079,0.273,1.18,0.649C10.018,24.869,9.9,25.117,9.789,25.279z M12,11.674v-1.92l12-3.429v1.92L12,11.674z M23.789,21.279
+                    c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                    c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                    c0.583,0,1.079,0.273,1.18,0.649C24.018,20.869,23.9,21.117,23.789,21.279z"/>
+                </svg>
+                {% endif %}
+                <div class="song-details">
+                    <div class="row1">
+                        <h2>{{song.title}}</h2>
+                        {% if song not in album.songs %}
+                            <form action="/creator/albums/{{album.id}}/add/songs/{{song.id}}" method="post"><button class="button">Add song</button></form> 
+                        {% else %}
+                        <form action="/creator/albums/{{album.id}}/remove/songs/{{song.id}}" method="post"><button class="button">Remove song</button></form> 
+                        {% endif %}
+                    </div>
+                    <div class="row2">
+                        <h4>Duration: {{song.duration}}</h4>
+                        <h4>Views: {{song.play_count}}</h4>
+                        <h4>Rating: {{song.rating}}</h4>
+                        <h4>Artist: {% if song.artist %} {{song.artist}} {% else %} -NA- {% endif %}</h4>
+                        <h4>Language: {{song.language}}</h4>
+                        <h4>Genre: {{song.genre}}</h4>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <h2>No songs added yet!</h2>
+        {% endif %}
+        </div>
+    </div>
+    <div class="album-img">
+        {% if album.cover %} <img class="album-cover" src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}">
+        {% else %}
+        <svg class="album-cover" width="100px" height="100px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 17.4V2.6C2 2.26863 2.26863 2 2.6 2H17.4C17.7314 2 18 2.26863 18 2.6V17.4C18 17.7314 17.7314 18 17.4 18H2.6C2.26863 18 2 17.7314 2 17.4Z" stroke="#000000" stroke-width="1.5"/>
+            <path d="M8 22H21.4C21.7314 22 22 21.7314 22 21.4V8" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5Z" fill="#000000"/>
+            <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5ZM11 12.5V6.6C11 6.26863 11.2686 6 11.6 6H13" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        {% endif %}
+        <a href="/creator/albums/{{album.id}}/add/songs" class="normal button">Add song</a>
+        <a href="/creator/albums/{{album.id}}/update" class="normal button">Edit album</a>
+        <a href="/creator/albums/{{album.id}}/delete" class="normal button">Delete album</a>
+    </div>
+</div>
+
+
+
+{% endblock %}

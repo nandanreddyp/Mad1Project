@@ -1,0 +1,77 @@
+form.form {
+    display: flex; flex-direction: column;
+    width: 40%; justify-content: center;
+    margin: auto; gap: 30px; padding: 40px;
+    padding-bottom: 20px; margin-bottom: 10px;
+    background-color: rgb(183, 183, 255);
+    border-radius: 10px; overflow: auto;
+}
+div.inputFile {
+    position: relative;
+    margin-bottom: 10px;
+}
+input.file {
+    background-color: rgb(92, 255, 206);
+    width: 100%; padding: 10px;
+}
+label.file-ph {
+    position: absolute;
+    top: -22px; left: 0;
+    background-color: white; color: black;
+    width: 100%; padding: 2px;
+    border-top-right-radius: 10px;
+}
+div.inputText {
+    position: relative;
+}
+input.text {
+    background-color: white;
+    width: 100%; padding: 5px; border-radius: 10px;
+    padding: 10px;
+}
+div.inputCheck {
+    display: flex; gap: 6px;
+}
+label.box-ph {
+    /* position: absolute;
+    top: -18px; left: 9px;
+    background-color: white; padding: 6px 3px 0px 3px; 
+    border-top-right-radius: 10px; border-top-left-radius: 10px;
+    border-top: 2px solid black; */
+    position: absolute; top: 10px; left: 10px;
+    pointer-events: none;
+}
+div.inputSelect {
+    position: relative;
+}
+select {
+    width: 100%; padding: 10px;
+    border-radius: 5px;
+}
+label.select-ph {
+    position: absolute;
+    top: -18px; left: 9px;
+    background-color: white; padding: 6px 3px 0px 3px; 
+    border-top-right-radius: 10px; border-top-left-radius: 10px;
+    border-top: 2px solid black;
+}
+textarea {
+    width: 100%; padding: 10px; border-radius: 10px;
+}
+input[type='submit'] {
+    width: max-content; margin: auto;
+    padding: 10px; background-color: red; color: white;
+    border: none; border-radius: 6px;
+    cursor: pointer;
+}
+
+input.text:not(:placeholder-shown) + label, textarea:not(:placeholder-shown) + label {
+    position: absolute;
+    top: -18px; left: 9px;
+    background-color: white; padding: 6px 3px 0px 3px; 
+    border-top-right-radius: 10px; border-top-left-radius: 10px;
+    border-top: 2px solid black;
+}
+
+/* filter form */
+

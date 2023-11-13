@@ -1,0 +1,23 @@
+{% extends "creator/base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+<h1 style="text-align: center; margin: 10px;">Album create form</h1>
+<form class="form" enctype="multipart/form-data" action="/creator/albums/create" method="post">
+    <h4 style="color: red; text-align: end;">Fields marked with * are mandatory</h4>
+    <div class="inputText">
+        <input type="text" class="text" id="title" name="title" required placeholder=" ">
+        <label for="title" class="box-ph">Album title *</label>
+    </div>
+    <div class="inputFile">
+        <input type="file" class="file" id="cover" name="cover" accept=".jpeg, .jpg, .png">
+        <label for="cover" class="file-ph">Select cover image</label>
+    </div>
+    <div class="inputText">
+        <input type="text" class="text" id="artist" name="artist" placeholder=" ">
+        <label for="artist" class="box-ph">Album artist</label>
+    </div>
+    <input type="submit" value="Submit">
+
+
+</form>
+{% endblock %}

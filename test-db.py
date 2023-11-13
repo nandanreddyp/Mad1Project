@@ -27,6 +27,5 @@ from Musica.database.models import *
 # # playlists = [x.songs for x in Playlist.query.all()]
 # print('songs',songs,'\n','albums',albums,'\n')
 
-user = User.query.get('admin@musica.com')
-user.role='admin'
-db.session.commit()
+user = session.query(User).get('new@gmail.com')
+print(user.library.__dict__)

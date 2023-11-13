@@ -24,7 +24,7 @@
             <h2>Creator Zone</h2>
             <div class="profile noSelect">
                 <div id="dropMenu" >
-                    <img src="http://127.0.0.1:3000/logos/KeerthiMukha.jpg">
+                    <img {% if current_user.cover %} src="{{url_for('static',filename='uploads/images/profile_covers/')}}{{current_user.cover}}" {% else %} src="{{url_for('static',filename='uploads/images/profile_covers/default_profile.png')}}" {% endif %}>
                     <h3 >{{current_user.id}}</h3>
                 </div>
                 <div id="Menu">
@@ -86,7 +86,8 @@
         display: flex; align-items: center; justify-content: space-between; flex-direction: column; gap: 6px;
     }
     .flash-container li {
-        width: 100% ; padding: 5px 10px; margin-right: 18px;
+        position: fixed; 
+        width: calc(100% - 20%); padding: 5px 10px; 
         display: flex; align-items: center; justify-content: space-between; box-shadow: 7px 5px black;
     }
     .flash-container li.success {

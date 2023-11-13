@@ -40,17 +40,18 @@ def get_premium():
 ##Song routes##
 ###############
 #read
+@app.route('/songs/', defaults={'song_id':None}, methods=['GET','POST'])
 @app.route('/songs/<int:song_id>',methods=['GET','POST'])
 def uploads(song_id):
     if request.method == 'GET' and song_id:
         song = Song.query.get(song_id)
-        return render_template('creator/song_view.html',song=song)
+        return render_template('user/sub-temp/rating.html')
     elif request.method == 'POST':
         # return queried results
         pass
     else:
         # show all songs
-        songs = Song.query.filter_by(Song.user_id==session['user_id']).all()
+        songs = Song.query.filter_by(Song.user_id==current_user.id).all()
         return render_template('creator/songs.html', songs=songs)
 #rating with json to update without increment count
 @app.route('/songs/<int:song_id>/rate/<int:rating>')
@@ -213,13 +214,17 @@ def library_remove_playlist():
 ### others ###
 @app.route('/profile',methods=['get','post'])
 def profile():
+    session['currentPage'] = None
     if request.method == 'POST':
         data = request.form; file = request.files.get('dp')
-        f_name = data['f_name']; l_name = data['l_name']
+        current_user.f_name = data['f_name']; current_user.l_name = data['l_name']
         delete = data.get('delete_dp')
         if file and not(delete):
             image_loc = save_file('image/profile',current_user.id,file)
-            print(image_loc)
-        if current_user.dp and delete:
-            remove_file('image/profile','user@gmail.com.jpg')
+            current_user.cover=image_loc
+            db.session.commit()
+        if current_user.cover and delete:
+            remove_file('image/profile',current_user.cover)
+            current_user.cover=None
+            db.session.commit()
     return render_template('user/sub-temp/profile.html')
