@@ -58,8 +58,8 @@
 </form>
 
 <div class="songs-container">
-    {% if current_user.songs %}
-        {% for song in current_user.songs %}
+    {% if songs %}
+        {% for song in songs %}
         <a class="song normal" href="/creator/uploads/{{song.id}}"> 
             {% if song.cover %}
             <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}">
@@ -97,6 +97,11 @@
             </div>
         </a>
         {% endfor %}
+        {% if songs.has_next %}
+            <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><a class="normal" href="/creator/uploads?view={{view}}">View more</a></div>
+        {% else %}
+            <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><h2>--The End--</h2></div>
+        {% endif %}
     {% else %}
         <h1>You haven't uploaded any songs yet :-(</h1>
     {% endif %}

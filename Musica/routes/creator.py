@@ -70,11 +70,13 @@ def all_uploads(song_id):
             return render_template('creator/sub-temp/song.html',song=song,lyrics=lyrics)
         flash('You are not owner of that song!','warning')
         return redirect(url_for('all_uploads'))
+    elif request.method == 'GET' and not(song):
+        view = request.args.get('view',6,type=int)
+        songs = Song.query.filter_by(user_id=current_user.id).order_by(Song.time_added.desc()).paginate(page=1, per_page=view) 
+        return render_template('creator/uploads.html',songs=songs,view=view+6)
     elif request.method == 'POST' and not(song):
         # return queried results
         pass
-    else:
-        return render_template('creator/uploads.html')
 
 @app.route('/creator/albums/', defaults={'album_id': None}, methods=['GET', 'POST'])
 @app.route('/creator/albums/<int:album_id>',methods=['GET','POST'])

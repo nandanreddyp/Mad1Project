@@ -34,7 +34,9 @@
             {% endif %}
         </div>
         <div class="song-file">
-            <audio src="{{url_for('static',filename='uploads/songs/')}}{{song.filename}}" controls></audio>
+            <audio controls preload="none">
+                <source src="{{url_for('static',filename='uploads/songs/')}}{{song.filename}}" type="audio/mpeg">
+            </audio>
         </div>
         <h2>No of view: {{song.play_count}}</h2>
         <h2>People liked: {{song.rating}}%</h2>
@@ -46,9 +48,9 @@
     <div class="lyrics" style="white-space: pre-line;">
         <h1>Lyrics</h1>
         {% if lyrics %}
-            {{lyrics}}
+{{lyrics}}
         {% else %}
-            lyrics not uploaded!
+lyrics not uploaded!
         {% endif %}
     </div>
 </div>
