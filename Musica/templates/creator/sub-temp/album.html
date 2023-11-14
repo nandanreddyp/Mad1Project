@@ -12,7 +12,7 @@
         <div class="songs-container">
         {% if album.songs %}
             {% for song in album.songs %}
-            <div class="song">
+            <a href="/creator/uploads/{{song.id}}" class="song normal">
                 {% if song.cover %}
                 <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}">
                 {% else %}
@@ -52,7 +52,7 @@
                         <h4>Genre: {{song.genre}}</h4>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         {% else %}
             <h2>No songs added yet!</h2>

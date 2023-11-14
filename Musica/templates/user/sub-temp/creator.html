@@ -1,24 +1,12 @@
 {% extends "user/base.html" %}
 {% block content %}
-<style>
-.form-container {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;
-}
-.form-container > form {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.form-container > form > div {
-    display: flex; gap: 10px; margin: 20px 10px;
-}
-.form-container > form > div + input {
-    background-color: red; color: white;
-    padding: 12px; cursor: pointer;
-}
-</style>
-<div class="form-container">
-    <h1>Become creator, and upload your songs.</h1>
-    <form action="/get_creator_role" method="post">
-        <div><input type="checkbox" required><label>I agree to all conditions and want to become a creator.</label></div>
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/form.css')}}">
+
+<div class="parentcenter">
+    <h1 style="text-align: center; margin: 10px;">Become creator, and upload your songs.</h1>
+    <form class="form" action="/get_creator_role" method="post">
+        <div class="inputCheck"><input type="checkbox" required><label>I agree to all conditions and want to become a creator.</label></div>
         <input type="submit" value="Get creator role">
     </form>
 </div>

@@ -7,7 +7,7 @@
 <form class="form" enctype="multipart/form-data" action="/creator/uploads/{{song.id}}/update" method="post">
     <h4 style="color: red; text-align: end;">Fields marked with * are mandatory</h4>
     <div class="inputFile">
-        <input type="file" class="file" id="song" name="song" accept=".mp3, .aac, .ogg, .wav, .alac" required>
+        <input type="file" class="file" id="song" name="song" accept=".mp3, .aac, .ogg, .wav, .alac" >
         <label for="song" class="file-ph"><strong>Select song</strong></label>
     </div>
     <div class="inputFile">
@@ -40,25 +40,23 @@
     <div class="inputSelect">
         <select name="genre" id="genre" required>
             <option value="" selected disabled hidden>Select genre</option>
-            <option {% if song.language == 'classical' %}selected{% endif %} value="classical">Classical</option>
-            <option {% if song.language == 'devotional' %}selected{% endif %} value="devotional">Devotional</option>
-            <option {% if song.language == 'dj' %}selected{% endif %} value="dj">DJ</option>
-            <option {% if song.language == 'folk' %}selected{% endif %} value="folk">Folk</option>
-            <option {% if song.language == 'item' %}selected{% endif %} value="item">Item</option>
-            <option {% if song.language == 'love' %}selected{% endif %} value="love">Love</option>
-            <option {% if song.language == 'motivational' %}selected{% endif %} value="motivational">Motivational</option>
-            <option {% if song.language == 'music' %}selected{% endif %} value="music">Music</option>
-            <option {% if song.language == 'patriotic' %}selected{% endif %} value="patriotic">Patriotic</option>
-            <option {% if song.language == 'ringtone' %}selected{% endif %} value="ringtone">Ringtone</option>
-            <option {% if song.language == 'romantic' %}selected{% endif %} value="romantic">Romantic</option>
-            <option {% if song.language == 'sad' %}selected{% endif %} value="sad">Sad</option>
+            <option {% if song.genre == 'classical' %}selected{% endif %} value="classical">Classical</option>
+            <option {% if song.genre == 'devotional' %}selected{% endif %} value="devotional">Devotional</option>
+            <option {% if song.genre == 'dj' %}selected{% endif %} value="dj">DJ</option>
+            <option {% if song.genre == 'folk' %}selected{% endif %} value="folk">Folk</option>
+            <option {% if song.genre == 'item' %}selected{% endif %} value="item">Item</option>
+            <option {% if song.genre == 'love' %}selected{% endif %} value="love">Love</option>
+            <option {% if song.genre == 'motivational' %}selected{% endif %} value="motivational">Motivational</option>
+            <option {% if song.genre == 'music' %}selected{% endif %} value="music">Music</option>
+            <option {% if song.genre == 'patriotic' %}selected{% endif %} value="patriotic">Patriotic</option>
+            <option {% if song.genre == 'ringtone' %}selected{% endif %} value="ringtone">Ringtone</option>
+            <option {% if song.genre == 'romantic' %}selected{% endif %} value="romantic">Romantic</option>
+            <option {% if song.genre == 'sad' %}selected{% endif %} value="sad">Sad</option>
         </select>
         <label for="genre" class="select-ph">Genre *</label>
     </div>
     <div class="inputText">
-        <textarea id="lyrics" name="lyrics" placeholder=" " cols="30" rows="10">
-{% if lyrics %}{{lyrics}}{% endif %}
-        </textarea>
+        <textarea id="lyrics" name="lyrics" placeholder=" " cols="30" rows="10">{% if lyrics %}{{lyrics}}{% endif %}</textarea>
         <label for="lyrics" class="box-ph">Song's lyrics</label>
     </div>
     <input type="submit" value="Submit">

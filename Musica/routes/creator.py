@@ -26,8 +26,12 @@ def become_creator():
 @not_in_blacklist
 def creator_home():
     session['currentPage']='creator_home'
-    # show info about trending songs, albums
-    return render_template('creator/home.html')
+    blacklisted = Blacklist.query.get(current_user.id)
+    recent = Song.query.filter_by(user_id=current_user.id).order_by(Song.time_added.desc()).first()
+    viewed = Song.query.filter_by(user_id=current_user.id).order_by(Song.play_count.desc()).first()
+    positive = Song.query.filter_by(user_id=current_user.id).order_by(Song.rating.desc()).first()
+    negative = Song.query.filter_by(user_id=current_user.id).order_by(Song.rating.asc()).first()
+    return render_template('creator/home.html',recent=recent,viewed=viewed,positive=positive,negative=negative,blacklisted=blacklisted)
     
 @app.route('/creator/uploads/upload',methods=['GET','POST'])
 @allowed_for(['creator'])
@@ -75,8 +79,26 @@ def all_uploads(song_id):
         songs = Song.query.filter_by(user_id=current_user.id).order_by(Song.time_added.desc()).paginate(page=1, per_page=view) 
         return render_template('creator/uploads.html',songs=songs,view=view+6)
     elif request.method == 'POST' and not(song):
-        # return queried results
-        pass
+        view = request.args.get('view',6,type=int)
+        data = request.form; song_name = data.get('song'); artist_name = data.get('artist'); language = data.get('language'); genre = data.get('genre'); sort_by = data.get('sortby')
+        filtered = Song.query.filter_by(user_id=current_user.id)
+        if song_name:
+            filtered = filtered.filter(Song.title.ilike('%'+song_name+'%'))
+        if artist_name:
+            filtered = filtered.filter(Song.artist.ilike('%'+artist_name+'%'))
+        if language:
+            filtered = filtered.filter(Song.language.ilike('%'+language+'%'))
+        if genre:
+            filtered =  filtered.filter(Song.genre.ilike('%'+genre+'%'))
+        if sort_by:
+            if sort_by == 'new': filtered = filtered.order_by(Song.time_added.desc())
+            elif sort_by == 'old': filtered = filtered.order_by(Song.time_added.asc())
+            elif sort_by == 'rating_high': filtered = filtered.order_by(Song.rating.desc())
+            elif sort_by == 'rating_low': filtered = filtered.order_by(Song.rating.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(Song.title.asc())
+        filtered = filtered.paginate(page=1, per_page=view)
+        flash('Filter applied','success')
+        return render_template('creator/uploads.html',songs=filtered,view=view+6,filter=True)
 
 @app.route('/creator/albums/', defaults={'album_id': None}, methods=['GET', 'POST'])
 @app.route('/creator/albums/<int:album_id>',methods=['GET','POST'])
@@ -89,13 +111,23 @@ def albums_creator(album_id):
         if album and album.user_id == current_user.id:
             return render_template('creator/sub-temp/album.html',album=album)
         else: flash('Not your album','error')
-    elif request.method == 'POST' and not(album_id):
-        # return filtered results
-        pass
-    else :
-        # albums = db.select(Album).filter_by(user_id=current_user.id)
-        albums = Album.query.filter_by(user_id=current_user.id).all()
+    elif request.method == 'GET' and not(album_id):
+        albums = Album.query.filter_by(user_id=current_user.id).order_by(Album.time_added.desc()).all()
         return render_template('creator/albums.html', albums=albums)
+    elif request.method == 'POST' and not(album_id) :
+        data = request.form; album_name = data.get('album'); artist_name = data.get('artist'); sort_by = data.get('sortby')
+        filtered = Album.query.filter_by(user_id=current_user.id)
+        if album_name:
+            filtered = filtered.filter(Album.title.ilike('%'+album_name+'%'))
+        if artist_name:
+            filtered = filtered.filter(Album.artist.ilike('%'+artist_name+'%'))
+        if sort_by:
+            if sort_by == 'new': filtered = filtered.order_by(Album.time_added.desc())
+            elif sort_by == 'old': filtered = filtered.order_by(Album.time_added.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(Album.title.asc())
+        filtered = filtered.all()
+        flash('Filter applied','success')
+        return render_template('creator/albums.html',albums=filtered,filter=True)
     return redirect(url_for('albums_creator'))
 
 ##Song routes##
@@ -145,19 +177,30 @@ def upload_edit(song_id,way):
     return redirect('/creator/uploads')
 
 #assign a song to a particular album
-@app.route('/creator/uploads/<int:song_id>/<way>/albums/',defaults={'album_id':None})
+@app.route('/creator/uploads/<int:song_id>/<way>/albums/',defaults={'album_id':None}, methods=['GET','POST'])
 @app.route('/creator/uploads/<int:song_id>/<way>/albums/<int:album_id>',methods=['GET','POST'])
 @allowed_for(['creator'])
 @not_in_blacklist
 def from_song_add_album(song_id,album_id,way):
+    session['currentPage']='uploads'
     song = Song.query.get(song_id); album = Album.query.get(album_id)
     if song and not(album) and request.method=='GET':
-        # show not added user albums in pagination format
-        albums = Album.query.filter_by(user_id=current_user.id).all()
+        albums = Album.query.filter_by(user_id=current_user.id).order_by(Album.time_added.desc()).all()
         return render_template('creator/sub-temp/song~add-rem.html',song=song,albums=albums)
     elif song and not(album) and request.method=='POST':
-        # show filtered not added user albums in pagination format
-        pass
+        data = request.form; album_name = data.get('album'); artist_name = data.get('artist'); sort_by = data.get('sortby')
+        filtered = Album.query.filter_by(user_id=current_user.id)
+        if album_name:
+            filtered = filtered.filter(Album.title.ilike('%'+album_name+'%'))
+        if artist_name:
+            filtered = filtered.filter(Album.artist.ilike('%'+artist_name+'%'))
+        if sort_by:
+            if sort_by == 'new': filtered = filtered.order_by(Album.time_added.desc())
+            elif sort_by == 'old': filtered = filtered.order_by(Album.time_added.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(Album.title.asc())
+        filtered = filtered.all()
+        flash('Filter applied','success')
+        return render_template('creator/sub-temp/song~add-rem.html',song=song,albums=filtered,filter=True)
     elif song and album and request.method=='POST':
         if way == 'add':
             album.songs.append(song)
@@ -167,7 +210,7 @@ def from_song_add_album(song_id,album_id,way):
             album.songs.remove(song)
             db.session.commit()
             flash('Song removed from album','success')
-        return redirect(f'/creator/uploads/{song_id}')
+        return redirect(f'/creator/uploads/{song_id}/add/albums')
     else:
         flash('Error while adding/removing song from album','error')
         return redirect(url_for('creator_home'))
@@ -226,20 +269,39 @@ def album_edit(album_id,way):
             return redirect('creator/albums')
             
 #assign a album a particular song
-@app.route('/creator/albums/<int:album_id>/<way>/songs/',defaults={'song_id':None})
+@app.route('/creator/albums/<int:album_id>/<way>/songs/',defaults={'song_id':None},methods=['GET','POST'])
 @app.route('/creator/albums/<int:album_id>/<way>/songs/<int:song_id>',methods=['GET','POST'])
 @allowed_for(['creator'])
 @not_in_blacklist
 def from_album_add_song(album_id,song_id,way):
+    session['currentPage']='albums'
     print(request.url_rule.endpoint)
     album = Album.query.get(album_id); song = Song.query.get(song_id)
     if album and not(song) and request.method=='GET':
-        # show not added user songs in pagination format
-        songs = Song.query.filter_by(user_id=current_user.id).all()
-        return render_template('creator/sub-temp/album~add-rem.html',songs=songs,album=album)
+        view = request.args.get('view',6,type=int)
+        songs = Song.query.filter_by(user_id=current_user.id).order_by(Song.time_added.desc()).paginate(page=1, per_page=view) 
+        return render_template('creator/sub-temp/album~add-rem.html',songs=songs,album=album,view=view+6)
     elif album and not(song) and request.method=='POST':
-        # show filtered not added user songs in pagination format
-        return render_template('creator/sub-temp/album~add-rem.html',songs=songs,album=album)
+        view = request.args.get('view',6,type=int)
+        data = request.form; song_name = data.get('song'); artist_name = data.get('artist'); language = data.get('language'); genre = data.get('genre'); sort_by = data.get('sortby')
+        filtered = Song.query.filter_by(user_id=current_user.id)
+        if song_name:
+            filtered = filtered.filter(Song.title.ilike('%'+song_name+'%'))
+        if artist_name:
+            filtered = filtered.filter(Song.artist.ilike('%'+artist_name+'%'))
+        if language:
+            filtered = filtered.filter(Song.language.ilike('%'+language+'%'))
+        if genre:
+            filtered =  filtered.filter(Song.genre.ilike('%'+genre+'%'))
+        if sort_by:
+            if sort_by == 'new': filtered = filtered.order_by(Song.time_added.desc())
+            elif sort_by == 'old': filtered = filtered.order_by(Song.time_added.asc())
+            elif sort_by == 'rating_high': filtered = filtered.order_by(Song.rating.desc())
+            elif sort_by == 'rating_low': filtered = filtered.order_by(Song.rating.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(Song.title.asc())
+        filtered = filtered.paginate(page=1, per_page=view)
+        flash('Filter applied','success')
+        return render_template('creator/sub-temp/album~add-rem.html',songs=filtered,album=album,filter=True,view=view+6)
     elif album and song and request.method=='POST' and way=='add':
         if song.user.id == current_user.id and song not in album.songs:
             album.songs.append(song); db.session.commit()

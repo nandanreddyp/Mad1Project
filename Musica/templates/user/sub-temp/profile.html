@@ -1,22 +1,23 @@
 {% extends "user/base.html" %}
 {% block content %}
-<div class="float-middle">
-    <form action="/profile" method="post" enctype="multipart/form-data">
-        <div class="input-main">
-            <input type="text" id="first_name" name="f_name" value="{{current_user.f_name}}">
-            <label for="first_name">First name</label>
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/form.css')}}">
+<div class="parentcenter">
+    <form class="form" action="/profile" method="post" enctype="multipart/form-data">
+        <div class="inputText">
+            <input class="text" type="text" id="first_name" name="f_name" value="{{current_user.f_name}}">
+            <label class="box-ph" for="first_name">First name</label>
         </div>
-        <div class="input-main">
-            <input type="text" id="last_name" name="l_name" value="{{current_user.l_name}}">
-            <label for="last_name">Last name</label>
+        <div class="inputText">
+            <input class="text" type="text" id="last_name" name="l_name" value="{{current_user.l_name}}">
+            <label class="box-ph" for="last_name">Last name</label>
         </div>
-        <div class="input-main" style="margin-top: 10px;">
-            <input class="input file" type="file" accept=".jpg, .jpeg, .png" name="dp" placeholder=" " >
-            <label class="placeholder">Change profile pic</label>
+        <div class="inputFile" style="margin-top: 10px;">
+            <input class="file" type="file" accept=".jpg, .jpeg, .png" name="dp" placeholder=" " >
+            <label class="file-ph">Change profile pic</label>
         </div>
-        <div style="display: flex; gap: 5px;" >
+        <div class="inputCheck" >
             <input type="checkbox" id="delete_profile_pic" name="delete_dp">
-            <label style="position: inherit; border-radius: none;" for="delete_profile_pic">Delete profile pic.</label>        
+            <label style="position: inherit; border-radius: none;" for="delete_profile_pic">Remove profile pic completely.</label>        
         </div>
         <input type="submit">
     </form>

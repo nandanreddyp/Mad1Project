@@ -23,17 +23,18 @@ def user_library():
     session['currentPage'] = 'library'
     return render_template('user/library.html')
 
-@app.route('/upgrade')
+@app.route('/upgrade',methods=['POST','GET'])
 def get_premium():
     session['currentPage'] = 'upgrade'
+    requested = PremiumReq.query.get(current_user.id)
     if request.method == 'GET':
-        return render_template('user/upgrade.html')
-    current_user = User.query.get(session['user_id'])
-    if current_user and current_user.premium != True and request.method == 'POST':
-        # make a premium request
-        flash('Premium request successfully created','success')
-    else:
-        flash('You are already Premium user!','info')
+        if requested: flash('You already requested, you can update transaction id','info')
+        return render_template('user/upgrade.html',requested=requested)
+    elif current_user.premium != True and request.method == 'POST':
+        trans_id = request.form.get('transaction_id')
+        if requested: requested.trans_id = trans_id; flash('Updated transaction id','success')
+        else: new_request = PremiumReq(user_id=current_user.id, trans_id=trans_id); db.session.add(new_request); flash('Premium request successfully created','success')
+        db.session.commit()
     return redirect(url_for('user_home'))
 
 
@@ -213,6 +214,7 @@ def library_remove_playlist():
 
 ### others ###
 @app.route('/profile',methods=['get','post'])
+@login_required
 def profile():
     session['currentPage'] = None
     if request.method == 'POST':
@@ -222,9 +224,15 @@ def profile():
         if file and not(delete):
             image_loc = save_file('image/profile',current_user.id,file)
             current_user.cover=image_loc
-            db.session.commit()
         if current_user.cover and delete:
             remove_file('image/profile',current_user.cover)
             current_user.cover=None
-            db.session.commit()
+        db.session.commit()
+        flash('Updated your profile','success')
     return render_template('user/sub-temp/profile.html')
+
+@app.route('/search',methods=['get','post'])
+@login_required
+def search():
+    query = request.args.get('query',)
+    pass

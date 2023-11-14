@@ -1,5 +1,5 @@
 .heading {
-    display: flex; justify-content:space-between; padding: 6px;
+    display: flex; justify-content:space-between; padding: 6px; 
 }
 a.button {
     padding: 3px; text-align: center; display: flex; align-items: center;

@@ -13,51 +13,23 @@
 </script>
 <div class="heading">
     <h1>Your albums</h1>
-    <button onclick="popmenu('filter-form')"><h2>Apply filter</h2></button>
+    <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>
 </div>
-<form id="filter-form" action="/creator/uploads" method="post">
-    <div class="heading"><h3>Filters to apply</h3><button onclick="hidemenu('filter-form')">X</button></div>
-        <input type="text" name="song" placeholder="Song name">
-        <input type="text" name="artist" placeholder="Artist name">
-        <select name="language" id="language" required>
-            <option value="" selected disabled hidden>Select language</option>
-            <option value="none">No language</option>
-            <option value="english">English</option>
-            <option value="hindi">Hindi</option>
-            <option value="kannada">Kannada</option>
-            <option value="malayalam">Malayalam</option>
-            <option value="tamil">Tamil</option>
-            <option value="telugu">Telugu</option>
-            <option value="urdu">Urdu</option>
-            <option value="foreign">Rest-Foreign</option>
-        </select>
-        <select name="genre" id="genre" required>
-            <option value="" selected disabled hidden>Select genre</option>
-            <option value="classical">Classical</option>
-            <option value="devotional">Devotional</option>
-            <option value="dj">DJ</option>
-            <option value="folk">Folk</option>
-            <option value="item">Item</option>
-            <option value="love">Love</option>
-            <option value="motivational">Motivational</option>
-            <option value="music">Music</option>
-            <option value="patriotic">Patriotic</option>
-            <option value="ringtone">Ringtone</option>
-            <option value="romantic">Romantic</option>
-            <option value="sad">Sad</option>
-        </select>
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+<form class="form" id="filter-form" action="/creator/albums/" method="post">
+    <div class="filter-heading"><h2>Filters to apply</h2><div onclick="hidemenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Close filter X</strong></div></div>
+        <input class="text" type="text" name="album" placeholder="Album name">
+        <input class="text" type="text" name="artist" placeholder="Artist name">
         <select name="sortby" id="sort">
             <option value="" selected disabled hidden>Sort by</option>
             <option value="new">Newest</option>
             <option value="old">Oldest</option>
-            <option value="rating_high">Ratings high</option>
-            <option value="rating_low">Ratings low</option>
             <option value="alphabetical">Alphabetical</option>
         </select>
-        <input type="submit" value="Filter">
+        <input type="submit" value="Apply filter">
 </form>
 
- 
+
 <div class="albums-container">
         <a href="/creator/albums/create" class="album normal create">
                 <svg class="album-cover" width="100px" height="100px" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
@@ -83,11 +55,16 @@
             {% endif %}
             <h2>{{album.title}}</h2>
             <h3>No of songs: {{album.songs | length}}</h3>
+            <h3>Artist: {% if album.artist %} {{album.artist}} {% else %} -NA- {% endif %}</h3>
         </a>
         {% endfor %}
     {% else %}
-    <h1 style="width: 600px;">No albums created yet, create now!</h1>
-    </div>
+        {% if not filter %}
+            <h1 style="width: max-content; margin: 100px;">You don't have albums, create now!</h1>
+        {% else %}
+            <h1 style="width: max-content; margin: 100px;">No albums matching applied filter!</h1>
+        {% endif %}
     {% endif %}
+</div>
 
 {% endblock %}

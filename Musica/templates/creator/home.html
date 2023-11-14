@@ -1,6 +1,217 @@
 {% extends "creator/base.html" %}
 {% block content %}
-<h1>Start</h1>
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque nobis rem sunt, aut impedit saepe iusto neque quis quam libero ullam, ex minus vel modi distinctio deserunt necessitatibus ad ab eligendi at porro incidunt reiciendis. Iste corrupti repellendus quo velit animi quidem a alias ducimus optio minima veritatis vero, dicta sapiente blanditiis nam, dolore tenetur distinctio ea. Commodi magnam cum quo numquam inventore nam officia soluta voluptas quas saepe! Iste esse molestias praesentium impedit error enim officiis obcaecati, eligendi cupiditate voluptatibus, quis beatae debitis sint saepe asperiores. Reprehenderit, ullam excepturi nulla eius odit cumque nobis iure aspernatur tempora, autem necessitatibus.</p>
-<h1>End</h1>
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/home.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/songs.css')}}">
+
+<div class="main-header">
+    <h2>Creator dashboard</h2>
+    <a style="padding: 10px; background-color: red; color: white; border-radius: 9px;" href="/creator/uploads/upload" class="normal">Upload now</a>
+</div>
+<div class="main-body">
+    <div class="grid-item latest">
+        <h2>Latest song performance</h2>
+        <div class="sub-item">
+            <h3>Recently uploaded</h3>
+            <div class="song-container">
+                {% if recent %}
+                    <a class="song normal" href="/creator/uploads/{{recent.id}}"> 
+                        {% if recent.cover %}
+                        <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{recent.cover}}">
+                        {% else %}
+                        <svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                        width="60px" height="60px" viewBox="0 0 32 32" xml:space="preserve">
+                        <style type="text/css">
+                            .linesandangles_een{fill:#111918;}
+                        </style>
+                        <path class="linesandangles_een" d="M26,3.674L10,8.246v13.933c-0.383-0.135-0.797-0.215-1.231-0.215
+                            c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804c0.348,1.299,1.639,2.131,3.112,2.131
+                            c0.342,0,0.693-0.045,1.045-0.139C10.792,27.492,11.886,26.292,12,25l0,0V13.754l12-3.429v7.853
+                            c-0.383-0.135-0.797-0.215-1.231-0.215c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804
+                            c0.348,1.299,1.639,2.131,3.112,2.131c0.342,0,0.693-0.045,1.045-0.139C24.792,23.492,25.886,22.292,26,21l0,0V3.674z M9.789,25.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C10.018,24.869,9.9,25.117,9.789,25.279z M12,11.674v-1.92l12-3.429v1.92L12,11.674z M23.789,21.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C24.018,20.869,23.9,21.117,23.789,21.279z"/>
+                        </svg>
+                        {% endif %}
+                        <div class="song-details">
+                            <div class="row1">
+                                <h2>{{recent.title}}</h2>
+                            </div>
+                            <div class="row2">
+                                <h4>Duration: {{recent.duration}}</h4>
+                                <h4>Views: {{recent.play_count}}</h4>
+                                <h4>Rating: {{recent.rating}}</h4>
+                                <h4>Artist: {% if recent.artist %} {{recent.artist}} {% else %} -NA- {% endif %}</h4>
+                                <h4>Language: {{recent.language}}</h4>
+                                <h4>Genre: {{recent.genre}}</h4>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <h4>You don't have any uploads yet.</h4>
+                {% endif %}
+            </div>
+        </div>
+        <div class="sub-item">
+            <h3>Most viewed</h3>
+            <div class="song-container">
+                {% if viewed %}
+                    <a class="song normal" href="/creator/uploads/{{viewed.id}}"> 
+                        {% if viewed.cover %}
+                        <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{viewed.cover}}">
+                        {% else %}
+                        <svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                        width="60px" height="60px" viewBox="0 0 32 32" xml:space="preserve">
+                        <style type="text/css">
+                            .linesandangles_een{fill:#111918;}
+                        </style>
+                        <path class="linesandangles_een" d="M26,3.674L10,8.246v13.933c-0.383-0.135-0.797-0.215-1.231-0.215
+                            c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804c0.348,1.299,1.639,2.131,3.112,2.131
+                            c0.342,0,0.693-0.045,1.045-0.139C10.792,27.492,11.886,26.292,12,25l0,0V13.754l12-3.429v7.853
+                            c-0.383-0.135-0.797-0.215-1.231-0.215c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804
+                            c0.348,1.299,1.639,2.131,3.112,2.131c0.342,0,0.693-0.045,1.045-0.139C24.792,23.492,25.886,22.292,26,21l0,0V3.674z M9.789,25.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C10.018,24.869,9.9,25.117,9.789,25.279z M12,11.674v-1.92l12-3.429v1.92L12,11.674z M23.789,21.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C24.018,20.869,23.9,21.117,23.789,21.279z"/>
+                        </svg>
+                        {% endif %}
+                        <div class="song-details">
+                            <div class="row1">
+                                <h2>{{viewed.title}}</h2>
+                            </div>
+                            <div class="row2">
+                                <h4>Duration: {{viewed.duration}}</h4>
+                                <h4>Views: {{viewed.play_count}}</h4>
+                                <h4>Rating: {{viewed.rating}}</h4>
+                                <h4>Artist: {% if viewed.artist %} {{viewed.artist}} {% else %} -NA- {% endif %}</h4>
+                                <h4>Language: {{viewed.language}}</h4>
+                                <h4>Genre: {{viewed.genre}}</h4>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <h4>You don't have any uploads yet.</h4>
+                {% endif %}
+            </div>
+        </div>
+        <div class="sub-item">
+            <h3>Most +ve rated</h3>
+            <div class="song-container">
+                {% if positive %}
+                    <a class="song normal" href="/creator/uploads/{{positive.id}}"> 
+                        {% if positive.cover %}
+                        <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{positive.cover}}">
+                        {% else %}
+                        <svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                        width="60px" height="60px" viewBox="0 0 32 32" xml:space="preserve">
+                        <style type="text/css">
+                            .linesandangles_een{fill:#111918;}
+                        </style>
+                        <path class="linesandangles_een" d="M26,3.674L10,8.246v13.933c-0.383-0.135-0.797-0.215-1.231-0.215
+                            c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804c0.348,1.299,1.639,2.131,3.112,2.131
+                            c0.342,0,0.693-0.045,1.045-0.139C10.792,27.492,11.886,26.292,12,25l0,0V13.754l12-3.429v7.853
+                            c-0.383-0.135-0.797-0.215-1.231-0.215c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804
+                            c0.348,1.299,1.639,2.131,3.112,2.131c0.342,0,0.693-0.045,1.045-0.139C24.792,23.492,25.886,22.292,26,21l0,0V3.674z M9.789,25.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C10.018,24.869,9.9,25.117,9.789,25.279z M12,11.674v-1.92l12-3.429v1.92L12,11.674z M23.789,21.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C24.018,20.869,23.9,21.117,23.789,21.279z"/>
+                        </svg>
+                        {% endif %}
+                        <div class="song-details">
+                            <div class="row1">
+                                <h2>{{positive.title}}</h2>
+                            </div>
+                            <div class="row2">
+                                <h4>Duration: {{positive.duration}}</h4>
+                                <h4>Views: {{positive.play_count}}</h4>
+                                <h4>Rating: {{positive.rating}}</h4>
+                                <h4>Artist: {% if positive.artist %} {{positive.artist}} {% else %} -NA- {% endif %}</h4>
+                                <h4>Language: {{positive.language}}</h4>
+                                <h4>Genre: {{positive.genre}}</h4>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <h4>You don't have any uploads yet.</h4>
+                {% endif %}
+            </div>
+        </div>
+        <div class="sub-item">
+            <h3>Most -ve rated</h3>
+            <div class="song-container">
+                {% if negative %}
+                    <a class="song normal" href="/creator/uploads/{{negative.id}}"> 
+                        {% if negative.cover %}
+                        <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{negative.cover}}">
+                        {% else %}
+                        <svg version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                        width="60px" height="60px" viewBox="0 0 32 32" xml:space="preserve">
+                        <style type="text/css">
+                            .linesandangles_een{fill:#111918;}
+                        </style>
+                        <path class="linesandangles_een" d="M26,3.674L10,8.246v13.933c-0.383-0.135-0.797-0.215-1.231-0.215
+                            c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804c0.348,1.299,1.639,2.131,3.112,2.131
+                            c0.342,0,0.693-0.045,1.045-0.139C10.792,27.492,11.886,26.292,12,25l0,0V13.754l12-3.429v7.853
+                            c-0.383-0.135-0.797-0.215-1.231-0.215c-0.342,0-0.693,0.045-1.045,0.139c-1.867,0.5-3.033,2.203-2.604,3.804
+                            c0.348,1.299,1.639,2.131,3.112,2.131c0.342,0,0.693-0.045,1.045-0.139C24.792,23.492,25.886,22.292,26,21l0,0V3.674z M9.789,25.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C10.018,24.869,9.9,25.117,9.789,25.279z M12,11.674v-1.92l12-3.429v1.92L12,11.674z M23.789,21.279
+                            c-0.219,0.32-0.595,0.571-1.031,0.687c-0.176,0.047-0.353,0.071-0.528,0.071c-0.583,0-1.079-0.273-1.18-0.649
+                            c-0.069-0.258,0.049-0.505,0.16-0.667c0.219-0.32,0.595-0.571,1.031-0.687c0.176-0.047,0.353-0.071,0.528-0.071
+                            c0.583,0,1.079,0.273,1.18,0.649C24.018,20.869,23.9,21.117,23.789,21.279z"/>
+                        </svg>
+                        {% endif %}
+                        <div class="song-details">
+                            <div class="row1">
+                                <h2>{{negative.title}}</h2>
+                            </div>
+                            <div class="row2">
+                                <h4>Duration: {{negative.duration}}</h4>
+                                <h4>Views: {{negative.play_count}}</h4>
+                                <h4>Rating: {{negative.rating}}</h4>
+                                <h4>Artist: {% if negative.artist %} {{negative.artist}} {% else %} -NA- {% endif %}</h4>
+                                <h4>Language: {{negative.language}}</h4>
+                                <h4>Genre: {{negative.genre}}</h4>
+                            </div>
+                        </div>
+                    </a>
+                {% else %}
+                    <h4>You don't have any uploads yet.</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="grid-item blacklist">
+        <h2>Community guidelines check</h2>
+        <div class="justify">
+            {% if blacklisted %}
+                <h4 style="text-align: center; color: red;">You got a strike, you do any action here!</h4>
+            {% else %}
+                <h4 style="text-align: center; color: green;">You don't have any strikes, keep going!</h4>
+            {% endif %}
+        </div>
+    </div>
+    <div class="grid-item history">
+        <h2>About you</h2>
+        <div class="justify">
+            <h4>First name                   : {{current_user.f_name}}</h4>
+            <h4>Last name                    : {{current_user.l_name}}</h4>
+            <h4>No. of song uploaded  : {{ current_user.songs | length }}</h4>
+            <h4>No. of albums created : {{ current_user.albums | length }}</h4>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

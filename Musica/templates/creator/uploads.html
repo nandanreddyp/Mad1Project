@@ -13,13 +13,14 @@
 </script>
 <div class="heading">
     <h1>Your uploads</h1>
-    <button onclick="popmenu('filter-form')"><h2>Apply filter</h2></button>
+    <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>
 </div>
-<form id="filter-form" action="/creator/uploads" method="post">
-    <div class="heading"><h3>Filters to apply</h3><button onclick="hidemenu('filter-form')">X</button></div>
-        <input type="text" name="song" placeholder="Song name">
-        <input type="text" name="artist" placeholder="Artist name">
-        <select name="language" id="language" required>
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+<form class="form" id="filter-form" action="/creator/uploads/" method="post">
+    <div class="filter-heading"><h2>Filters to apply on song</h2><div onclick="hidemenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Close filter X</strong></div></div>
+        <input class="text" type="text" name="song" placeholder="Song name">
+        <input class="text" type="text" name="artist" placeholder="Artist name">
+        <select name="language" id="language">
             <option value="" selected disabled hidden>Select language</option>
             <option value="none">No language</option>
             <option value="english">English</option>
@@ -31,7 +32,7 @@
             <option value="urdu">Urdu</option>
             <option value="foreign">Rest-Foreign</option>
         </select>
-        <select name="genre" id="genre" required>
+        <select name="genre" id="genre">
             <option value="" selected disabled hidden>Select genre</option>
             <option value="classical">Classical</option>
             <option value="devotional">Devotional</option>
@@ -54,11 +55,11 @@
             <option value="rating_low">Ratings low</option>
             <option value="alphabetical">Alphabetical</option>
         </select>
-        <input type="submit" value="Filter">
+        <input type="submit" value="Apply filter">
 </form>
 
 <div class="songs-container">
-    {% if songs %}
+    {% if songs.items %}
         {% for song in songs %}
         <a class="song normal" href="/creator/uploads/{{song.id}}"> 
             {% if song.cover %}
@@ -98,12 +99,16 @@
         </a>
         {% endfor %}
         {% if songs.has_next %}
-            <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><a class="normal" href="/creator/uploads?view={{view}}">View more</a></div>
+            <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/creator/uploads?view={{view}}">View more</a></div>
         {% else %}
             <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><h2>--The End--</h2></div>
         {% endif %}
     {% else %}
-        <h1>You haven't uploaded any songs yet :-(</h1>
+        {% if not filter %}
+            <h1>You don't have uploaded songs, upload now to add!</h1>
+        {% else %}
+            <h1>No songs matching applied filter...</h1>
+        {% endif %}
     {% endif %}
 </div>
 

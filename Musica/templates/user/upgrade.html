@@ -1,19 +1,20 @@
 {% extends "user/base.html" %}
 {% block content %}
 
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/form.css')}}">
 {% if current_user.premium %}
-<div class="float-middle">
+<div class="parentcenter">
     <h1>You are a premium user!</h1>
     <h3>Download unlimited songs and watch no ads...:-)</h3>
 </div>
 {% else %}
-<div class="float-middle">
+<div class="parentcenter">
     <h1>Get premium and download unlimited songs!</h1>
     <h3>Send 420₹ to upi 944***490*@axl and submit transaction id below.</h3>
-    <form>
-        <div class="input-main">
-            <input type="text" placeholder=" " name="transaction_id"  required>
-            <label for="transaction_id">Transaction id</label>
+    <form class="form" action="/upgrade" method="post">
+        <div class="inputText">
+            <input class="text" type="text" placeholder=" " name="transaction_id"  required {% if requested %}value="{{requested.trans_id}}"{% endif %}>
+            <label class="box-ph" for="transaction_id">Transaction id</label>
         </div>
         <input type="submit">
     </form>

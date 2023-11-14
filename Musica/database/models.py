@@ -79,7 +79,7 @@ class Rating(db.Model):
 class Album(db.Model):
     __tablename__ = 'albums'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
-    title = db.Column(db.String,nullable=False); artist = db.Column(db.String, default='-NA-'); cover = db.Column(db.String)
+    title = db.Column(db.String,nullable=False); artist = db.Column(db.String); cover = db.Column(db.String)
     time_added = db.Column(db.DateTime, default=datetime.utcnow)
     # foreign key relationship to user
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
@@ -108,7 +108,13 @@ class Library(db.Model):
     # many-to-many relationship with playlists
     playlists = db.relationship('Playlist', secondary=library_palylist_association, lazy=True)
 
+# admin required
 
 class Blacklist(db.Model):
     __tablename__ = 'blaklist'
     creator_id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+
+class PremiumReq(db.Model):
+    __tablename__ = 'premium_requests'
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    trans_id = db.Column(db.String)
