@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 # for time song and palylist added:
 from datetime import datetime
@@ -15,11 +15,12 @@ class User(db.Model, UserMixin):
     premium = db.Column(db.Boolean,default=False); cover = db.Column(db.String)
     role = db.Column(db.String,default='user'); library = db.relationship('Library',backref='user',uselist=False)
     # one-to-many relationships
+    played = db.relationship('Play',back_populates='user',cascade='all, delete-orphan')
     playlists = db.relationship('Playlist',back_populates='user',cascade="all, delete-orphan")
     songs = db.relationship('Song',back_populates='user',cascade="all, delete-orphan")
     albums = db.relationship('Album',back_populates='user',cascade="all, delete-orphan")
     ratings = db.relationship('Rating',back_populates='user',cascade="all, delete-orphan")
-    library = db.relationship('Library',back_populates='user',cascade='all, delete-orphan')
+    library = db.relationship('Library',back_populates='user',uselist=False,cascade='all, delete-orphan')
 
 # many to many relationship declaration
 album_song_association = db.Table('album_song_association',
@@ -53,8 +54,10 @@ class Song(db.Model):
     language = db.Column(db.String,nullable=False)
     artist = db.Column(db.String)
     genre = db.Column(db.String)
+    flagged = db.Column(db.Boolean,default=False)
     # analytics useage
     play_count = db.Column(db.Integer, default=0)
+    plays = db.relationship('Play',back_populates='song',cascade='all, delete-orphan')
     rating = db.Column(db.Float, default=0.0)
     ratings = db.relationship('Rating',back_populates='song',cascade="all, delete-orphan")
     # foreign key relationship to user
@@ -74,13 +77,21 @@ class Rating(db.Model):
     user = db.relationship('User',back_populates='ratings')
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
     song = db.relationship('Song',back_populates='ratings')
-    rating = db.Column(db.Boolean, nullable=False)
+
+class Play(db.Model):
+    __tablename__ = 'Song_plays'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User',back_populates='played')
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song = db.relationship('Song',back_populates='plays')
 
 class Album(db.Model):
     __tablename__ = 'albums'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     title = db.Column(db.String,nullable=False); artist = db.Column(db.String); cover = db.Column(db.String)
     time_added = db.Column(db.DateTime, default=datetime.utcnow)
+    flagged = db.Column(db.Boolean, default=False)
     # foreign key relationship to user
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User',back_populates='albums')
@@ -90,7 +101,7 @@ class Album(db.Model):
 class Playlist(db.Model):
     __tablename__ = 'playlists'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True); title = db.Column(db.String,nullable=False)
-    time_added = db.Column(db.DateTime, default=datetime.utcnow)
+    time_added = db.Column(db.DateTime, default=datetime.utcnow); public = db.Column(db.Boolean,default=False)
     # foreign key relationship to User
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User',back_populates='playlists')

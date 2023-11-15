@@ -1,0 +1,17 @@
+{% extends "user/base.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/form.css')}}">
+
+<div class="parentcenter">
+    <h1 style="text-align: center; margin: 10px;">{% if not playlist %}Playlist create form{% else %}Playlist update form{% endif %}</h1>
+    <form class="form" enctype="multipart/form-data" action={% if not playlist %}"/playlists/create"{% else %}"/playlists/{{playlist.id}}/update"{% endif %} method="post">
+        <h4 style="color: red; text-align: end;">Fields marked with * are mandatory</h4>
+        <div class="inputText">
+            <input type="text" class="text" id="title" name="title" required placeholder=" " {% if playlist %}value="{{playlist.title}}"{% endif %}>
+            <label for="title" class="box-ph">Album title *</label>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}

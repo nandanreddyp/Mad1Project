@@ -102,7 +102,7 @@
             </div>
         </div>
         <div class="sub-item">
-            <h3>Most +ve rated</h3>
+            <h3>Most rated</h3>
             <div class="song-container">
                 {% if positive %}
                     <a class="song normal" href="/creator/uploads/{{positive.id}}"> 
@@ -147,7 +147,7 @@
             </div>
         </div>
         <div class="sub-item">
-            <h3>Most -ve rated</h3>
+            <h3>Least rated</h3>
             <div class="song-container">
                 {% if negative %}
                     <a class="song normal" href="/creator/uploads/{{negative.id}}"> 
@@ -196,7 +196,7 @@
         <h2>Community guidelines check</h2>
         <div class="justify">
             {% if blacklisted %}
-                <h4 style="text-align: center; color: red;">You got a strike, you do any action here!</h4>
+                <h4 style="text-align: center; color: red;">You got a strike, you're restricted!</h4>
             {% else %}
                 <h4 style="text-align: center; color: green;">You don't have any strikes, keep going!</h4>
             {% endif %}

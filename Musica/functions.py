@@ -85,3 +85,30 @@ def get_lyrics(file_name):
     file_path = os.path.join(cwd,'Musica','static','uploads','lyrics',file_name)
     lines = ('').join(open(file_path,'r',encoding='utf-8').readlines())
     return lines
+
+def get_song(file_name):
+    import os; cwd = os.getcwd();
+    file_path = os.path.join(cwd,'Musica','static','uploads','songs',file_name)
+    return file_path
+
+# user liked or not?
+def has_user_liked(current_user, song):
+    from Musica.database.models import Rating
+    rating = Rating.query.filter_by(user_id=current_user.id,song_id=song.id).first()
+    return rating is not None
+
+# update ratings
+def update_rating(song):
+    from Musica.database.models import db
+    ratings = len(song.ratings)
+    plays = len(song.plays)
+    song.rating = round((ratings/plays)*100,2)
+    db.session.commit()
+    return ''
+
+# update view count
+def update_play_count(song):
+    from Musica.database.models import db
+    song.play_count = len(song.plays)
+    db.session.commit()
+    return ''

@@ -1,0 +1,77 @@
+{% extends "user/base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/search.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/songs.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/albums.css')}}">
+
+<p style="font-size: 32px;">Search results for '<strong>{{query}}</strong>'</p>
+<div class="main-results-container">
+<!--songs-->
+    <div class="song-results-container item-results">
+        {% if songs %}
+        <h2>Results for '{{query}}' in songs:</h2>
+            {% for song in songs %}
+                <a class="normal song-item" href="/songs/{{song.id}}">
+                    <h2>{{ loop.index }}</h1>
+                    <div class="song-cover-small">
+                        {% if song.cover %} <img src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_song.png')}}"> {% endif %}
+                    </div>
+                    <div class="song-title"><h3>{{song.title}}</h3></div>
+                    <div class="song-artist"><h3>{{song.artist}}</h3></div>
+                    <div class="song-like"><img src={% if has_user_liked(current_user, song) %}"{{url_for('static',filename='images/liked.png')}}"{% else %}"{{url_for('static',filename='images/not_liked.png')}}"{% endif %}></div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <h2>No results for songs with '{{query}}'</h2>
+        {% endif %}
+    </div>
+
+<!--albums-->
+    <div class="abum-results-container item-results">
+        {% if albums %}
+        <h2>Results for '{{query}}' in albums:</h2>
+        <div class="container">
+            {% for album in albums %}
+                <a class="normal album-item" href="/albums/{{album.id}}">
+                    <div class="album-cover-small">
+                        {% if album.cover %} <img src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_album.png')}}"> {% endif %}
+                    </div>
+                    <div style="width: 100%;" >
+                        <div class="album-title"><h3>{{album.title}}</h3></div>
+                        <div class="album-artist"><h3>{% if album.artist %}By '{{album.artist}}'{% else %}ㅤ{% endif %}</h3></div>
+                        <div class="album-noof-songs">No of songs: {{ album.songs | length }}</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        {% else %}
+            <h2>No results for albums with '{{query}}'</h2>
+        {% endif %}
+    </div>
+
+<!--playlists-->
+    <div class="playlist-results-container item-results">
+        {% if playlists %}
+        <h2>Results for '{{query}}' in public playlists:</h2>
+            {% for palylist in palylists %}
+                <a class="normal album-item" href="/playlists/{{playlist.id}}">
+                    <div class="album-cover-small">
+                        <img src="{{url_for('static',filename='images/default_playlist.png')}}">
+                    </div>
+                    <div style="width: 100%;" >
+                        <div class="album-title"><h3>{{playlist.title}}</h3></div>
+                        <div class="album-artist"><h3>By: {{playlist.user_id}}</h3></div>
+                        <div class="album-noof-songs">No of songs: {{ playlist.songs | length }}</div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <h2>No results for playlists with '{{query}}'</h2>
+        {% endif %}
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -51,7 +51,9 @@ def signup():
         from Musica.functions import hash
         user = User(id=data['email'],password=hash(data['password']),f_name=data['f_name'],l_name=data['l_name'])
         library = Library(user_id=user.id)
-        db.session.add(user, library); db.session.commit()
+        db.session.add(user)
+        db.session.add(library)
+        db.session.commit()
         dp = request.files['dp']
         if dp:
             from Musica.functions import save_file

@@ -1,6 +1,88 @@
 {% extends "user/base.html" %}
 {% block content %}
-<h1>Start</h1>
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque nobis rem sunt, aut impedit saepe iusto neque quis quam libero ullam, ex minus vel modi distinctio deserunt necessitatibus ad ab eligendi at porro incidunt reiciendis. Iste corrupti repellendus quo velit animi quidem a alias ducimus optio minima veritatis vero, dicta sapiente blanditiis nam, dolore tenetur distinctio ea. Commodi magnam cum quo numquam inventore nam officia soluta voluptas quas saepe! Iste esse molestias praesentium impedit error enim officiis obcaecati, eligendi cupiditate voluptatibus, quis beatae debitis sint saepe asperiores. Reprehenderit, ullam excepturi nulla eius odit cumque nobis iure aspernatur tempora, autem necessitatibus.</p>
-<h1>End</h1>
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/songs.css')}}">
+
+<div class="heading-menu"><a style="padding: 6px; outline: 1px solid black; background-color: red; color: white;" class="normal" href="#">Songs</a> <a style="padding: 6px; outline: 1px solid black;" class="normal" href="/albums">Albums</a></div>
+<script>
+    function popmenu(id) {
+        var element = document.getElementById(id);
+        element.style.visibility = 'visible';
+    }
+    function hidemenu(id) {
+        var element = document.getElementById(id);
+        element.style.visibility = 'hidden';
+    }
+</script>
+<div class="heading">
+    <h1>Explore songs</h1>
+    <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>
+</div>
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+<form class="form" id="filter-form" action="/songs" method="post">
+    <div class="filter-heading"><h2>Filters to apply on song</h2><div onclick="hidemenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Close filter X</strong></div></div>
+        <input class="text" type="text" name="song" placeholder="Song name">
+        <input class="text" type="text" name="artist" placeholder="Artist name">
+        <select name="language" id="language">
+            <option value="" selected disabled hidden>Select language</option>
+            <option value="none">No language</option>
+            <option value="english">English</option>
+            <option value="hindi">Hindi</option>
+            <option value="kannada">Kannada</option>
+            <option value="malayalam">Malayalam</option>
+            <option value="tamil">Tamil</option>
+            <option value="telugu">Telugu</option>
+            <option value="urdu">Urdu</option>
+            <option value="foreign">Rest-Foreign</option>
+        </select>
+        <select name="genre" id="genre">
+            <option value="" selected disabled hidden>Select genre</option>
+            <option value="classical">Classical</option>
+            <option value="devotional">Devotional</option>
+            <option value="dj">DJ</option>
+            <option value="folk">Folk</option>
+            <option value="item">Item</option>
+            <option value="love">Love</option>
+            <option value="motivational">Motivational</option>
+            <option value="music">Music</option>
+            <option value="patriotic">Patriotic</option>
+            <option value="ringtone">Ringtone</option>
+            <option value="romantic">Romantic</option>
+            <option value="sad">Sad</option>
+        </select>
+        <select name="sortby" id="sort">
+            <option value="" selected disabled hidden>Sort by</option>
+            <option value="new">Newest</option>
+            <option value="old">Oldest</option>
+            <option value="rating_high">Ratings high</option>
+            <option value="rating_low">Ratings low</option>
+            <option value="alphabetical">Alphabetical</option>
+        </select>
+        <input type="submit" value="Apply filter">
+</form>
+{% if filter %}<h2>Results for applied filter</h2>{% else %}<h2>Recently uploaded songs</h2>{% endif %}
+<div style="padding-top: 5px; min-height: calc(100% - 120px); padding-bottom: 100px;" class="songs-container">
+    {% if songs.items %}
+        {% for song in songs %}
+            <a class="normal song-item" href="/songs/{{song.id}}">
+                <h2>{{ loop.index }}</h1>
+                <div class="song-cover-small">
+                    {% if song.cover %} <img src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_song.png')}}"> {% endif %}
+                </div>
+                <div class="song-title"><h3>{{song.title}}</h3></div>
+                <div class="song-artist"><h3>{{song.artist}}</h3></div>
+                <div class="song-like"><img src={% if has_user_liked(current_user, song) %}"{{url_for('static',filename='images/liked.png')}}"{% else %}"{{url_for('static',filename='images/not_liked.png')}}"{% endif %}></div>
+            </a>
+        {% endfor %}
+        {% if songs.has_next %}
+            <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/songs?view={{view}}">View more</a></div>
+        {% else %}
+            <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><h2>--The End--</h2></div>
+        {% endif %}
+    {% else %}
+        {% if not filter %}<h2>No songs uploaded yet, please wait</h2>{% else %}<h2>No songs matching applied filter</h2>{% endif %}
+    {% endif %}
+
+</div>
+
 {% endblock %}

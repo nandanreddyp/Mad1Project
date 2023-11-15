@@ -1,0 +1,43 @@
+{% extends "user/base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/albums.css')}}">
+<style>
+    .heading {
+        display: flex; align-items: center; justify-content: space-evenly;
+        height: 40px;
+    }
+</style>
+
+<div class="heading"><a style="padding: 6px; outline: 1px solid black; background-color: red; color: white;" class="normal" href="/library/songs">Liked songs</a> <a style="padding: 6px; outline: 1px solid black; background-color: red; color: white;" class="normal" href="/library/albums">Albums</a> <a style="padding: 6px; outline: 1px solid black;" class="normal" href="#">Playlists</a></div>
+
+<div><h1>Your playlists</h1></div>
+<div style="min-height: calc(100% - 80px);" class="albums-container">
+        <a href="/playlists/create" class="normal album-item">
+            <div class="album-cover-small">
+                <img src="{{url_for('static',filename='images/default_playlist_add.png')}}">
+            </div>
+            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                <div><h3>Create playlist</h3></div>
+            </div>
+        </a>
+    {% if current_user.library.playlists %}
+        {% for album in current_user.library.playlists[::-1] %}
+            <a class="normal album-item" href="/playlists/{{album.id}}">
+                <div class="album-cover-small">
+                    <img src="{{url_for('static',filename='images/default_playlist.png')}}">
+                </div>
+                <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-evenly;" >
+                    <div class="album-title"><h2>{{album.title}}</h2></div>
+                    <div class="album-noof-songs">No of songs: {{ album.songs | length }}</div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+            <h2 style="width: 600px;">Create playlists to group songs</h2>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

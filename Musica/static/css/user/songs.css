@@ -1,0 +1,28 @@
+.heading-menu {
+    display: flex; align-items: center; justify-content: space-evenly;
+    height: 40px; background-color: rgb(235, 235, 235);
+}
+.heading {
+    display: flex; justify-content:space-between; padding: 6px;
+}
+.songs-container {
+    background-color: rgb(255, 198, 198);
+    min-height: calc(100% - 40px);
+}
+.song-item {
+    display: flex; align-items: center; justify-content: space-evenly;
+    background-color: white; padding: 6px; border-radius: 6px; margin: 3px 6px;
+}
+.song-cover-small, .song-cover-small img {
+    width: 60px; height: 60px; object-fit: cover;
+    border-radius: 10px;
+}
+.song-item .song-like, .song-item .song-like img {
+    width: 40px; height: 40px;
+}
+.song-item .song-title {
+    width: 30%;
+}
+.song-item .song-artist {
+    width: 30%;
+}

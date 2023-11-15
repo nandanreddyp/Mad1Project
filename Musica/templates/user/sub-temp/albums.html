@@ -1,0 +1,54 @@
+{% extends "user/base.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('static',filename='css/user/albums.css')}}">
+
+<div class="heading-menu"><a style="padding: 6px; outline: 1px solid black;" class="normal" href="/songs">Songs</a> <a style="padding: 6px; outline: 1px solid black; background-color: red; color: white;" class="normal" href="#">Albums</a></div>
+<script>
+    function popmenu(id) {
+        var element = document.getElementById(id);
+        element.style.visibility = 'visible';
+    }
+    function hidemenu(id) {
+        var element = document.getElementById(id);
+        element.style.visibility = 'hidden';
+    }
+</script>
+<div class="heading">
+    <h1>Explore albums</h1>
+    <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>
+</div>
+<link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
+<form class="form" id="filter-form" action="/albums" method="post">
+    <div class="filter-heading"><h2>Filters to apply</h2><div onclick="hidemenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Close filter X</strong></div></div>
+        <input class="text" type="text" name="album" placeholder="Album name">
+        <input class="text" type="text" name="artist" placeholder="Artist name">
+        <select name="sortby" id="sort">
+            <option value="" selected disabled hidden>Sort by</option>
+            <option value="new">Newest</option>
+            <option value="old">Oldest</option>
+            <option value="alphabetical">Alphabetical</option>
+        </select>
+        <input type="submit" value="Apply filter">
+</form>
+{% if not filter %}<h2>Recently created albums</h2>{%else%}<h2>Results for applied filter</h2>{%endif%}
+<div style="padding-top: 5px; min-height: calc(100% - 120px); padding-bottom: 100px;" class="albums-container">
+    {% if albums %}
+        {% for album in albums %}
+            <a class="normal album-item" href="/albums/{{album.id}}">
+                <div class="album-cover-small">
+                    {% if album.cover %} <img src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_album.png')}}"> {% endif %}
+                </div>
+                <div style="width: 100%;" >
+                    <div class="album-title"><h3>{{album.title}}</h3></div>
+                    <div class="album-artist"><h3>{% if album.artist %}By '{{album.artist}}'{% else %}ㅤ{% endif %}</h3></div>
+                    <div class="album-noof-songs">No of songs: {{ album.songs | length }}</div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        {% if not filter %}<h2>No albums created yet, please wait</h2>{%else%}<h2>No albums matching applied filter</h2>{%endif%}
+    {% endif %}
+</div>
+
+{% endblock %}

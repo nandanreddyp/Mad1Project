@@ -1,9 +1,9 @@
 from Musica import app
 from Musica.database.models import *
-from flask import session, render_template, flash, redirect, url_for, request
+from flask import session, render_template, flash, redirect, url_for, request, send_file
 
 from Musica.routes.permissions import *
-from Musica.functions import save_file, remove_file
+from Musica.functions import save_file, remove_file, has_user_liked, update_play_count, update_rating, get_lyrics, get_song
 
 ## Main views ##
 ################
@@ -13,10 +13,33 @@ def user_home():
     session['currentPage'] = 'home'
     return render_template('user/home.html')
 
-@app.route('/explore')
+@app.route('/songs',methods=['GET','POST'])
 def user_explore():
     session['currentPage'] = 'explore'
-    return render_template('user/explore.html')
+    if request.method=='POST':
+        view = request.args.get('view',6,type=int)
+        data = request.form; song_name = data.get('song'); artist_name = data.get('artist'); language = data.get('language'); genre = data.get('genre'); sort_by = data.get('sortby')
+        filtered = Song.query.filter_by(user_id=current_user.id)
+        if song_name:
+            filtered = filtered.filter(Song.title.ilike('%'+song_name+'%'))
+        if artist_name:
+            filtered = filtered.filter(Song.artist.ilike('%'+artist_name+'%'))
+        if language:
+            filtered = filtered.filter(Song.language.ilike('%'+language+'%'))
+        if genre:
+            filtered =  filtered.filter(Song.genre.ilike('%'+genre+'%'))
+        if sort_by:
+            if sort_by == 'new': filtered = filtered.order_by(Song.time_added.desc())
+            elif sort_by == 'old': filtered = filtered.order_by(Song.time_added.asc())
+            elif sort_by == 'rating_high': filtered = filtered.order_by(Song.rating.desc())
+            elif sort_by == 'rating_low': filtered = filtered.order_by(Song.rating.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(Song.title.asc())
+        filtered = filtered.paginate(page=1, per_page=view)
+        flash('Filter applied','success')
+        return render_template('user/explore.html',songs=filtered,has_user_liked=has_user_liked,filter=True,view=view+6)
+    view = request.args.get('view',6,type=int)
+    songs = Song.query.filter_by(flagged=False).order_by(Song.time_added.desc()).paginate(page=1, per_page=view)
+    return render_template('user/explore.html',songs=songs,has_user_liked=has_user_liked,view=view+6)
 
 @app.route('/library')
 def user_library():
@@ -41,26 +64,29 @@ def get_premium():
 ##Song routes##
 ###############
 #read
-@app.route('/songs/', defaults={'song_id':None}, methods=['GET','POST'])
-@app.route('/songs/<int:song_id>',methods=['GET','POST'])
-def uploads(song_id):
-    if request.method == 'GET' and song_id:
-        song = Song.query.get(song_id)
-        return render_template('user/sub-temp/rating.html')
-    elif request.method == 'POST':
-        # return queried results
-        pass
-    else:
-        # show all songs
-        songs = Song.query.filter_by(Song.user_id==current_user.id).all()
-        return render_template('creator/songs.html', songs=songs)
-#rating with json to update without increment count
-@app.route('/songs/<int:song_id>/rate/<int:rating>')
-def rate(song_id,rating):
-    pass
+@app.route('/songs/<int:song_id>')
+def songs(song_id):
+    song = Song.query.get(song_id)
+    if request.method == 'GET' and song:
+        watched = Play.query.filter_by(user_id=current_user.id, song_id=song.id).first()
+        if not(watched): db.session.add(Play(user_id=current_user.id, song_id=song.id)); db.session.commit(); update_play_count(song)
+        return render_template('user/sub-temp/song.html',song=song,get_lyrics=get_lyrics,has_user_liked=has_user_liked)
+
+#rating
+@app.route('/songs/<int:song_id>/rate')
+def rate(song_id):
+    song = Song.query.get(song_id)
+    if song and not(has_user_liked(current_user,song)):
+        db.session.add(Rating(user_id=current_user.id, song_id=song.id)); db.session.commit()
+    elif song and has_user_liked(current_user, song):
+        rating = Rating.query.filter_by(user_id=current_user.id, song_id=song.id).first()
+        db.session.delete(rating); db.session.commit()
+    update_rating(song)
+    return redirect(f'/songs/{song_id}')
+
 #assign a song to a particular playlist
-@app.route('/songs/<int:song_id>/add/<int:playlist_id>')
-def from_song_add_playlist(song_id,playlist_id):
+@app.route('/songs/<int:song_id>/<way>/playlists/<int:playlist_id>')
+def from_song_add_playlist(song_id,way,playlist_id):
     song = Song.query.get(song_id); playlist = Playlist.query.get(playlist_id)
     if playlist_id and not(song_id) and request.method=='GET':
         # show not added user playlists in pagination format
@@ -78,17 +104,45 @@ def from_song_add_playlist(song_id,playlist_id):
 ##Album routes##
 ################
 #read
-@app.route('/albums/<int:album_id>',methods=['GET','POST'])
+@app.route('/albums', defaults={'album_id':None}, methods=['GET','POST'])
+@app.route('/albums/<int:album_id>', methods=['GET','POST'])
 def albums(album_id):
-    if request.method == 'GET' and album_id:
-        album = Album.query.get(album_id)
-        return render_template('creator/album_view.html',album=album)
-    elif request.method == 'POST':
-        # return filtered results
-        pass
+    session['currentPage'] = 'explore'
+    album = Album.query.get(album_id)
+    if request.method == 'GET' and album:
+        return render_template('user/album_view.html',album=album)
+    elif request.method == 'POST' and not(album_id):
+        data = request.form; album_name = data.get('album'); artist_name = data.get('artist'); sort_by = data.get('sortby')
+        filtered = Album.query.filter_by(user_id=current_user.id)
+        if album_name:
+            filtered = filtered.filter(Album.title.ilike('%'+album_name+'%'))
+        if artist_name:
+            filtered = filtered.filter(Album.artist.ilike('%'+artist_name+'%'))
+        if sort_by:
+            if sort_by == 'new': filtered = filtered.order_by(Album.time_added.desc())
+            elif sort_by == 'old': filtered = filtered.order_by(Album.time_added.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(Album.title.asc())
+        filtered = filtered.all()
+        flash('Filter applied','success')
+        return render_template('user/sub-temp/albums.html', albums=filtered, filter=True)
     else :
-        albums = Album.query.filter_by(Album.user_id==session['user_id']).all()
-        return render_template('creator/albums.html', albums=albums)
+        albums = Album.query.filter_by(flagged=False).all()
+        return render_template('user/sub-temp/albums.html', albums=albums)
+
+#assign album to library
+@app.route('/albums/<int:album_id>/<way>/library')
+def album_to_library(album_id,way):
+    album = Song.query.get(album_id)
+    if album and way=='add':
+        if album not in current_user.library.albums:
+            current_user.library.albums.append(album); db.session.commit()
+            flash('Song added to library','success')
+    elif album and way=='remove':
+        if album in current_user.library.albums:
+            current_user.library.albums.remove(album); db.session.commit()
+            flash('Song removed from library','success')
+    return redirect(f'/albums/{album_id}')
+
 
 ##Playlist routes##
 ###################
@@ -96,11 +150,14 @@ def albums(album_id):
 @app.route('/playlists/create',methods=['GET','POST'])
 def create_playlist():
     if request.method == 'GET':
-        pass
-        # send form to upload
+        return render_template('user/sub-temp/playlist-create.html')
     elif request.method == 'POST':
-        pass
-        # make song data in db and save file
+        title = request.form.get('title')
+        playlist = Playlist(title=title,user_id=current_user.id)
+        db.session.add(playlist)
+        current_user.library.playlists.append(playlist)
+        db.session.commit()
+        return redirect('/library')
 #read
 @app.route('/playlists/<int:playlist_id>',methods=['GET','POST'])
 def playlists(playlist_id):
@@ -116,103 +173,74 @@ def playlists(playlist_id):
         playlists = Playlist.query.filter_by(Playlist.user_id==session['user_id']).all()
         return render_template('creator/playlists.html', playlists=playlists)
 #update
-@app.route('/playlists/<int:playlist_id>/update',methods=['GET','POST'])
-def playlist_edit(playlist_id):
-    if request.method == 'GET':
-        playlist = Playlist.query.get(playlist_id)
-        return render_template('creator/playlist_update.html',playlist=playlist)
-    elif request.method == 'POST':
-        # update song details
-        pass
-    pass
-#delete
-@app.route('/playlists/<int:playlist_id>/delete')
-def delete(playlist_id):
+@app.route('/playlists/<int:playlist_id>/<method>',methods=['GET','POST'])
+def playlist_edit(playlist_id,method):
     playlist = Playlist.query.get(playlist_id)
-    if playlist_id and playlist:
+    if playlist and method=='update' and playlist.user_id==current_user.id:
+        if request.method == 'GET':
+            return render_template('user/sub-temp/playlist-create.html',playlist=playlist)
+        elif request.method == 'POST':
+            title = request.form.get('title')
+            playlist.title=title
+            db.session.commit()
+            return redirect('/library/playlists')
+        return redirect(f'/playlists/{playlist_id}')
+    elif playlist and method=='delete' and playlist.user_id==current_user.id:
         db.session.delete(playlist); db.session.commit()
-        # remove file in uploads also
         flash('Successfully deleted playlist','success')
-        return redirect('/playlists')
-    else:
-        flash('Error deleting playlist!','error')
-        return redirect('/playlists')
+    return redirect('/library/playlists')
+
 #assign a playlist a particular song
-@app.route('/playlists/<int:playlist_id>/add/<int:song_id>')
+@app.route('/playlists/<int:playlist_id>/<way>/songs',defaults={'song_id':None},methods=['GET','POST'])
+@app.route('/playlists/<int:playlist_id>/<way>/songs/<int:song_id>',methods=['GET','POST'])
 def from_playlist_add_song(playlist_id,song_id):
     playlist = Playlist.query.get(playlist_id); song = Song.query.get(song_id)
-    if playlist.user_id != session['user_id']:
-        flash('Not your playlist to add song!','warning')
-        return redirect(url_for('creator_home'))
-    if playlist_id and not(song_id) and request.method=='GET':
+    if way=='add':
+        if playlist and song:
+            if playlist.user_id != current_user.id:
+                flash('Not your playlist to add song!','warning')
+                return redirect(f'/playlists/{playlist_id}')
+            elif song not in playlist.songs:
+                playlist.songs.append(song); db.session.commit()
+                flash('Added song into playlist','success')
+                return redirect(f'/playlists/{playlist_id}/add/songs')
+    elif way=='remove':
+        if playlist and song:
+            if playlist.user_id != current_user.id:
+                flash('Not your playlist to remove song!','warning')
+                return redirect(f'/playlists/{playlist_id}')
+            elif song in playlist.songs:
+                playlist.songs.remove(song); db.session.commit()
+                flash('Removed song from playlist','success')
+                return redirect(f'/playlists/{playlist_id}/add/songs')
+    elif playlist and not(song) and request.method=='GET':
         # show not added user songs in pagination format
         pass
     elif playlist_id and not(song_id) and request.method=='POST':
         # show filtered not added user songs in pagination format
         pass
-    elif playlist_id and song_id and request.method=='POST':
-        # add song in playlist
-        pass
-    else:
-        flash('Error while adding song into playlist','error')
-        return redirect(url_for('creatorhome'))
-#remove song from playlist
-@app.route('/creator/playlists/<int:playlist_id>/remove/<int:song_id>')
-def from_playlist_remove_song(playlist_id,song_id):
-    playlist = Playlist.query.get(playlist_id); song = Song.query.get(song_id)
-    if playlist.user_id != session['user_id']:
-        flash('Not your playlist to add song!','warning')
-        return redirect(url_for('creator_home'))
-    if song in playlist.songs:
-        playlist.songs.remove(song)
-        flash('Removed song from playlist','success')
-    else:
-        flash('Song not in playlist to remove!','warning')
-    return redirect(f'/creator/playlists/{playlist_id}')
+    return redirect(f'/playlists/{playlist_id}')
 
 ##Library routes##
 ##################
-#songssssssssssssssssssssssssssssssssssssssssssssssss
-@app.route('/library/songs')
-def library_songs():
-    # show songs in library
-    pass
-@app.route('/library/songs/add/<int:song_id>')
-def library_add_song():
-    # add song in library
-    pass
-@app.route('/library/songs/remove/<int:song_id>')
-def library_remove_song():
-    # remove song
-    pass
-#albumsssssssssssssssssssssssssssssssssssssssssssssss
-@app.route('/library/albums')
-def library_albums():
-    # show albums in library
-    pass
-@app.route('/library/albums/add/<int:album_id>')
-def library_add_album():
-    # add album in library
-    pass
-@app.route('/library/albums/remove/<int:album_id>')
-def library_remove_album():
-    # remove album
-    pass
-#playlistssssssssssssssssssssssssssssssssssssssssssss
-@app.route('/library/playlists')
-def library_playlists():
-    # show playlists in library
-    pass
-@app.route('/library/playlists/add/<int:playlist_id>')
-def library_add_playlist():
-    # add playlist in library if public
-    pass
-@app.route('/library/playlists/remove/<int:playlist_id>')
-def library_remove_playlist():
-    # remove playlist
-    pass
+@app.route('/library/<item>')
+def library_view_item(item):
+    session['currentPage']='library'
+    if item=='albums':
+            return render_template('user/sub-temp/lib-albums.html')
+    elif item=='playlists':
+            return render_template('user/sub-temp/lib-playlists.html')
+    return redirect('/library')
 
 ### others ###
+
+@app.route('/history',methods=['get'])
+@login_required
+def history():
+    session['currentPage'] = None
+    songs = [x.song for x in current_user.played]
+    return render_template('user/sub-temp/history.html',songs=songs,has_user_liked=has_user_liked)
+
 @app.route('/profile',methods=['get','post'])
 @login_required
 def profile():
@@ -229,10 +257,24 @@ def profile():
             current_user.cover=None
         db.session.commit()
         flash('Updated your profile','success')
+        return redirect(url_for('user_home'))
     return render_template('user/sub-temp/profile.html')
 
 @app.route('/search',methods=['get','post'])
 @login_required
 def search():
-    query = request.args.get('query',)
-    pass
+    session['currentPage'] =  None
+    query = request.args.get('query')
+    songs = Song.query.filter(or_(Song.title.ilike(f'%{query}%'),Song.artist.ilike(f'%{query}%'))).all()
+    albums = Album.query.filter(or_(Album.title.ilike(f'%{query}%'),Album.artist.ilike(f'%{query}%'))).all()
+    playlists = Playlist.query.filter(Playlist.title.ilike(f'%{query}%')).all()
+    return render_template('user/sub-temp/search.html',songs=songs,albums=albums,playlists=playlists,query=query,has_user_liked=has_user_liked)
+
+@app.route('/download/<int:song_id>')
+@login_required
+def download(song_id):
+    song = Song.query.get(song_id)
+    file_path = get_song(song.filename)
+    filename = song.title +'.'+ song.filename.split('.')[-1]
+    print(filename)
+    return send_file(file_path,download_name=filename,as_attachment=True)
