@@ -19,7 +19,7 @@ def user_explore():
     if request.method=='POST':
         view = request.args.get('view',6,type=int)
         data = request.form; song_name = data.get('song'); artist_name = data.get('artist'); language = data.get('language'); genre = data.get('genre'); sort_by = data.get('sortby')
-        filtered = Song.query.filter_by(user_id=current_user.id)
+        filtered = Song.query.filter_by(flagged=False)
         if song_name:
             filtered = filtered.filter(Song.title.ilike('%'+song_name+'%'))
         if artist_name:
@@ -33,8 +33,9 @@ def user_explore():
             elif sort_by == 'old': filtered = filtered.order_by(Song.time_added.asc())
             elif sort_by == 'rating_high': filtered = filtered.order_by(Song.rating.desc())
             elif sort_by == 'rating_low': filtered = filtered.order_by(Song.rating.asc())
-            elif sort_by == 'alphabetical': filtered = filtered.order_by(Song.title.asc())
-        filtered = filtered.paginate(page=1, per_page=view)
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(func.lower(Song.title).asc())
+        # filtered = filtered.paginate(page=1, per_page=view)
+        filtered = filtered.all()
         flash('Filter applied','success')
         return render_template('user/explore.html',songs=filtered,has_user_liked=has_user_liked,filter=True,view=view+6)
     view = request.args.get('view',6,type=int)
@@ -138,7 +139,7 @@ def albums(album_id):
         return render_template('user/sub-temp/album.html',album=album,current=current,get_lyrics=get_lyrics,has_user_liked=has_user_liked)
     elif request.method == 'POST' and not(album_id):
         data = request.form; album_name = data.get('album'); artist_name = data.get('artist'); sort_by = data.get('sortby')
-        filtered = Album.query.filter_by(user_id=current_user.id)
+        filtered = Album.query.filter_by(flagged=False)
         if album_name:
             filtered = filtered.filter(Album.title.ilike('%'+album_name+'%'))
         if artist_name:
@@ -146,7 +147,7 @@ def albums(album_id):
         if sort_by:
             if sort_by == 'new': filtered = filtered.order_by(Album.time_added.desc())
             elif sort_by == 'old': filtered = filtered.order_by(Album.time_added.asc())
-            elif sort_by == 'alphabetical': filtered = filtered.order_by(Album.title.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(func.lower(Album.title).asc())
         filtered = filtered.all()
         flash('Filter applied','success')
         return render_template('user/sub-temp/albums.html', albums=filtered, filter=True)
@@ -267,7 +268,7 @@ def from_playlist_add_song(playlist_id,way,song_id):
             elif sort_by == 'alphabetical': filtered = filtered.order_by(Song.title.asc())
         filtered = filtered.paginate(page=1, per_page=view)
         flash('Filter applied','success')
-        return render_template('user/sub-temp/playlist~add-rem.html',playlist=playlist,songs=filtered,view=view+6)
+        return render_template('user/sub-temp/playlist~add-rem.html',playlist=playlist,songs=filtered,filter=True,view=view+6)
     return redirect(f'/playlists/{playlist_id}')
 
 ##Library routes##

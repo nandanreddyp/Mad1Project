@@ -95,8 +95,8 @@ def all_uploads(song_id):
             elif sort_by == 'old': filtered = filtered.order_by(Song.time_added.asc())
             elif sort_by == 'rating_high': filtered = filtered.order_by(Song.rating.desc())
             elif sort_by == 'rating_low': filtered = filtered.order_by(Song.rating.asc())
-            elif sort_by == 'alphabetical': filtered = filtered.order_by(Song.title.asc())
-        filtered = filtered.paginate(page=1, per_page=view)
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(func.lower(Song.title).asc())
+        filtered = filtered.paginate.all()
         flash('Filter applied','success')
         return render_template('creator/uploads.html',songs=filtered,view=view+6,filter=True)
 
@@ -124,7 +124,7 @@ def albums_creator(album_id):
         if sort_by:
             if sort_by == 'new': filtered = filtered.order_by(Album.time_added.desc())
             elif sort_by == 'old': filtered = filtered.order_by(Album.time_added.asc())
-            elif sort_by == 'alphabetical': filtered = filtered.order_by(Album.title.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(func.lower(Album.title).asc())
         filtered = filtered.all()
         flash('Filter applied','success')
         return render_template('creator/albums.html',albums=filtered,filter=True)

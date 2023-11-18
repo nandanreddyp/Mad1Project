@@ -41,6 +41,7 @@ def create_upload_folders():
             os.makedirs(folder)
     return ''
 
+
 def save_file(type, id, file):
     import os; cwd = os.getcwd();
     if type=='image/album':
@@ -128,6 +129,7 @@ def update_play_count(song):
     return ''
 
 # linked list for album and palylist
+
 def get_linked_list(lst):
     class Node:
         def __init__(self,value):
