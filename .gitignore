@@ -2,7 +2,7 @@
 myvenv
 
 /Musica/database/database.db
-/Musica/database/migrate/
+/Musica/database/migrate
 /Musica/static/uploads/images/album_covers/*
 /Musica/static/uploads/images/profile_covers/*
 /Musica/static/uploads/images/song_covers/*
