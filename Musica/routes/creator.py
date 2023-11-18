@@ -197,7 +197,7 @@ def from_song_add_album(song_id,album_id,way):
         if sort_by:
             if sort_by == 'new': filtered = filtered.order_by(Album.time_added.desc())
             elif sort_by == 'old': filtered = filtered.order_by(Album.time_added.asc())
-            elif sort_by == 'alphabetical': filtered = filtered.order_by(Album.title.asc())
+            elif sort_by == 'alphabetical': filtered = filtered.order_by(func.lower(Album.title).asc())
         filtered = filtered.all()
         flash('Filter applied','success')
         return render_template('creator/sub-temp/song~add-rem.html',song=song,albums=filtered,filter=True)
