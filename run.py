@@ -1,8 +1,10 @@
 from Musica import app
 from Musica.database.models import *
+from Musica.functions import create_upload_folders
 
 #local pc
 if __name__ == "__main__":
+    create_upload_folders()
     db.create_all()
     app.run(debug=True)
 

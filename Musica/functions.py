@@ -27,6 +27,20 @@ def mp3_duration_cal(file_loc):
 
 # save files in static/uploads
 
+def create_upload_folders():
+    import os; cwd = os.getcwd()
+    required_folders = [os.path.join(cwd,'Musica','static','uploads'),
+                        os.path.join(cwd,'Musica','static','uploads','images'),
+                        os.path.join(cwd,'Musica','static','uploads','images','album_covers'),
+                        os.path.join(cwd,'Musica','static','uploads','images','profile_covers'),
+                        os.path.join(cwd,'Musica','static','uploads','images','song_covers'),
+                        os.path.join(cwd,'Musica','static','uploads','lyrics'),
+                        os.path.join(cwd,'Musica','static','uploads','songs')]
+    for folder in required_folders:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+    return ''
+
 def save_file(type, id, file):
     import os; cwd = os.getcwd();
     if type=='image/album':
