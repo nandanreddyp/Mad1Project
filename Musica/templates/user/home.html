@@ -4,7 +4,7 @@
 <style>
     .heading {
         display: flex; align-items: center; justify-content: space-between;
-        padding: 0 10px;
+        padding: 10px 10px;
     }
     .home-container {
         display: grid; 
@@ -19,11 +19,11 @@
         padding-top: 5px;
     }
     .square-container {
-        display: grid; gap: 5px;
+        display: grid; gap: 5px; width: 2000px;
         grid-template-columns: repeat(auto-fill, 200px);
         grid-template-rows: 210px;
         background-color: rgb(142, 2, 2);
-        padding: 10px;
+        padding: 10px; 
     }
     .square {
         width: 200px; height: 210px;
@@ -48,14 +48,14 @@
             {% endfor %}
         </div>
         {% else %}
-        <h2>Listen some songs!</h2>
+        <h2>Explore latest songs in Explore section</h2>
         {% endif %}
     </div>
     <div class="row-container">
         <div class="heading"><h1>Your liked songs</h1><a style="width: 100px; padding: 6px; background-color: red; color: white;" class="normal" href="/library/songs">View all</a></div>
         {% if current_user.ratings %}
         <div class="liked square-container">
-            {% for rating in current_user.ratings[:9] %}
+            {% for rating in current_user.ratings[-9:][::-1] %}
                 <a href="/songs/{{rating.song.id}}" class="square normal">
                     <img src="{% if rating.song.cover %}{{url_for('static',filename='uploads/images/song_covers/')}}{{rating.song.cover}}{% else %}{{url_for('static',filename='images/default_song.png')}}{% endif %}">
                     <div><h2>{{rating.song.title}}</h2></div>

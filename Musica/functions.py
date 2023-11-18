@@ -112,3 +112,19 @@ def update_play_count(song):
     song.play_count = len(song.plays)
     db.session.commit()
     return ''
+
+# linked list for album and palylist
+def get_linked_list(lst):
+    class Node:
+        def __init__(self,value):
+            self.song = value; self.next = None; self.prev = None
+    if not lst: return None
+    head = Node(lst[0])
+    current_node = head
+    for i in range(1,len(lst)):
+        next_node = Node(lst[i])
+        current_node.next = next_node
+        next_node.prev = current_node
+        current_node = current_node.next
+    return head
+

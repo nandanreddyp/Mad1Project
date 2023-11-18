@@ -306,12 +306,17 @@ def from_album_add_song(album_id,song_id,way):
         if song.user.id == current_user.id and song not in album.songs:
             album.songs.append(song); db.session.commit()
             flash('Song added into album','success')
+            return redirect(f'/creator/albums/{album_id}/add/songs')
         else:
             flash('Song already in album','error')
     elif album and song and request.method=='POST' and way=='remove':
+        fromm = request.args.get('from',None)
+        print(fromm)
         if song in album.songs:
             album.songs.remove(song); db.session.commit()
             flash('Song removed from album','success')
+            if not(fromm): return redirect(f'/creator/albums/{album_id}')
+            else: return redirect(f'/creator/albums/{album_id}/add/songs')
         else:
             flash('Song not in album','error')
     else:

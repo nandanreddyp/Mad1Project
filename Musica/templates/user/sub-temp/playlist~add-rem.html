@@ -1,4 +1,4 @@
-{% extends "creator/base.html" %}
+{% extends "user/base.html" %}
 {% block content %}
 <link rel="stylesheet" href="{{url_for('static',filename='css/creator/songs.css')}}">
 <script>
@@ -12,19 +12,15 @@
     }
 </script>
 <div class="heading">
-    <h2>Add song to album, '{{album.title}}'</h2>
+    <h2>Add song to playlist, '{{playlist.title}}'</h2>
     <div style="display: flex; gap: 10px; align-items: center;">
-        <style>
-            .button {
-                padding: 9px; background-color: red; color: white; text-decoration: none; text-align: center;
-            }
-        </style>
-        <a class="button" href="/creator/albums/{{album.id}}">Cancel</a>
-        <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>
+        <a style="padding: 6px; background-color: red; color: white; text-decoration: none;" href="/playlists/{{playlist.id}}">Cancel</a>
+        <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>        
     </div>
+
 </div>
 <link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
-<form class="form" id="filter-form" action="/creator/albums/{{album.id}}/add/songs/" method="post">
+<form class="form" id="filter-form" action="/playlists/{{playlist.id}}/add/songs" method="post">
     <div class="filter-heading"><h2>Filters to apply on song</h2><div onclick="hidemenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Close filter X</strong></div></div>
         <input class="text" type="text" name="song" placeholder="Song name">
         <input class="text" type="text" name="artist" placeholder="Artist name">
@@ -69,7 +65,7 @@
 <div class="songs-container">
     {% if songs.items %}
         {% for song in songs %}
-        <a class="song normal" href="/creator/uploads/{{song.id}}">
+        <a class="song normal" href="/songs/{{song.id}}">
             {% if song.cover %}
             <img class="song-cover" src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}">
             {% else %}
@@ -94,10 +90,10 @@
             <div class="song-details">
                 <div class="row1">
                     <h2>{{song.title}}</h2>
-                    {% if song not in album.songs %}
-                        <form action="/creator/albums/{{album.id}}/add/songs/{{song.id}}" method="post"><button style="padding: 5px;" >Add song</button></form> 
+                    {% if song not in playlist.songs %}
+                        <form action="/playlists/{{playlist.id}}/add/songs/{{song.id}}" method="post"><button style="padding: 5px;" class="button">Add song</button></form> 
                     {% else %}
-                        <form action="/creator/albums/{{album.id}}/remove/songs/{{song.id}}?from=page" method="post"><button style="padding: 5px;" >Remove song</button></form> 
+                        <form action="/playlists/{{playlist.id}}/remove/songs/{{song.id}}?from=page" method="post"><button style="padding: 5px;" class="button">Remove song</button></form> 
                     {% endif %}
                 </div>
                 <div class="row2">
@@ -112,7 +108,7 @@
         </a>
         {% endfor %}
         {% if songs.has_next %}
-            <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/creator/albums/{{album.id}}/add/songs/?view={{view}}"><strong>-View more-</strong></a></div>
+            <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/playlists/{{playlist.id}}/add/songs?view={{view}}"><strong>-View more-</strong></a></div>
         {% else %}
             <div class="paginate" style="display: flex; align-items: center; justify-content: center;"><h2>--The End--</h2></div>
         {% endif %}

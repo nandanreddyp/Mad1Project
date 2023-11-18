@@ -1,5 +1,7 @@
-{% extends "creator/base.html" %}
+{% extends "user/base.html" %}
 {% block content %}
+
+
 <link rel="stylesheet" href="{{url_for('static',filename='css/creator/albums.css')}}">
 <script>
     function popmenu(id) {
@@ -12,23 +14,22 @@
     }
 </script>
 <div class="heading">
-    <h2>Assign song, '{{song.title}}' to album</h2>
+    <h2>Assign song, '{{song.title}}' to playlist</h2>
     <div style="display: flex; gap: 10px; align-items: center;">
         <style>
             .button {
                 padding: 9px; background-color: red; color: white; text-decoration: none; text-align: center;
             }
         </style>
-        <a class="button" href="/creator/uploads/{{song.id}}">Cancel</a>
+        <a class="button" href="/songs/{{song.id}}">Cancel</a>
         <div onclick="popmenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Apply filter</strong></div>
     </div>
 
 </div>
 <link rel="stylesheet" href="{{url_for('static',filename='css/creator/form.css')}}">
-<form class="form" id="filter-form" action="/creator/uploads/{{song.id}}/add/albums/" method="post">
+<form class="form" id="filter-form" action="/songs/{{song.id}}/add/playlists" method="post">
     <div class="filter-heading"><h2>Filters to apply</h2><div onclick="hidemenu('filter-form')" style="padding: 10px; border: 1px solid grey; cursor: pointer; background-color: #efefef;"><strong>Close filter X</strong></div></div>
-        <input class="text" type="text" name="album" placeholder="Album name">
-        <input class="text" type="text" name="artist" placeholder="Artist name">
+        <input class="text" type="text" name="album" placeholder="Playlist name">
         <select name="sortby" id="sort">
             <option value="" selected disabled hidden>Sort by</option>
             <option value="new">Newest</option>
@@ -42,7 +43,7 @@
 <div class="albums-container">
     {% if albums %}
         {% for album in albums %}
-            <a href="/creator/albums/{{album.id}}" class="album normal">
+            <a href="/playlists/{{album.id}}" class="album normal">
                 {% if album.cover %}
                 <img class="album-cover" src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}">
                 {% else %}
@@ -55,11 +56,10 @@
                 {% endif %}
                 <h2>{{album.title}}</h2>
                 <h3>No of songs: {{album.songs | length}}</h3>
-                <h3>Artist: {% if album.artist %} {{album.artist}} {% else %} -NA- {% endif %}</h3>
                 {% if song in album.songs %}
-                <form action="/creator/uploads/{{song.id}}/remove/albums/{{album.id}}" method="post"><button style="padding: 5px;" type="submit">Remove</button></form>
+                <form action="/songs/{{song.id}}/remove/playlists/{{album.id}}?from=page" method="post"><button style="padding: 5px;" type="submit">Remove</button></form>
                 {% else %}
-                <form action="/creator/uploads/{{song.id}}/add/albums/{{album.id}}" method="post"><button style="padding: 5px;" type="submit">Add</button></form>
+                <form action="/songs/{{song.id}}/add/playlists/{{album.id}}" method="post"><button style="padding: 5px;" type="submit">Add</button></form>
                 {% endif %}
             </a>
         {% endfor %}
