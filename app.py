@@ -6,3 +6,4 @@ from Musica.database.models import *
 # user = User.query.get(email_id)
 # if user : user.role = 'admin'
 # db.session.commit()
+
