@@ -63,6 +63,7 @@
 </form>
 
 <div class="songs-container">
+    <h2>{% if filter %}Results for filter{% else %}Songs to add{% endif %}</h2>
     {% if songs.items %}
         {% for song in songs %}
         <a class="song normal" href="/songs/{{song.id}}">
@@ -114,9 +115,9 @@
         {% endif %}
     {% else %}
         {% if not filter %}
-            <h1>No songs uploaded yet, please wait.</h1>
+            <h2>No songs uploaded yet, please wait.</h2>
         {% else %}
-            <h1>No songs matching applied filter...</h1>
+            <h2>No songs matching applied filter...</h2>
         {% endif %}
     {% endif %}
 </div>

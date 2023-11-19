@@ -1,5 +1,13 @@
-# password hashing
+# create admin
+def create_admin():
+    from Musica.database.models import db, User
+    user = User(id='admin@musica',password=12345678,f_name='Admin',role='admin')
+    db.session.add(user)
+    db.session.commit()
+    print('admin created')
+    return ''
 
+# password hashing
 def hash(password):
     import bcrypt
     password = password.encode('utf-8')
@@ -12,7 +20,6 @@ def password_check(hashed, input):
     return bcrypt.checkpw(input, hashed)
 
 # audio length calculator
-
 def mp3_duration_cal(file_loc):
     from mutagen.mp3 import MP3
     audio = MP3(file_loc)
@@ -26,7 +33,6 @@ def mp3_duration_cal(file_loc):
     return f'{mins:02}:{secs:02}'
 
 # save files in static/uploads
-
 def create_upload_folders():
     import os; cwd = os.getcwd()
     required_folders = [os.path.join(cwd,'Musica','static','uploads'),

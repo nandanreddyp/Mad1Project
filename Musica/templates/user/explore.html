@@ -62,27 +62,52 @@
 </form>
 {% if filter %}<h2>Results for applied filter</h2>{% else %}<h2>Recently uploaded songs</h2>{% endif %}
 <div style="padding-top: 5px; min-height: calc(100% - 120px); padding-bottom: 100px;" class="songs-container">
-    {% if songs.items or songs %}
-        {% for song in songs %}
-            <a class="normal song-item" href="/songs/{{song.id}}">
-                <h2>{{ loop.index }}</h1>
-                <div class="song-cover-small">
-                    {% if song.cover %} <img src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_song.png')}}"> {% endif %}
-                </div>
-                <div class="song-title"><h3>{{song.title}}</h3></div>
-                <div class="song-artist"><h3>{{song.artist}}</h3></div>
-                <div class="song-like"><img src={% if has_user_liked(current_user, song) %}"{{url_for('static',filename='images/liked.png')}}"{% else %}"{{url_for('static',filename='images/not_liked.png')}}"{% endif %}></div>
-            </a>
-        {% endfor %}
-        {% if songs.has_next %}
-            <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/songs?view={{view}}">View more</a></div>
+    {% if filter %}
+        {% if songs %}
+            {% for song in songs %}
+                <a class="normal song-item" href="/songs/{{song.id}}">
+                    <h2>{{ loop.index }}</h1>
+                    <div class="song-cover-small">
+                        {% if song.cover %} <img src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_song.png')}}"> {% endif %}
+                    </div>
+                    <div class="song-title"><h3>{{song.title}}</h3></div>
+                    <div class="song-artist"><h3>{{song.artist}}</h3></div>
+                    <div class="song-like"><img src={% if has_user_liked(current_user, song) %}"{{url_for('static',filename='images/liked.png')}}"{% else %}"{{url_for('static',filename='images/not_liked.png')}}"{% endif %}></div>
+                </a>
+            {% endfor %}
+            {% if songs.has_next %}
+                <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/songs?view={{view}}">View more</a></div>
+            {% else %}
+                <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><h2>--The End--</h2></div>
+            {% endif %}
         {% else %}
-            <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><h2>--The End--</h2></div>
+            <h2>No songs matching applied filter</h2>
         {% endif %}
-    {% else %}
-        {% if not filter %}<h2>No songs uploaded yet, please wait</h2>{% else %}<h2>No songs matching applied filter</h2>{% endif %}
     {% endif %}
 
-</div>
+    {% if not filter %}
+        {% if songs.items %}
+            {% for song in songs %}
+                <a class="normal song-item" href="/songs/{{song.id}}">
+                    <h2>{{ loop.index }}</h1>
+                    <div class="song-cover-small">
+                        {% if song.cover %} <img src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_song.png')}}"> {% endif %}
+                    </div>
+                    <div class="song-title"><h3>{{song.title}}</h3></div>
+                    <div class="song-artist"><h3>{{song.artist}}</h3></div>
+                    <div class="song-like"><img src={% if has_user_liked(current_user, song) %}"{{url_for('static',filename='images/liked.png')}}"{% else %}"{{url_for('static',filename='images/not_liked.png')}}"{% endif %}></div>
+                </a>
+            {% endfor %}
+            {% if songs.has_next %}
+                <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><a style="padding: 6px; background-color: black; color: white;" class="normal" href="/songs?view={{view}}">View more</a></div>
+            {% else %}
+                <div class="paginate" style="display: flex; align-items: center; justify-content: center; margin-top: 6px;"><h2>--The End--</h2></div>
+            {% endif %}
+        {% else %}
+            <h2>No songs uploaded yet, please wait</h2>
+        {% endif %}
+    {% endif %}
 
+
+</div>
 {% endblock %}

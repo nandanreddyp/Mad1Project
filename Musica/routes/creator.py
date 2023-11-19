@@ -96,7 +96,7 @@ def all_uploads(song_id):
             elif sort_by == 'rating_high': filtered = filtered.order_by(Song.rating.desc())
             elif sort_by == 'rating_low': filtered = filtered.order_by(Song.rating.asc())
             elif sort_by == 'alphabetical': filtered = filtered.order_by(func.lower(Song.title).asc())
-        filtered = filtered.paginate.all()
+        filtered = filtered.paginate(page=1,per_page=view)
         flash('Filter applied','success')
         return render_template('creator/uploads.html',songs=filtered,view=view+6,filter=True)
 

@@ -92,7 +92,7 @@ def rate(song_id):
 def from_song_add_playlist(song_id,way,playlist_id):
     song = Song.query.get(song_id); playlist = Playlist.query.get(playlist_id)
     if song and not(playlist) and request.method=='GET':
-        playlists=Playlist.query.filter_by(user_id=current_user.id).all()
+        playlists=Playlist.query.filter_by(user_id=current_user.id).order_by(Playlist.time_added.desc()).all()
         return render_template('user/sub-temp/song~add-rem.html',albums=playlists,song=song)
     elif song and not(playlist) and request.method=='POST':
         data = request.form; playlist_name = data.get('album'); sort_by = data.get('sortby')
@@ -105,8 +105,8 @@ def from_song_add_playlist(song_id,way,playlist_id):
             elif sort_by == 'alphabetical': filtered = filtered.order_by(Playlist.title.asc())
         filtered = filtered.all()
         flash('Filter applied','success')
-        return render_template('user/sub-temp/song~add-rem.html',song=song,albums=filtered)
-    elif playlist and song:
+        return render_template('user/sub-temp/song~add-rem.html',song=song,albums=filtered,filter=True)
+    elif playlist and song and way:
         if way=='add' and song not in playlist.songs:
             playlist.songs.append(song); db.session.commit()
             flash('Added song to playlist','success')

@@ -2,5 +2,4 @@
 myvenv
 
 /Musica/database/database.db
-/Musica/database/migrate
 /Musica/static/uploads

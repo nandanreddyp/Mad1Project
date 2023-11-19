@@ -59,6 +59,7 @@
 </form>
 
 <div class="songs-container">
+    <h2>{% if filter %}Results for applied filter{% endif %}</h2>
     {% if songs.items %}
         {% for song in songs %}
         <a class="song normal" href="/creator/uploads/{{song.id}}"> 
@@ -105,9 +106,9 @@
         {% endif %}
     {% else %}
         {% if not filter %}
-            <h1>You don't have uploaded songs, upload now to add!</h1>
+            <h2 style="padding-left: 30px;">You haven't uploaded songs, upload now</h2>
         {% else %}
-            <h1>No songs matching applied filter...</h1>
+            <h2 style="padding-left: 30px;">No songs matching applied filter...</h2>
         {% endif %}
     {% endif %}
 </div>

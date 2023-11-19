@@ -29,42 +29,42 @@
         <input type="submit" value="Apply filter">
 </form>
 
-
-<div class="albums-container">
-        <a href="/creator/albums/create" class="album normal create">
-                <svg class="album-cover" width="100px" height="100px" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="var(--ci-primary-color, #000000)" d="M48,464V144H16V472a24.027,24.027,0,0,0,24,24H368V464H48Z" class="ci-primary"/>
-                    <path fill="var(--ci-primary-color, #000000)" d="M144,400H112V80H80V408a24.027,24.027,0,0,0,24,24H432V400H144Z" class="ci-primary"/>
-                    <path fill="var(--ci-primary-color, #000000)" d="M472,16H168a24.027,24.027,0,0,0-24,24V344a24.027,24.027,0,0,0,24,24H472a24.027,24.027,0,0,0,24-24V40A24.027,24.027,0,0,0,472,16Zm-8,320H176V48H464Z" class="ci-primary"/>
-                    <polygon fill="var(--ci-primary-color, #000000)" points="304 288 336 288 336 204 420 204 420 172 336 172 336 88 304 88 304 172 220 172 220 204 304 204 304 288" class="ci-primary"/>
-                </svg>
-            <h2>Create new album</h2>
-        </a>
-    {% if albums %}
-        {% for album in albums %}
-        <a href="/creator/albums/{{album.id}}" class="album normal">
-            {% if album.cover %}
-            <img class="album-cover" src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}">
-            {% else %}
-            <svg class="album-cover" width="100px" height="100px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 17.4V2.6C2 2.26863 2.26863 2 2.6 2H17.4C17.7314 2 18 2.26863 18 2.6V17.4C18 17.7314 17.7314 18 17.4 18H2.6C2.26863 18 2 17.7314 2 17.4Z" stroke="#000000" stroke-width="1.5"/>
-                <path d="M8 22H21.4C21.7314 22 22 21.7314 22 21.4V8" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
-                <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5Z" fill="#000000"/>
-                <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5ZM11 12.5V6.6C11 6.26863 11.2686 6 11.6 6H13" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            {% endif %}
-            <h2>{{album.title}}</h2>
-            <h3>No of songs: {{album.songs | length}}</h3>
-            <h3>Artist: {% if album.artist %} {{album.artist}} {% else %} -NA- {% endif %}</h3>
-        </a>
-        {% endfor %}
-    {% else %}
+<div class="main-container">
+    <h2>{% if not albums and not filter %}You don't have albums create now{% elif albums and not filter %}Your albums{% elif filter %}Results for filter{% endif %}</h2>
+    <h2 style="padding-left: 30px;">{% if filter and not albums %}No results for applied filter{% endif %}</h2>
+    <div class="albums-container">
         {% if not filter %}
-            <h1 style="width: max-content; margin: 100px;">You don't have albums, create now!</h1>
-        {% else %}
-            <h1 style="width: max-content; margin: 100px;">No albums matching applied filter!</h1>
+            <a href="/creator/albums/create" class="album normal create">
+                    <svg class="album-cover" width="100px" height="100px" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="var(--ci-primary-color, #000000)" d="M48,464V144H16V472a24.027,24.027,0,0,0,24,24H368V464H48Z" class="ci-primary"/>
+                        <path fill="var(--ci-primary-color, #000000)" d="M144,400H112V80H80V408a24.027,24.027,0,0,0,24,24H432V400H144Z" class="ci-primary"/>
+                        <path fill="var(--ci-primary-color, #000000)" d="M472,16H168a24.027,24.027,0,0,0-24,24V344a24.027,24.027,0,0,0,24,24H472a24.027,24.027,0,0,0,24-24V40A24.027,24.027,0,0,0,472,16Zm-8,320H176V48H464Z" class="ci-primary"/>
+                        <polygon fill="var(--ci-primary-color, #000000)" points="304 288 336 288 336 204 420 204 420 172 336 172 336 88 304 88 304 172 220 172 220 204 304 204 304 288" class="ci-primary"/>
+                    </svg>
+                <h2>Create new album</h2>
+            </a>
         {% endif %}
-    {% endif %}
+        {% if albums %}
+            {% for album in albums %}
+            <a href="/creator/albums/{{album.id}}" class="album normal">
+                {% if album.cover %}
+                <img class="album-cover" src="{{url_for('static',filename='uploads/images/album_covers/')}}{{album.cover}}">
+                {% else %}
+                <svg class="album-cover" width="100px" height="100px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 17.4V2.6C2 2.26863 2.26863 2 2.6 2H17.4C17.7314 2 18 2.26863 18 2.6V17.4C18 17.7314 17.7314 18 17.4 18H2.6C2.26863 18 2 17.7314 2 17.4Z" stroke="#000000" stroke-width="1.5"/>
+                    <path d="M8 22H21.4C21.7314 22 22 21.7314 22 21.4V8" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5Z" fill="#000000"/>
+                    <path d="M11 12.5C11 13.3284 10.3284 14 9.5 14C8.67157 14 8 13.3284 8 12.5C8 11.6716 8.67157 11 9.5 11C10.3284 11 11 11.6716 11 12.5ZM11 12.5V6.6C11 6.26863 11.2686 6 11.6 6H13" stroke="#000000" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                {% endif %}
+                <h2>{{album.title}}</h2>
+                <h3>No of songs: {{album.songs | length}}</h3>
+                <h3>Artist: {% if album.artist %} {{album.artist}} {% else %} -NA- {% endif %}</h3>
+            </a>
+            {% endfor %}
+        {% endif %}
+    </div>    
 </div>
+
 
 {% endblock %}
