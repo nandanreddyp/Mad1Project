@@ -125,14 +125,14 @@ class Library(db.Model):
 # admin required
 class Blacklist(db.Model):
     __tablename__ = 'blaklist'
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,autoincrement=True,primary_key=True)
     time_added = db.Column(db.DateTime, default=datetime.utcnow)
     creator_id = db.Column(db.String, db.ForeignKey('users.id'))
     user = db.relationship('User',back_populates='blacklist')
 
 class PremiumReq(db.Model):
     __tablename__ = 'premium_requests'
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,autoincrement=True,primary_key=True)
     time_added = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.String, db.ForeignKey('users.id'))
     trans_id = db.Column(db.String)

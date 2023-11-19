@@ -33,39 +33,39 @@ table, td {
 
 <div class="heading">
     <div>
-        <h1>Flagged content</h1>
-        <a class="button" href="/admin/flag">Flag content</a>
+        <h1>Users in blacklist</h1>
+        <a class="button" href="/admin/blacklist">Blacklist creator</a>
     </div>
 </div>
 
 <div class="main-body">
-    <div class="songs">
-        <h2>Flagged songs</h2>
-        {% if songs %}
+        {% if creators %}
         <table>
             <tr>
-                <td class="serialno">Sl. no.</td>
-                <td class="itemid" style="text-align: center;">Content id</td>
-                <td class="title">Content title</td>
-                <td class="by_user">By user</td>
+                <td class="serialno" style="text-align: center;">Sl. no.</td>
+                <td class="userid" style="text-align: center;">User id</td>
+                <td style="text-align: center;">User role</td>
+                <td class="songs_count" style="text-align: center;">No of songs</td>
+                <td class="albums_count" style="text-align: center;">No of albums</td>
                 <td class="status" style="text-align: center;">Status</td>
                 <td class="action" style="text-align: center;">Action to take</td>
             </tr>
-            {% for song in songs %}
+            {% for creatorz in creators %}
+                {% set creator = creatorz.user %}
                 <tr {% if loop.index%2!=0 %} style="background-color: white;" {% else %} style="background-color: rgb(206, 206, 206);" {% endif %}>
-                    <td class="serialno" >{{loop.index}}</td>
-                    <td class="itemid"   >{{song.id}}</td>
-                    <td class="title"    >{{song.title}}</td>
-                    <td class="by_user"  >{{song.user_id}}</td>
-                    <td class="status"   >{% if song.flagged %}Flagged{% else %}Not flagged{% endif %}</td>
-                    <td class="action"   >{% if song.flagged %} <a class="button" href="/admin/flag/song/{{song.id}}/unflag">Unflag</a> {% else %} <a class="button" href="/admin/flag/song/{{song.id}}/flag">Flag</a> {% endif %} <a class="button" href="/admin/flag/song/{{song.id}}/delete">Delete</a></td>
+                    <td class="serialno" >1</td>
+                    <td class="itemid"   >{{creator.id}}</td>
+                    <td>{{creator.role}}</td>
+                    <td class="type"     >{{ creator.songs | length }}</td>
+                    <td class="title"    >{{ creator.albums | length }}</td>
+                    <td class="status"   >{% if creator.blacklist %}Blacklisted{% else %}Not Blacklisted{% endif %}</td>
+                    <td class="action"   >{% if creator.blacklist %} <a class="button" href="/admin/blacklist/remove?user_id={{creator.id}}">Remove from blacklist</a> {% else %} <a class="button" href="/admin/blacklist/add?user_id={{creator.id}}">Add to blacklist</a> {% endif %}</td>
                 </tr>
             {% endfor %}
         </table>
         {% else %}
-            <h3 style="padding-left: 10px;">No song flagged yet.</h3>
-        {% endif %}  
-    </div>  
+            <h3 style="padding-left: 10px;">No users flagged yet.</h3>
+        {% endif %}
 </div>
    
 {% endblock %}

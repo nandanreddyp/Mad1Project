@@ -44,16 +44,17 @@ table, td {
 
 <div class="main-body">
 <h2>Search creator</h2>
-    <form class="form-search" action="/admin/blacklist" method="GET">
-        <input name="user_id" type="text" placeholder="User id" required>
+    <form class="form-search" action="/admin/blacklist" method="GET" >
+        <input name="user_id" type="email" placeholder="User email id" required>
         <input type="submit" value="Search">
     </form>
     {% if filter and creator %}
         <table>
             <tr>
-                <td class="serialno">Sl. no.</td>
-                <td class="userid" style="text-align: center;">Creator id</td>
-                <td class="songs_count" style="text-align: center;">No of songs uploaded</td>
+                <td class="serialno" style="text-align: center;">Sl. no.</td>
+                <td class="userid" style="text-align: center;">User id</td>
+                <td style="text-align: center;">User role</td>
+                <td class="songs_count" style="text-align: center;">No of songs</td>
                 <td class="albums_count" style="text-align: center;">No of albums</td>
                 <td class="status" style="text-align: center;">Status</td>
                 <td class="action" style="text-align: center;">Action to take</td>
@@ -61,11 +62,11 @@ table, td {
             <tr style="background-color: white;">
                 <td class="serialno" >1</td>
                 <td class="itemid"   >{{creator.id}}</td>
+                <td>{{creator.role}}</td>
                 <td class="type"     >{{ creator.songs | length }}</td>
                 <td class="title"    >{{ creator.albums | length }}</td>
-                <td class="by_user"  >{{ creator.user_id}}</td>
                 <td class="status"   >{% if creator.blacklist %}Blacklisted{% else %}Not Blacklisted{% endif %}</td>
-                <td class="action"   >{% if creator.blacklist %} <a class="button" href="/admin/blacklist/remove?user_id={{creator.id}}">Remove from blacklist</a> {% else %} <a class="button" href="/admin/blacklist/remove?user_id={creator.user_id}">Add to blacklist</a> {% endif %}</td>
+                <td class="action"   >{% if creator.blacklist %} <a class="button" href="/admin/blacklist/remove?user_id={{creator.id}}">Remove from blacklist</a> {% else %} <a class="button" href="/admin/blacklist/add?user_id={{creator.id}}">Add to blacklist</a> {% endif %}</td>
             </tr>
         </table>
     {% else %}

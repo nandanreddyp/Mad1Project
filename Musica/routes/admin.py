@@ -12,8 +12,9 @@ from flask import session, render_template, flash, redirect, url_for, request
 @allowed_for(['admin'])
 def admin_home():
     session['currentPage'] = 'admin_home'
+    no_users = User.query.count()
     # show no of users, creators; no of songs, albums; top 3 trending song
-    return render_template('admin/home.html')
+    return render_template('admin/home.html',no_users=no_users)
 
 ##Premium Requests##
 @app.route('/admin/premium_requests/', defaults={'req_id': None, 'action': None}, methods=['GET', 'POST'])
@@ -39,8 +40,9 @@ def premium_requests(req_id,action):
         results = PremiumReq.query.filter(func.lower(PremiumReq.user_id).ilike(f'%{user_id}%')).all()
         return render_template('admin/premium_req.html',requests=results,filter=True)
     return redirect('/admin/premium_requests')
+
 ##Flag song/album##
-@app.route('/admin/flagged')
+@app.route('/admin/flagged/')
 @allowed_for(['admin'])
 def flagged():
     songs = Song.query.filter(Song.flagged==True).all()
@@ -101,23 +103,23 @@ def flag(category,item_id,action):
 @allowed_for(['admin'])
 def blacklist(way):
     session['currentPage'] = 'creator_blacklist'
+    from urllib.parse import unquote, quote
     if not(way) and not(request.args.get('user_id')):
         return render_template('admin/creator_blacklist.html')
     elif request.method == 'GET' and request.args.get('user_id') and not(way):
-        user = User.query.get(request.args.get('user_id'))
+        user = User.query.get(unquote(request.args.get('user_id')))
         return render_template('admin/creator_blacklist.html',creator=user,filter=True)
+    elif not(request.args.get('user_id')) and way:
+        if way=='view':
+            creators = Blacklist.query.order_by(Blacklist.time_added.desc()).all()
+            return render_template('admin/sub-temp/blacklist.html',creators=creators)
     elif request.method == 'GET' and request.args.get('user_id') and way:
-        user = User.query.get(user_id)
+        user = User.query.get(unquote(request.args.get('user_id')))
         if way == 'add':
-            pass
+            db.session.add(Blacklist(creator_id=user.id)); db.session.commit()
         elif way == 'remove':
-            pass
-        
-@app.route('/admin/blacklist/view')
-@allowed_for(['admin'])
-def view_blacklist(way):
-    creators = Blacklist.query.filter(Blacklist.time_added.desc()).all()
-    return render_template('admin/sub-temp/blacklist.html',creators=creators)
+            db.session.delete(user.blacklist); db.session.commit()
+        return redirect(f'/admin/blacklist/?user_id={user.id}')
     
 
 
