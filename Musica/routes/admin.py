@@ -3,6 +3,7 @@ from .permissions import allowed_for
 
 from functools import wraps
 from Musica.database.models import *
+from Musica.functions import *
 from flask import session, render_template, flash, redirect, url_for, request
 
 ##Admin Main Page##
@@ -15,68 +16,108 @@ def admin_home():
     return render_template('admin/home.html')
 
 ##Premium Requests##
-@app.route('/admin/premium_requests/', defaults={'status': None, 'user_id': None, 'action': None}, methods=['GET', 'POST'])
-@app.route('/admin/premium_requests/<status>/<user_id>/<action>', methods=['GET', 'POST'])
+@app.route('/admin/premium_requests/', defaults={'req_id': None, 'action': None}, methods=['GET', 'POST'])
+@app.route('/admin/premium_requests/<int:req_id>/<action>', methods=['GET', 'POST'])
 @allowed_for(['admin'])
-def premium_requests(status,user_id,action):
+def premium_requests(req_id,action):
     session['currentPage'] = 'premium_req'
-    if request.method=='GET':
-        if status == 'pending':
-            # show all pending and perform action
-            pass
-        elif status == 'completed':
-            # show all completed and perform action
-            pass
-        #show all requests
-        pass
-    elif request.method=='POST':
-        #update premium
-        pass
-    return render_template('admin/premium_req.html')
+    req = PremiumReq.query.get(req_id)
+    if request.method=='GET' and not(action) and not(req_id):
+        requests = PremiumReq.query.order_by(PremiumReq.time_added.desc()).all()
+        return render_template('admin/premium_req.html',requests=requests)
+    elif req and action:
+        user = User.query.get(req.user_id)
+        if action == 'accept':
+            user.premium = True; db.session.delete(req)
+            db.session.commit()
+            flash('Accepted user request','success')
+        elif action == 'reject':
+            db.session.delete(req); db.session.commit()
+            flash('Rejected user request','success')
+    elif request.method == 'POST':
+        user_id = request.form.get('user_id')
+        results = PremiumReq.query.filter(func.lower(PremiumReq.user_id).ilike(f'%{user_id}%')).all()
+        return render_template('admin/premium_req.html',requests=results,filter=True)
+    return redirect('/admin/premium_requests')
 ##Flag song/album##
-@app.route('/admin/flagged/',defaults={'category':None,'method':None,'item_id':None}, methods=['GET','POST'])
-@app.route('/admin/flagged/<category>/<method>/<int:item_id>', methods=['GET','POST'])
+@app.route('/admin/flagged')
 @allowed_for(['admin'])
-def flag(category,method,item_id):
+def flagged():
+    songs = Song.query.filter(Song.flagged==True).all()
+    albums = Album.query.filter(Album.flagged==True).all()
+    return render_template('admin/sub-temp/flagged.html',songs=songs,albums=albums)
+
+@app.route('/admin/flag',defaults={'category':None,'action':None,'item_id':None,'action':None}, methods=['GET','POST'])
+@app.route('/admin/flag/<category>/<int:item_id>/<action>', methods=['GET','POST'])
+@allowed_for(['admin'])
+def flag(category,item_id,action):
     session['currentPage'] = 'flag_content'
-    if category == 'songs':
-        if not(method):
-            #show flagged items
-            pass
-        elif method == 'add':
-            # add to flagged
-            pass
-        elif method == 'remove':
-            #remove from flagged
-            pass
-    elif category == 'albums':
-        if not(method):
-            #show flagged items
-            pass
-        elif method == 'add':
-            # add to flagged
-            pass
-        elif method == 'remove':
-            #remove from flagged
-            pass
-    return render_template('admin/flag.html')
+    if not(category and item_id) and not(request.args.get('type')):
+        return render_template('admin/flag.html')
+    elif request.method == 'GET' and request.args.get('type') and request.args.get('id'):
+        item_type = request.args.get('type'); item_id = request.args.get('id')
+        if item_type=='song':
+            song = Song.query.get(item_id)
+            return render_template('admin/flag.html',filter=True,result=song)
+        elif item_type=='album':
+            album = Album.query.get(item_id)
+            return render_template('admin/flag.html',filter=True,result=album)
+    if category == 'song':
+        song = Song.query.get(item_id)
+        if action == 'flag':
+            song.flagged = True
+            flash('Flagged song','success')
+        elif action == 'unflag':
+            song.flagged = False
+            flash('Unflagged song','success')
+        elif action == 'delete':
+            if song.cover: remove_file('image/song',song.cover)
+            if song.lyrics: remove_file('lyrics',song.lyrics)
+            remove_file('song',song.filename)
+            db.session.delete(song)
+            db.session.commit()
+            flash('Song deleted','success')
+            return redirect('/admin/flag'); db.session.commit()
+        db.session.commit()
+        return redirect(f'/admin/flag?type=song&id={item_id}')
+    elif category == 'album':
+        album = Album.query.get(item_id)
+        if action == 'flag':
+            album.flagged = True
+            flash('Flagged album','success')
+        elif action == 'unflag':
+            album.flagged = False
+            flash('Unflagged album','success')
+        elif action == 'delete':
+            if album.cover: remove_file('image/album',album.cover)
+            db.session.delete(album); db.session.commit()
+            flash('Album deleted','success')
+            return redirect('/admin/flag')
+        db.session.commit()
+        return redirect(f'/admin/flag?type=album&id={item_id}')
 ##Blacklist Creator##
-@app.route('/admin/blacklist/', defaults={'way':None, 'user_id':None}, methods=['GET','POST'])
-@app.route('/admin/blacklist/<way>/<user_id>', methods=['GET', 'POST'])
+@app.route('/admin/blacklist/', defaults={'way':None}, methods=['GET','POST'])
+@app.route('/admin/blacklist/<way>', methods=['GET', 'POST'])
 @allowed_for(['admin'])
-def blacklist(way,user_id):
+def blacklist(way):
     session['currentPage'] = 'creator_blacklist'
-    if request.method=='GET':
-        #show all flagged or queried
-        pass
-    elif request.method=='POST':
-        if way=='add':
-            #add creator to flagged
+    if not(way) and not(request.args.get('user_id')):
+        return render_template('admin/creator_blacklist.html')
+    elif request.method == 'GET' and request.args.get('user_id') and not(way):
+        user = User.query.get(request.args.get('user_id'))
+        return render_template('admin/creator_blacklist.html',creator=user,filter=True)
+    elif request.method == 'GET' and request.args.get('user_id') and way:
+        user = User.query.get(user_id)
+        if way == 'add':
             pass
-        elif way=='remove':
-            #remove creator from flagged
+        elif way == 'remove':
             pass
-    return render_template('admin/creator_blacklist.html')
+        
+@app.route('/admin/blacklist/view')
+@allowed_for(['admin'])
+def view_blacklist(way):
+    creators = Blacklist.query.filter(Blacklist.time_added.desc()).all()
+    return render_template('admin/sub-temp/blacklist.html',creators=creators)
     
 
 

@@ -92,6 +92,5 @@ aside .currentPage {
 main {
     position: fixed; bottom: 0; right: 0;
     width: calc(100% - 90px); height: calc(100% - 60px);
-    padding: 6px 6px; overflow: auto; overflow-x: hidden;
-    padding-bottom: 100px;
+    overflow: auto; overflow-x: hidden;
 }

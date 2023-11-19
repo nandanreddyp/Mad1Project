@@ -1,6 +1,88 @@
 {% extends "admin/base.html" %}
 {% block content %}
-<h1>Start</h1>
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eaque nobis rem sunt, aut impedit saepe iusto neque quis quam libero ullam, ex minus vel modi distinctio deserunt necessitatibus ad ab eligendi at porro incidunt reiciendis. Iste corrupti repellendus quo velit animi quidem a alias ducimus optio minima veritatis vero, dicta sapiente blanditiis nam, dolore tenetur distinctio ea. Commodi magnam cum quo numquam inventore nam officia soluta voluptas quas saepe! Iste esse molestias praesentium impedit error enim officiis obcaecati, eligendi cupiditate voluptatibus, quis beatae debitis sint saepe asperiores. Reprehenderit, ullam excepturi nulla eius odit cumque nobis iure aspernatur tempora, autem necessitatibus.</p>
-<h1>End</h1>
+
+<style>
+.heading div:nth-child(1) {
+    padding: 6px; height: 40px; align-items: center;
+    display: flex; justify-content: space-between; 
+}
+.main-body {
+    min-height: calc(100% - 40px);
+    padding: 20px 30px;
+    background-color: rgb(159, 146, 146);
+}
+table {
+    width: 100%; margin-top: 30px;
+}
+td {
+    padding-left: 3px;
+}
+table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.action {
+    display: flex; justify-content: space-evenly;
+}
+.form-search {
+    width: 100%; background-color: rgb(94, 94, 94);
+    display:flex; justify-content: space-evenly; padding: 15px;
+}
+.button {
+    padding: 6px; background-color: red; color: white;
+    text-align: center; text-decoration: none; user-select: none; border-radius: 9px;
+}
+</style>
+
+<div class="heading">
+    <div>
+        <h1>Flag content</h1>
+        <a class="button" href="/admin/flagged">Flagged content</a>
+    </div>
+</div>
+
+
+<div class="main-body">
+<h2>Search content</h2>
+    <form class="form-search" action="/admin/flag" method="GET">
+        <select name="type" id="" required>
+            <option value="" selected hidden>Select content type</option>
+            <option value="song">Song</option>
+            <option value="album">Album</option>
+        </select>
+        <input name="id" type="number" placeholder="Song or album id" required>
+        <input type="submit" value="Search">
+    </form>
+    {% if filter and result %}
+        <table>
+            <tr>
+                <td class="serialno">Sl. no.</td>
+                <td class="itemid" style="text-align: center;">Content id</td>
+                <td class="type" style="text-align: center;">Content type</td>
+                <td class="title">Content title</td>
+                <td class="by_user">By user</td>
+                <td class="status" style="text-align: center;">Status</td>
+                <td class="action" style="text-align: center;">Action to take</td>
+            </tr>
+            <tr style="background-color: white;">
+                <td class="serialno" >1</td>
+                <td class="itemid"   >{{result.id}}</td>
+                <td class="type"     >{% if result.play_count %}Song{% else %}Album{% endif %}</td>
+                <td class="title"    >{{result.title}}</td>
+                <td class="by_user"  >{{result.user_id}}</td>
+                <td class="status"   >{% if result.flagged %}Flagged{% else %}Not flagged{% endif %}</td>
+                {% if result.play_count %}
+                <td class="action"   >{% if result.flagged %} <a class="button" href="/admin/flag/song/{{result.id}}/unflag">Unflag</a> {% else %} <a class="button" href="/admin/flag/song/{{result.id}}/flag">Flag</a> {% endif %} <a class="button" href="/admin/flag/song/{{result.id}}/delete">Delete</a></td>
+                {% else %}
+                <td class="action"   >{% if result.flagged %} <a class="button" href="/admin/flag/album/{{result.id}}/unflag">Unflag</a> {% else %} <a class="button" href="/admin/flag/album/{{result.id}}/flag">Flag</a> {% endif %} <a class="button" href="/admin/flag/album/{{result.id}}/delete">Delete</a></td>
+                {% endif %}
+            </tr>
+        </table>
+    {% else %}
+        {% if filter %}<h3>No results found</h3>{% endif %}
+    {% endif %}    
+</div>
+
+
+
 {% endblock %}

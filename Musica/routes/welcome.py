@@ -25,7 +25,7 @@ def home():
     if current_user.role=='creator':
         return redirect(url_for('creator_home'))
     elif current_user.role=='admin':
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin_home'))
     return redirect(url_for('user_home'))
 
 @app.route('/in',methods=['GET','POST'])

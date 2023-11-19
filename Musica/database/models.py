@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
     albums = db.relationship('Album',back_populates='user',cascade="all, delete-orphan")
     ratings = db.relationship('Rating',back_populates='user',cascade="all, delete-orphan")
     library = db.relationship('Library',back_populates='user',uselist=False,cascade='all, delete-orphan')
+    blacklist = db.relationship('Blacklist',back_populates='user',uselist=False,cascade='all, delete-orphan')
 
 # many to many relationships declaration
 album_song_association = db.Table('album_song_association',
@@ -124,9 +125,14 @@ class Library(db.Model):
 # admin required
 class Blacklist(db.Model):
     __tablename__ = 'blaklist'
-    creator_id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
+    time_added = db.Column(db.DateTime, default=datetime.utcnow)
+    creator_id = db.Column(db.String, db.ForeignKey('users.id'))
+    user = db.relationship('User',back_populates='blacklist')
 
 class PremiumReq(db.Model):
     __tablename__ = 'premium_requests'
-    user_id = db.Column(db.String, db.ForeignKey('users.id'), primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
+    time_added = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'))
     trans_id = db.Column(db.String)

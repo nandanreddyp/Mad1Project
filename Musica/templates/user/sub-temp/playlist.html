@@ -146,13 +146,13 @@
         <div style="display: flex; justify-content: space-evenly;" class="controls-bar">
             <div class="button" onclick="rewind()">Rewind</div>
             {% if current.prev %}
-                <a class="button" href="/albums/{{album.id}}?play={{album.songs.index(current.prev.song)+1}}">Prev</a>
+                <a class="button" href="/playlists/{{album.id}}?play={{album.songs.index(current.prev.song)+1}}">Prev</a>
             {% else %}
                 <a class="button" href="#">No prev</a>
             {% endif %}
             <div id="play_pause" class="button" onclick="playPause()">Play</div>
             {% if current.next %}
-                <a class="button" href="/albums/{{album.id}}?play={{album.songs.index(current.next.song)+1}}">Next</a>
+                <a class="button" href="/playlists/{{album.id}}?play={{album.songs.index(current.next.song)+1}}">Next</a>
             {% else %}
                 <a class="button" href="#">No next</a>
             {% endif %}

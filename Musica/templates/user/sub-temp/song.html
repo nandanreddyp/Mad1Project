@@ -50,7 +50,7 @@
         <div class="song-cover-side">
             <div class="song-details">
                 <h2>{{song.title}}</h2>
-                <p>{% if song.artist %}By: {{song.artist}} ~ {% endif %}Duration: {{song.duration}} ~ Language: {{song.language}}</p>
+                <p>{% if song.artist %}By: {{song.artist}} ~ {% endif %}Duration: {{song.duration}} ~ Language: {{song.language}} ~ Upload by: {{song.user_id}}</p>
                 <p style="padding-top: 10px;"><h3>Plays: {{song.play_count}}</h3> <h3>Rating: {{song.rating}}</h3></p>
             </div>
             <div class="controls">

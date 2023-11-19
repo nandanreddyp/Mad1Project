@@ -1,11 +1,9 @@
 from Musica.functions import get_linked_list, create_upload_folders
 
-from Musica.database.models import Song, db
+from Musica.database.models import User, db, Blacklist
 
-# songs = Song.query.all()
-# for song in songs:
-#     song.flagged=False
-# db.session.commit()
+# admin = User.query.get('admin@musica')
+# db.session.add(admin); db.session.commit()
 
-
-dic = {}
+for item in Blacklist.query.all():
+    print(item.__dict__)

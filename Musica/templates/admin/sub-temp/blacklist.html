@@ -1,0 +1,71 @@
+{% extends "admin/base.html" %}
+{% block content %}
+
+<style>
+.heading div:nth-child(1) {
+    padding: 6px; height: 40px; align-items: center;
+    display: flex; justify-content: space-between; 
+}
+.main-body {
+    min-height: calc(100% - 40px);
+    padding: 20px 30px;
+    background-color: rgb(159, 146, 146);
+    display: flex; flex-direction: column; gap: 30px;
+}
+table {
+    width: 100%; margin-top: 10px;
+}
+td {
+    padding-left: 3px;
+}
+table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.action {
+    display: flex; justify-content: space-evenly;
+}
+.button {
+    padding: 6px; background-color: red; color: white;
+    text-align: center; text-decoration: none; user-select: none; border-radius: 9px;
+}
+</style>
+
+<div class="heading">
+    <div>
+        <h1>Flagged content</h1>
+        <a class="button" href="/admin/flag">Flag content</a>
+    </div>
+</div>
+
+<div class="main-body">
+    <div class="songs">
+        <h2>Flagged songs</h2>
+        {% if songs %}
+        <table>
+            <tr>
+                <td class="serialno">Sl. no.</td>
+                <td class="itemid" style="text-align: center;">Content id</td>
+                <td class="title">Content title</td>
+                <td class="by_user">By user</td>
+                <td class="status" style="text-align: center;">Status</td>
+                <td class="action" style="text-align: center;">Action to take</td>
+            </tr>
+            {% for song in songs %}
+                <tr {% if loop.index%2!=0 %} style="background-color: white;" {% else %} style="background-color: rgb(206, 206, 206);" {% endif %}>
+                    <td class="serialno" >{{loop.index}}</td>
+                    <td class="itemid"   >{{song.id}}</td>
+                    <td class="title"    >{{song.title}}</td>
+                    <td class="by_user"  >{{song.user_id}}</td>
+                    <td class="status"   >{% if song.flagged %}Flagged{% else %}Not flagged{% endif %}</td>
+                    <td class="action"   >{% if song.flagged %} <a class="button" href="/admin/flag/song/{{song.id}}/unflag">Unflag</a> {% else %} <a class="button" href="/admin/flag/song/{{song.id}}/flag">Flag</a> {% endif %} <a class="button" href="/admin/flag/song/{{song.id}}/delete">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <h3 style="padding-left: 10px;">No song flagged yet.</h3>
+        {% endif %}  
+    </div>  
+</div>
+   
+{% endblock %}

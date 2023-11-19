@@ -45,3 +45,13 @@ def not_in_blacklist(f):
         return f(*args,**kwargs)
     return wrapper
 
+def premium_required(f):
+    @wraps(f)
+    @login_required
+    def wrapper(*args,**kwargs):
+        if not current_user.premium:
+            flash('Get premium in upgrade section','info')
+            flash('You are not premium user!','warning')
+            return redirect(url_for('user_home'))
+        return f(*args,**kwargs)
+    return wrapper

@@ -50,7 +50,7 @@ def user_library():
 @app.route('/upgrade',methods=['POST','GET'])
 def get_premium():
     session['currentPage'] = 'upgrade'
-    requested = PremiumReq.query.get(current_user.id)
+    requested = PremiumReq.query.filter_by(user_id=current_user.id).first()
     if request.method == 'GET':
         if requested: flash('You already requested, you can update transaction id','info')
         return render_template('user/upgrade.html',requested=requested)
@@ -322,6 +322,7 @@ def search():
 
 @app.route('/download/<int:song_id>')
 @login_required
+@premium_required
 def download(song_id):
     song = Song.query.get(song_id)
     file_path = get_song(song.filename)
