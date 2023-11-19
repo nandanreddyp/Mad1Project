@@ -1,9 +1,8 @@
 from Musica import app, db
-
 from Musica.database.models import *
 
-# for song in User.query.all():
-#     if not song.library:
-#         library = Library(user_id=song.id)
-#         db.session.add(library)
+# # edit user
+# email_id = 'admin@musica'
+# user = User.query.get(email_id)
+# if user : user.role = 'admin'
 # db.session.commit()
