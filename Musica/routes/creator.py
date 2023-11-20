@@ -23,15 +23,13 @@ def become_creator():
 
 @app.route('/creator')
 @allowed_for(['creator'])
-@not_in_blacklist
 def creator_home():
     session['currentPage']='creator_home'
-    blacklisted = Blacklist.query.get(current_user.id)
     recent = Song.query.filter_by(user_id=current_user.id).order_by(Song.time_added.desc()).first()
     viewed = Song.query.filter_by(user_id=current_user.id).order_by(Song.play_count.desc()).first()
     positive = Song.query.filter_by(user_id=current_user.id).order_by(Song.rating.desc()).first()
     negative = Song.query.filter_by(user_id=current_user.id).order_by(Song.rating.asc()).first()
-    return render_template('creator/home.html',recent=recent,viewed=viewed,positive=positive,negative=negative,blacklisted=blacklisted)
+    return render_template('creator/home.html',recent=recent,viewed=viewed,positive=positive,negative=negative)
     
 @app.route('/creator/uploads/upload',methods=['GET','POST'])
 @allowed_for(['creator'])
@@ -134,6 +132,7 @@ def albums_creator(album_id):
 ##############################################################################################################################
 #update & delete
 @app.route('/creator/uploads/<int:song_id>/<way>',methods=['GET','POST'])
+@allowed_for(['creator'])
 @not_in_blacklist
 def upload_edit(song_id,way):
     song = Song.query.get(song_id)

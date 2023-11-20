@@ -195,10 +195,10 @@
     <div class="grid-item blacklist">
         <h2>Community guidelines check</h2>
         <div class="justify">
-            {% if blacklisted %}
-                <h4 style="text-align: center; color: red;">You got a strike, you're restricted!</h4>
+            {% if current_user.blacklist %}
+                <h2 style="text-align: center; color: red;">You got a strike, you're restricted!</h2>
             {% else %}
-                <h4 style="text-align: center; color: green;">You don't have any strikes, keep going!</h4>
+                <h3 style="text-align: center; color: green;">You don't have any strikes, keep going!</h3>
             {% endif %}
         </div>
     </div>

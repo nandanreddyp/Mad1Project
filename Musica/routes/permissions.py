@@ -1,7 +1,6 @@
 from functools import wraps
 from flask import redirect, url_for, flash, session
 from .welcome import current_user
-from Musica.database.models import Blacklist
 
 from functools import wraps
 
@@ -39,8 +38,8 @@ def not_in_blacklist(f):
     @wraps(f)
     @login_required
     def wrapper(*args,**kwargs):
-        if Blacklist.query.get(current_user.id):
-            flash('You are in blacklist for breaching company policies, contact admin for more details.','warning')
+        if current_user.blacklist:
+            flash('You are in blacklist for breaching policies, contact admin for more details.','warning')
             return redirect(url_for('home'))
         return f(*args,**kwargs)
     return wrapper

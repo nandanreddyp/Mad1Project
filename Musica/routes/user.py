@@ -14,6 +14,7 @@ def user_home():
     return render_template('user/home.html')
 
 @app.route('/songs',methods=['GET','POST'])
+@login_required
 def user_explore():
     session['currentPage'] = 'explore'
     if request.method=='POST':
@@ -43,11 +44,13 @@ def user_explore():
     return render_template('user/explore.html',songs=songs,has_user_liked=has_user_liked,view=view+6)
 
 @app.route('/library')
+@login_required
 def user_library():
     session['currentPage'] = 'library'
     return render_template('user/library.html')
 
 @app.route('/upgrade',methods=['POST','GET'])
+@login_required
 def get_premium():
     session['currentPage'] = 'upgrade'
     requested = PremiumReq.query.filter_by(user_id=current_user.id).first()
@@ -66,6 +69,7 @@ def get_premium():
 ###############
 #read
 @app.route('/songs/<int:song_id>')
+@login_required
 def songs(song_id):
     song = Song.query.get(song_id)
     if request.method == 'GET' and song:
@@ -76,6 +80,7 @@ def songs(song_id):
 
 #rating
 @app.route('/songs/<int:song_id>/rate')
+@login_required
 def rate(song_id):
     song = Song.query.get(song_id)
     if song and not(has_user_liked(current_user,song)):
@@ -89,6 +94,7 @@ def rate(song_id):
 #assign a song to a particular playlist
 @app.route('/songs/<int:song_id>/<way>/playlists',defaults={'playlist_id':None},methods=['GET','POST'])
 @app.route('/songs/<int:song_id>/<way>/playlists/<int:playlist_id>',methods=['GET','POST'])
+@login_required
 def from_song_add_playlist(song_id,way,playlist_id):
     song = Song.query.get(song_id); playlist = Playlist.query.get(playlist_id)
     if song and not(playlist) and request.method=='GET':
@@ -124,6 +130,7 @@ def from_song_add_playlist(song_id,way,playlist_id):
 #read
 @app.route('/albums', defaults={'album_id':None}, methods=['GET','POST'])
 @app.route('/albums/<int:album_id>', methods=['GET','POST'])
+@login_required
 def albums(album_id):
     session['currentPage'] = 'explore'
     album = Album.query.get(album_id)
@@ -157,6 +164,7 @@ def albums(album_id):
 
 #assign album to library
 @app.route('/albums/<int:album_id>/<way>/library')
+@login_required
 def album_to_library(album_id,way):
     album = Album.query.get(album_id)
     if album and way=='add':
@@ -175,6 +183,7 @@ def album_to_library(album_id,way):
 ###################
 #create
 @app.route('/playlists/create',methods=['GET','POST'])
+@login_required
 def create_playlist():
     if request.method == 'GET':
         return render_template('user/sub-temp/playlist-create.html')
@@ -187,6 +196,7 @@ def create_playlist():
         return redirect('/library/playlists')
 #read
 @app.route('/playlists/<int:playlist_id>',methods=['GET','POST'])
+@login_required
 def playlists(playlist_id):
     if request.method == 'GET' and playlist_id:
         playlist = Playlist.query.get(playlist_id)
@@ -209,6 +219,7 @@ def playlists(playlist_id):
         return render_template('creator/playlists.html', playlists=playlists)
 #update
 @app.route('/playlists/<int:playlist_id>/<method>',methods=['GET','POST'])
+@login_required
 def playlist_edit(playlist_id,method):
     playlist = Playlist.query.get(playlist_id)
     if playlist and method=='update' and playlist.user_id==current_user.id:
@@ -229,6 +240,7 @@ def playlist_edit(playlist_id,method):
 #assign a playlist a particular song
 @app.route('/playlists/<int:playlist_id>/<way>/songs',defaults={'song_id':None},methods=['GET','POST'])
 @app.route('/playlists/<int:playlist_id>/<way>/songs/<int:song_id>',methods=['GET','POST'])
+@login_required
 def from_playlist_add_song(playlist_id,way,song_id):
     playlist = Playlist.query.get(playlist_id); song = Song.query.get(song_id)
     if way=='add' and playlist and song:
@@ -274,6 +286,7 @@ def from_playlist_add_song(playlist_id,way,song_id):
 ##Library routes##
 ##################
 @app.route('/library/<item>')
+@login_required
 def library_view_item(item):
     session['currentPage']='library'
     if item=='albums':
