@@ -248,7 +248,8 @@ def album_edit(album_id,way):
             data = request.form; file = request.files.get('cover')
             album.title = data['title']; album.artist = data['artist']; delete = data.get('cover-delete')
             if file and not(delete):
-                image_loc = save_file('image/album',current_user.id,file)
+                if album.cover: remove_file('image/album',album.cover)
+                image_loc = save_file('image/album',album.id,file)
                 album.cover = image_loc
             elif album.cover and delete:
                 remove_file('image/album',album.cover)
