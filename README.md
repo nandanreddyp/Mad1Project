@@ -84,6 +84,7 @@ project this is used to store song duration data.
 Set the root folder such that it includes Musica folder, requirements.txt, run.py.
 
 Create a virtual environment by running command 'python -m venv FOLDER_NAME_YOU_WANT'
+
 Enable the environment you have created by running 'FOLDER_NAME_YOU_GIVEN/scripts/activate'
 
 ### Prerequisites
