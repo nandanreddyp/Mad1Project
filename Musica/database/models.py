@@ -13,8 +13,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.String,primary_key=True); password = db.Column(db.String,nullable=False)
     f_name = db.Column(db.String,nullable=False); l_name = db.Column(db.String)
     premium = db.Column(db.Boolean,default=False); cover = db.Column(db.String)
-    role = db.Column(db.String,default='user'); library = db.relationship('Library',backref='user',uselist=False)
-
+    role = db.Column(db.String,default='user'); 
+    
+    library = db.relationship('Library',backref='user',uselist=False)
     played = db.relationship('Play',back_populates='user',cascade='all, delete-orphan')
     playlists = db.relationship('Playlist',back_populates='user',cascade="all, delete-orphan")
     songs = db.relationship('Song',back_populates='user',cascade="all, delete-orphan")
@@ -69,16 +70,6 @@ class Song(db.Model):
     playlists = db.relationship('Playlist', secondary=playlist_song_association, single_parent=True, back_populates='songs', lazy=True)
     library = db.relationship('Library',secondary=library_song_association, single_parent=True, back_populates='songs', lazy=True)
 
-class Rating(db.Model):
-    __tablename__ = 'Song_ratings'
-    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
-
-    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User',back_populates='ratings')
-
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
-    song = db.relationship('Song',back_populates='ratings')
-
 class Play(db.Model):
     __tablename__ = 'Song_plays'
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
@@ -88,6 +79,16 @@ class Play(db.Model):
 
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
     song = db.relationship('Song',back_populates='plays')
+
+class Rating(db.Model):
+    __tablename__ = 'Song_ratings'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User',back_populates='ratings')
+
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song = db.relationship('Song',back_populates='ratings')
 
 class Album(db.Model):
     __tablename__ = 'albums'
@@ -105,7 +106,7 @@ class Album(db.Model):
 class Playlist(db.Model):
     __tablename__ = 'playlists'
     id = db.Column(db.Integer,primary_key=True,autoincrement=True); title = db.Column(db.String,nullable=False)
-    time_added = db.Column(db.DateTime, default=datetime.utcnow); public = db.Column(db.Boolean,default=False)
+    time_added = db.Column(db.DateTime, default=datetime.utcnow)
 
     user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User',back_populates='playlists')
