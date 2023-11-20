@@ -1,7 +1,7 @@
 # create admin
 def create_admin():
     from Musica.database.models import db, User, Library
-    user = User(id='admin@musica',password=hash('12345678'),f_name='Admin',role='admin')
+    user = User(id='admin@musica',password=hash('12345678'),f_name='Admin',l_name='',role='admin')
     db.session.add(user)
     db.session.add(Library(user_id=user.id))
     db.session.commit()
