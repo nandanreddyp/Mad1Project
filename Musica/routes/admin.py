@@ -12,9 +12,21 @@ from flask import session, render_template, flash, redirect, url_for, request
 @allowed_for(['admin'])
 def admin_home():
     session['currentPage'] = 'admin_home'
-    no_users = User.query.count()
+    count = {
+        'users'   : User.query.filter(User.role=='user').count(),
+        'premium' : User.query.filter(User.premium==True).count(),
+        'admins'  : User.query.filter(User.role=='admin').count(),
+        'creators': User.query.filter(User.role=='creator').count(),
+        'blacklist': User.query.filter(User.blacklist).count(),
+        'total_users'   : User.query.count(),
+        'songs'   : Song.query.count(),
+        'flagged_songs': Song.query.filter(Song.flagged==True).count(),
+        'albums'  : Album.query.count(),
+        'flagged_albums': Album.query.filter(Album.flagged==True).count(),
+        }
+    popular = Song.query.order_by(Song.play_count.asc()).limit(3)
     # show no of users, creators; no of songs, albums; top 3 trending song
-    return render_template('admin/home.html',no_users=no_users)
+    return render_template('admin/home.html',count=count,popular=popular)
 
 ##Premium Requests##
 @app.route('/admin/premium_requests/', defaults={'req_id': None, 'action': None}, methods=['GET', 'POST'])

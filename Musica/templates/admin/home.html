@@ -2,11 +2,73 @@
 {% block content %}
 
 <style>
-
+.heading div:nth-child(1) {
+    padding: 6px; height: 40px; align-items: center;
+    display: flex; justify-content: space-between; 
+}
+.main-body {
+    min-height: calc(100% - 40px);
+    padding: 20px 30px;
+    background-color: rgb(159, 146, 146);
+}
+.wide-bar {
+    width: 100%; height: max-content; padding: 30px; background-color: rgb(203, 203, 203);
+    display: flex; justify-content: space-evenly; border-radius: 9px; margin-bottom: 30px;
+}
+.sub-item {
+    display: flex; flex-direction: column;
+}
+.sub-item h3:nth-child(2) {
+    text-align: center;
+}
 </style>
 
-<div class="main-content">
-    
+<div class="heading">
+    <div>
+        <h1>Admin Dashboard</h1>
+        <a class="button" href="#"></a>
+    </div>
+</div>
+
+<div class="main-body">
+    <h2 style="padding-bottom: 3px;">Users details</h2>
+    <div class="wide-bar">
+        <div class="sub-item">
+            <h3>Total no of users</h3>
+            <h3>{{count['total_users']}}</h3>
+        </div>
+        <div class="sub-item">
+            <h3>Total users: {{count['users']}}</h3>
+            <h3>Premium: {{count['premium']}}, Basic: {{count['users']-count['premium']}}</h3>
+        </div>
+        <div class="sub-item">
+            <h3>Total creators: {{count['creators']}}</h3>
+            <h3>Blacklist: {{count['blacklist']}}</h3>
+        </div>
+        <div class="sub-item">
+            <h3>Total admin</h3>
+            <h3>{{count['admins']}}</h3>
+        </div>
+    </div>
+    <h2 style="padding-bottom: 3px;">Songs and albums details</h2>
+    <div class="wide-bar">
+        <div class="sub-item">
+            <h3>Total song uploads</h3>
+            <h3>{{count['songs']}}</h3>
+        </div>
+        <div class="sub-item">
+            <h3>Flagged songs</h3>
+            <h3>{{count['flagged_songs']}}</h3>
+        </div>
+        <div class="sub-item">
+            <h3>Total albums</h3>
+            <h3>{{count['albums']}}</h3>
+        </div>
+        <div class="sub-item">
+            <h3>Flagged albums</h3>
+            <h3>{{count['flagged_albums']}}</h3>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
