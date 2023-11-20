@@ -69,15 +69,44 @@
             <h3>{{count['flagged_albums']}}</h3>
         </div>
     </div>
+    <style>
+        .songs {
+            min-height: 30px; max-height: max-content; padding: 10px; background-color: rgb(230, 230, 230);
+        }
+        .song-item {
+            display: flex; align-items: center; justify-content: space-evenly;
+            background-color: white; padding: 6px; border-radius: 6px; margin: 3px 6px;
+        }
+        .song-cover-small, .song-cover-small img {
+            width: 60px; height: 60px; object-fit: cover;
+            border-radius: 10px;
+        }
+        .song-item .song-like, .song-item .song-like img {
+            width: 40px; height: 40px;
+        }
+        .song-item .song-title {
+            width: 30%;
+        }
+        .song-item .song-artist {
+            width: 30%;
+        }
+    </style>
     <div class="songs">
+        <h2 style="padding-bottom: 3px;">Top 3 most played songs</h2>
         {% if popular %}
             {% for song in popular %}
-                <a href="/songs/{{song.id}}">
-                    <h3>{{song.title}}</h3>
+                <a class="normal song-item" href="/songs/{{song.id}}">
+                    <h2>{{ loop.index }}</h1>
+                    <div class="song-cover-small">
+                        {% if song.cover %} <img src="{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}"> {% else %} <img src="{{url_for('static',filename='images/default_song.png')}}"> {% endif %}
+                    </div>
+                    <div class="song-title"><h3>{{song.title}}</h3></div>
+                    <div class="song-artist"><h3>{{song.artist}}</h3></div>
+                    <div class="song-like"><img src={% if has_user_liked(current_user, song) %}"{{url_for('static',filename='images/liked.png')}}"{% else %}"{{url_for('static',filename='images/not_liked.png')}}"{% endif %}></div>
                 </a>
             {% endfor %}
         {% else %}
-            <h2>No songs uploaded yet</h2>
+            <h3 style="padding-left: 6px;">No songs to show</h2>
         {% endif %}
     </div>
 </div>

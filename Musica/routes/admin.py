@@ -24,9 +24,9 @@ def admin_home():
         'albums'  : Album.query.count(),
         'flagged_albums': Album.query.filter(Album.flagged==True).count(),
         }
-    popular = Song.query.filter(Song.flagged==False).order_by(Song.play_count.desc()).limit(3)
+    popular = Song.query.filter(Song.flagged==False).order_by(Song.play_count.desc()).limit(3).all()
     # show no of users, creators; no of songs, albums; top 3 trending song
-    return render_template('admin/home.html',count=count,popular=popular)
+    return render_template('admin/home.html',count=count,popular=popular,has_user_liked=has_user_liked)
 
 ##Premium Requests##
 @app.route('/admin/premium_requests/', defaults={'req_id': None, 'action': None}, methods=['GET', 'POST'])
