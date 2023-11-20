@@ -73,10 +73,13 @@ def get_premium():
 def songs(song_id):
     song = Song.query.get(song_id)
     if request.method == 'GET' and song:
-        watched = Play.query.filter_by(user_id=current_user.id, song_id=song.id).first()
-        if not(watched): db.session.add(Play(user_id=current_user.id, song_id=song.id)); db.session.commit(); update_play_count(song)
-        if watched: db.session.delete(watched); db.session.commit(); db.session.add(Play(user_id=current_user.id, song_id=song.id)); db.session.commit()
-        return render_template('user/sub-temp/song.html',song=song,get_lyrics=get_lyrics,has_user_liked=has_user_liked)
+        if not song.flagged:
+            watched = Play.query.filter_by(user_id=current_user.id, song_id=song.id).first()
+            if not(watched): db.session.add(Play(user_id=current_user.id, song_id=song.id)); db.session.commit(); update_play_count(song)
+            if watched: db.session.delete(watched); db.session.commit(); db.session.add(Play(user_id=current_user.id, song_id=song.id)); db.session.commit()
+            return render_template('user/sub-temp/song.html',song=song,get_lyrics=get_lyrics,has_user_liked=has_user_liked)
+        else: flash('Song is flagged','info')
+    return redirect(url_for('home'))
 
 #rating
 @app.route('/songs/<int:song_id>/rate')

@@ -24,7 +24,7 @@ def admin_home():
         'albums'  : Album.query.count(),
         'flagged_albums': Album.query.filter(Album.flagged==True).count(),
         }
-    popular = Song.query.order_by(Song.play_count.asc()).limit(3)
+    popular = Song.query.filter(Song.flagged==False).order_by(Song.play_count.desc()).limit(3)
     # show no of users, creators; no of songs, albums; top 3 trending song
     return render_template('admin/home.html',count=count,popular=popular)
 

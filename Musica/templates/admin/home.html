@@ -69,6 +69,17 @@
             <h3>{{count['flagged_albums']}}</h3>
         </div>
     </div>
+    <div class="songs">
+        {% if popular %}
+            {% for song in popular %}
+                <a href="/songs/{{song.id}}">
+                    <h3>{{song.title}}</h3>
+                </a>
+            {% endfor %}
+        {% else %}
+            <h2>No songs uploaded yet</h2>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}
