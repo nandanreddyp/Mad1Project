@@ -50,28 +50,28 @@ add them in blacklist and approve or reject premium requests made by users.
 ### Built With
 
 * HTML & CSS and some Java Script
-* Flask
+* Flask,
 Flask is a micro web framework for Python that is designed to be lightweight, flexible, and
 easy to use.
-* Flask Sqlalchemy
+* Flask Sqlalchemy,
 Flask-SQLAlchemy is an extension for Flask that simplifies the integration of SQLAlchemy,
 it is a Object-Relational Mapping (ORM) library. SQLAlchemy provides a powerful and
 flexible way to interact with databases using Python.
-* Flask Migrate
+* Flask Migrate,
 Flask-Migrate is an extension that integrates the Alembic migration framework with Flask
 applications, providing a convenient way to handle database schema changes.
-* Flask Restful
+* Flask Restful,
 Flask-RESTful is an extension for Flask that adds support for quickly building REST APIs. It
 simplifies the process of creating web services by providing tools and abstractions to
 handle common tasks associated with RESTful APIs.
-* Flask Login
+* Flask Login,
 Flask-Login is an extension for Flask that provides user session management, including
 user authentication. It simplifies the process of managing user logins and sessions in Flask
 applications.
-* Bcrypt
+* Bcrypt,
 Bcrypt is a Python library, used for implementing Bcrypt hashing the passwords before
 storing them in a database to enhance security.
-* Mutagen
+* Mutagen,
 Mutagen is a Python library that provides a set of tools for working with audio files. In this
 project this is used to store song duration data.
 
@@ -84,11 +84,11 @@ project this is used to store song duration data.
 Set the root folder such that it includes Musica folder, requirements.txt, run.py.
 
 Create a virtual environment by running command 'python -m venv FOLDER_NAME_YOU_WANT'
+Enable the environment you have created by running 'FOLDER_NAME_YOU_GIVEN/scripts/activate'
 
 ### Prerequisites
 
-Prerequisits are mentioned in requirements.txt,
-
+Python and packages in requirements.txt
 
 ### Installation
 
