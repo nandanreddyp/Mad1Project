@@ -44,8 +44,9 @@ def upload():
         title = data.get('title'); artist = data.get('artist'); 
         language = data.get('language'); genre = data.get('genre'); 
         lyrics = data.get('lyrics').rstrip()
+        duration = song
         from Musica.functions import mp3_duration_cal, save_file
-        new_song = Song(user_id=current_user.id, title=title, duration=mp3_duration_cal(song), language=language, artist=artist, genre=genre)
+        new_song = Song(user_id=current_user.id, title=title, duration=mp3_duration_cal(duration), language=language, artist=artist, genre=genre)
         db.session.add(new_song); db.session.commit()
         filename = save_file('song',new_song.id, song); new_song.filename = filename; 
         if cover:

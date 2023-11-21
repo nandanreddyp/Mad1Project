@@ -25,7 +25,6 @@ def mp3_duration_cal(file_loc):
     from mutagen.mp3 import MP3
     audio = MP3(file_loc)
     audio_length = int(audio.info.length)
-    print(audio_length)
     hours = audio_length//3600
     audio_length %= 3600
     mins = audio_length//60
@@ -50,20 +49,23 @@ def create_upload_folders():
 
 
 def save_file(type, id, file):
-    import os; cwd = os.getcwd();
+    import os; cwd = os.getcwd()
     if type=='image/album':
+        file.seek(0)
         file_extension = os.path.splitext(file.filename)[-1]
         image_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','images','album_covers',image_name)
         file.save(file_path)
         return image_name
     elif type=='image/profile':
+        file.seek(0)
         file_extension = os.path.splitext(file.filename)[-1]
         image_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','images','profile_covers',image_name)
         file.save(file_path)
         return image_name
     elif type=='image/song':
+        file.seek(0)
         file_extension = os.path.splitext(file.filename)[-1]
         image_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','images','song_covers',image_name)
@@ -76,6 +78,7 @@ def save_file(type, id, file):
         file_to_write.close()
         return str(id)+'.txt'
     elif type=='song':
+        file.seek(0)
         file_extension = os.path.splitext(file.filename)[-1]
         song_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','songs',song_name)
