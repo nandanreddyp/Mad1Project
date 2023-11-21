@@ -76,7 +76,7 @@ def save_file(type, id, file):
         file_to_write.close()
         return str(id)+'.txt'
     elif type=='song':
-        file_extension = os.path.splitext(file.filename)[1]
+        file_extension = os.path.splitext(file.filename)[-1]
         song_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','songs',song_name)
         file.save(file_path)
