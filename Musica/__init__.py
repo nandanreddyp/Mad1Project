@@ -13,10 +13,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + database_path
 from .database.models import db
 db.init_app(app)
 
-# migrate database
-from flask_migrate import Migrate
-migrate_path = os.path.join(cwd,'Musica','database','migrate')
-migrate = Migrate(app, db, directory=migrate_path)
+# # migrate database
+# from flask_migrate import Migrate
+# migrate_path = os.path.join(cwd,'Musica','database','migrate')
+# migrate = Migrate(app, db, directory=migrate_path)
 
 
 # creating api endpoints

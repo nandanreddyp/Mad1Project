@@ -22,9 +22,8 @@ def password_check(hashed, input):
 
 # audio length calculator
 def mp3_duration_cal(file_loc):
-    from mutagen.mp3 import MP3
-    audio = MP3(file_loc)
-    audio_length = int(audio.info.length)
+    import soundfile
+    audio_length = int(soundfile.info(file_loc).duration)
     hours = audio_length//3600
     audio_length %= 3600
     mins = audio_length//60
