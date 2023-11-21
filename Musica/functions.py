@@ -52,19 +52,19 @@ def create_upload_folders():
 def save_file(type, id, file):
     import os; cwd = os.getcwd();
     if type=='image/album':
-        file_extension = os.path.splitext(file.filename)[1]
+        file_extension = os.path.splitext(file.filename)[-1]
         image_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','images','album_covers',image_name)
         file.save(file_path)
         return image_name
     elif type=='image/profile':
-        file_extension = os.path.splitext(file.filename)[1]
+        file_extension = os.path.splitext(file.filename)[-1]
         image_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','images','profile_covers',image_name)
         file.save(file_path)
         return image_name
     elif type=='image/song':
-        file_extension = os.path.splitext(file.filename)[1]
+        file_extension = os.path.splitext(file.filename)[-1]
         image_name = str(id)+file_extension
         file_path = os.path.join(cwd,'Musica','static','uploads','images','song_covers',image_name)
         file.save(file_path)
@@ -86,20 +86,35 @@ def save_file(type, id, file):
 def remove_file(type,file_name):
     import os; cwd = os.getcwd();
     if type=='image/album':
-        file_path = os.path.join(cwd,'Musica','static','uploads','images','album_covers',file_name)
-        os.remove(file_path)
+        try:
+            file_path = os.path.join(cwd,'Musica','static','uploads','images','album_covers',file_name)
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
     elif type=='image/profile':
-        file_path = os.path.join(cwd,'Musica','static','uploads','images','profile_covers',file_name)
-        os.remove(file_path)
+        try:
+            file_path = os.path.join(cwd,'Musica','static','uploads','images','profile_covers',file_name)
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
     elif type=='image/song':
-        file_path = os.path.join(cwd,'Musica','static','uploads','images','song_covers',file_name)
-        os.remove(file_path)
+        try:
+            file_path = os.path.join(cwd,'Musica','static','uploads','images','song_covers',file_name); 
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
     elif type=='lyrics':
-        file_path = os.path.join(cwd,'Musica','static','uploads','lyrics',file_name)
-        os.remove(file_path)
+        try:
+            file_path = os.path.join(cwd,'Musica','static','uploads','lyrics',file_name)
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
     elif type=='song':
-        file_path = os.path.join(cwd,'Musica','static','uploads','songs',file_name)
-        os.remove(file_path)
+        try:
+            file_path = os.path.join(cwd,'Musica','static','uploads','songs',file_name)
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
     return 
 
 def get_lyrics(file_name):

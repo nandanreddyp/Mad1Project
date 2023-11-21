@@ -43,7 +43,7 @@ def upload():
         song = files['song']; cover = files.get('cover')
         title = data.get('title'); artist = data.get('artist'); 
         language = data.get('language'); genre = data.get('genre'); 
-        lyrics = data.get('lyrics')
+        lyrics = data.get('lyrics').rstrip()
         from Musica.functions import mp3_duration_cal, save_file
         new_song = Song(user_id=current_user.id, title=title, duration=mp3_duration_cal(song), language=language, artist=artist, genre=genre)
         db.session.add(new_song); db.session.commit()
@@ -142,7 +142,7 @@ def upload_edit(song_id,way):
             else: lyrics = None
             return render_template('creator/sub-temp/song-update.html',song=song,lyrics=lyrics)
         elif request.method == 'POST':
-            data = request.form; files = request.files; song_file = files['song']; cover = files.get('cover'); lyrics = data.get('lyrics')
+            data = request.form; files = request.files; song_file = files['song']; cover = files.get('cover'); lyrics = data.get('lyrics').rstrip()
             song.title = data.get('title')
             song.artist = data.get('artist')
             song.language = data.get('language')
@@ -160,6 +160,8 @@ def upload_edit(song_id,way):
             if lyrics:
                 filename = save_file('lyrics',song.id,lyrics)
                 song.lyrics = filename
+            else:
+                if song.lyrics: remove_file('lyrics',song.lyrics); song.lyrics=None
             db.session.commit()
             flash('Song updated successfully','success')
         return redirect(f'/creator/uploads/{song_id}')
@@ -275,7 +277,6 @@ def album_edit(album_id,way):
 @not_in_blacklist
 def from_album_add_song(album_id,song_id,way):
     session['currentPage']='albums'
-    print(request.url_rule.endpoint)
     album = Album.query.get(album_id); song = Song.query.get(song_id)
     if album and not(song) and request.method=='GET':
         view = request.args.get('view',6,type=int)
@@ -311,7 +312,6 @@ def from_album_add_song(album_id,song_id,way):
             flash('Song already in album','error')
     elif album and song and request.method=='POST' and way=='remove':
         fromm = request.args.get('from',None)
-        print(fromm)
         if song in album.songs:
             album.songs.remove(song); db.session.commit()
             flash('Song removed from album','success')
