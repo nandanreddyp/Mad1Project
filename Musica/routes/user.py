@@ -71,7 +71,8 @@ def get_premium():
 @app.route('/songs/<int:song_id>')
 @login_required
 def songs(song_id):
-    song = Song.query.get(song_id)
+    song = db.session.get(Song, song_id)
+    # song = Song.query.get(song_id)
     if request.method == 'GET' and song:
         if not song.flagged:
             watched = Play.query.filter_by(user_id=current_user.id, song_id=song.id).first()
@@ -85,7 +86,8 @@ def songs(song_id):
 @app.route('/songs/<int:song_id>/rate')
 @login_required
 def rate(song_id):
-    song = Song.query.get(song_id)
+    song = db.session.get(Song, song_id)
+    # song = Song.query.get(song_id)
     if song and not(has_user_liked(current_user,song)):
         db.session.add(Rating(user_id=current_user.id, song_id=song.id)); db.session.commit()
     elif song and has_user_liked(current_user, song):
@@ -99,7 +101,8 @@ def rate(song_id):
 @app.route('/songs/<int:song_id>/<way>/playlists/<int:playlist_id>',methods=['GET','POST'])
 @login_required
 def from_song_add_playlist(song_id,way,playlist_id):
-    song = Song.query.get(song_id); playlist = Playlist.query.get(playlist_id)
+    song = db.session.get(Song, song_id); playlist = db.session.get(Playlist, playlist_id)
+    # song = Song.query.get(song_id); playlist = Playlist.query.get(playlist_id)
     if song and not(playlist) and request.method=='GET':
         playlists=Playlist.query.filter_by(user_id=current_user.id).order_by(Playlist.time_added.desc()).all()
         return render_template('user/sub-temp/song~add-rem.html',albums=playlists,song=song)
@@ -136,7 +139,8 @@ def from_song_add_playlist(song_id,way,playlist_id):
 @login_required
 def albums(album_id):
     session['currentPage'] = 'explore'
-    album = Album.query.get(album_id)
+    album = db.session.get(Album, album_id)
+    # album = Album.query.get(album_id)
     if request.method == 'GET' and album:
         current_ind = request.args.get('play',1,type=int)
         head = get_linked_list(album.songs)
@@ -169,7 +173,8 @@ def albums(album_id):
 @app.route('/albums/<int:album_id>/<way>/library')
 @login_required
 def album_to_library(album_id,way):
-    album = Album.query.get(album_id)
+    album = db.session.get(Album, album_id)
+    # album = Album.query.get(album_id)
     if album and way=='add':
         if album not in current_user.library.albums:
             current_user.library.albums.append(album); db.session.commit()
@@ -202,7 +207,8 @@ def create_playlist():
 @login_required
 def playlists(playlist_id):
     if request.method == 'GET' and playlist_id:
-        playlist = Playlist.query.get(playlist_id)
+        playlist = db.session.get(Playlist, playlist_id)
+        # playlist = Playlist.query.get(playlist_id)
         if playlist.user_id == current_user.id:
             current_ind = request.args.get('play',1,type=int)
             head = get_linked_list(playlist.songs)
@@ -224,7 +230,8 @@ def playlists(playlist_id):
 @app.route('/playlists/<int:playlist_id>/<method>',methods=['GET','POST'])
 @login_required
 def playlist_edit(playlist_id,method):
-    playlist = Playlist.query.get(playlist_id)
+    playlist = db.session.get(Playlist, playlist_id)
+    # playlist = Playlist.query.get(playlist_id)
     if playlist and method=='update' and playlist.user_id==current_user.id:
         if request.method == 'GET':
             return render_template('user/sub-temp/playlist-create.html',playlist=playlist)
@@ -245,7 +252,8 @@ def playlist_edit(playlist_id,method):
 @app.route('/playlists/<int:playlist_id>/<way>/songs/<int:song_id>',methods=['GET','POST'])
 @login_required
 def from_playlist_add_song(playlist_id,way,song_id):
-    playlist = Playlist.query.get(playlist_id); song = Song.query.get(song_id)
+    playlist = db.session.get(Playlist, playlist_id); song = db.session.get(Song, song_id)
+    # playlist = Playlist.query.get(playlist_id); song = Song.query.get(song_id)
     if way=='add' and playlist and song:
         if song not in playlist.songs:
             playlist.songs.append(song); db.session.commit()
@@ -340,7 +348,8 @@ def search():
 @login_required
 @premium_required
 def download(song_id):
-    song = Song.query.get(song_id)
+    song = db.session.get(Song, song_id)
+    # song = Song.query.get(song_id)
     file_path = get_song(song.filename)
     filename = song.title +'.'+ song.filename.split('.')[-1]
     return send_file(file_path,download_name=filename,as_attachment=True)

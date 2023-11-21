@@ -15,7 +15,8 @@ login_manager.login_message_category = "warning"
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    return db.session.get(User, user_id)
+    # return User.query.get(user_id)
 
 from .permissions import *
 
@@ -33,7 +34,8 @@ def home():
 def welcome():
     if request.method == 'POST':
         session['id'] = request.form['email']
-        exists = User.query.get(session['id'])
+        exists = db.session.get(User, session['id'])
+        # exists = User.query.get(session['id'])
         if exists:
             return redirect(url_for('login'))
         return redirect(url_for('signup'))
@@ -45,7 +47,8 @@ def signup():
     if request.method == 'POST':
         data = request.form
         session['id']=data['email']
-        if User.query.get(session['id']):
+        # if User.query.get(session['id']):
+        if db.session.get(User, session['id']):
             flash('User already exists','info')
             return redirect(url_for('login'))
         from Musica.functions import hash
@@ -68,7 +71,8 @@ def signup():
 def login():
     if request.method == 'POST':
         data = request.form
-        user = User.query.get(session['id'])
+        user = db.session.get(User, session['id'])
+        # user = User.query.get(session['id'])
         from Musica.functions import password_check
         if user and password_check(user.password, data['password']):
             flash('Successfully logged in to your account.','success')
@@ -76,8 +80,10 @@ def login():
             return redirect(url_for('home'))
         flash('Wrong password entered!','warning')
         return redirect(url_for('login'))
-    elif User.query.get(session.get('id')):
-        session['name']=User.query.get(session['id']).f_name
+    #elif User.query.get(session.get('id')):
+    elif db.session.get(User, session.get('id')):
+        # session['name']=User.query.get(session['id']).f_name
+        session['name']=db.session.get(User, session['id']).f_name
         return render_template('welcome/login.html',signup=True)
     return redirect(url_for('welcome'))
 

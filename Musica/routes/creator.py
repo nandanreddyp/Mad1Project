@@ -62,7 +62,8 @@ def upload():
 @not_in_blacklist
 def all_uploads(song_id):
     session['currentPage']='uploads'
-    song = Song.query.get(song_id)
+    song = db.session.get(Song, song_id)
+    # song = Song.query.get(song_id)
     if request.method == 'GET' and song:
         if song.user_id == current_user.id:
             if song.lyrics:
@@ -105,7 +106,8 @@ def all_uploads(song_id):
 def albums_creator(album_id):
     session['currentPage']='albums'
     if request.method == 'GET' and album_id:
-        album = Album.query.get(album_id)
+        album = db.session.get(Album, album_id)
+        # album = Album.query.get(album_id)
         if album and album.user_id == current_user.id:
             return render_template('creator/sub-temp/album.html',album=album)
         else: flash('Not your album','error')
@@ -135,7 +137,8 @@ def albums_creator(album_id):
 @allowed_for(['creator'])
 @not_in_blacklist
 def upload_edit(song_id,way):
-    song = Song.query.get(song_id)
+    song = db.session.get(Song, song_id)
+    # song = Song.query.get(song_id)
     if way == 'update' and song:
         if request.method == 'GET':
             if song.lyrics: lyrics = get_lyrics(song.lyrics)
@@ -184,7 +187,8 @@ def upload_edit(song_id,way):
 @not_in_blacklist
 def from_song_add_album(song_id,album_id,way):
     session['currentPage']='uploads'
-    song = Song.query.get(song_id); album = Album.query.get(album_id)
+    song = db.session.get(Song, song_id); album = db.session.get(Album, album_id)
+    # song = Song.query.get(song_id); album = Album.query.get(album_id)
     if song and not(album) and request.method=='GET':
         albums = Album.query.filter_by(user_id=current_user.id).order_by(Album.time_added.desc()).all()
         return render_template('creator/sub-temp/song~add-rem.html',song=song,albums=albums)
@@ -242,7 +246,8 @@ def create_album():
 @allowed_for(['creator'])
 @not_in_blacklist
 def album_edit(album_id,way):
-    album = Album.query.get(album_id)
+    album = db.session.get(Album, album_id)
+    # album = Album.query.get(album_id)
     if way == 'update':
         if request.method == 'GET' and album:
             return render_template('creator/sub-temp/album-update.html',album=album)
@@ -277,7 +282,8 @@ def album_edit(album_id,way):
 @not_in_blacklist
 def from_album_add_song(album_id,song_id,way):
     session['currentPage']='albums'
-    album = Album.query.get(album_id); song = Song.query.get(song_id)
+    album = db.session.get(Album, album_id); song = db.session.get(Song, song_id)
+    # album = Album.query.get(album_id); song = Song.query.get(song_id)
     if album and not(song) and request.method=='GET':
         view = request.args.get('view',6,type=int)
         songs = Song.query.filter_by(user_id=current_user.id).order_by(Song.time_added.desc()).paginate(page=1, per_page=view) 

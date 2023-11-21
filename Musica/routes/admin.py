@@ -34,12 +34,14 @@ def admin_home():
 @allowed_for(['admin'])
 def premium_requests(req_id,action):
     session['currentPage'] = 'premium_req'
-    req = PremiumReq.query.get(req_id)
+    req = db.session.get(PremiumReq, req_id)
+    # req = PremiumReq.query.get(req_id)
     if request.method=='GET' and not(action) and not(req_id):
         requests = PremiumReq.query.order_by(PremiumReq.time_added.desc()).all()
         return render_template('admin/premium_req.html',requests=requests)
     elif req and action:
-        user = User.query.get(req.user_id)
+        user = db.session.get(User, req.user_id)
+        # user = User.query.get(req.user_id)
         if action == 'accept':
             user.premium = True; db.session.delete(req)
             db.session.commit()
@@ -71,13 +73,16 @@ def flag(category,item_id,action):
     elif request.method == 'GET' and request.args.get('type') and request.args.get('id'):
         item_type = request.args.get('type'); item_id = request.args.get('id')
         if item_type=='song':
-            song = Song.query.get(item_id)
+            song = db.session.get(Song, item_id)
+            # song = Song.query.get(item_id)
             return render_template('admin/flag.html',filter=True,result=song)
         elif item_type=='album':
-            album = Album.query.get(item_id)
+            album = db.session.get(Album, item_id)
+            # album = Album.query.get(item_id)
             return render_template('admin/flag.html',filter=True,result=album)
     if category == 'song':
-        song = Song.query.get(item_id)
+        song = db.session.get(Song, item_id)
+        # song = Song.query.get(item_id)
         if action == 'flag':
             song.flagged = True
             flash('Flagged song','success')
@@ -95,7 +100,8 @@ def flag(category,item_id,action):
         db.session.commit()
         return redirect(f'/admin/flag?type=song&id={item_id}')
     elif category == 'album':
-        album = Album.query.get(item_id)
+        album = db.session.get(Album, item_id)
+        # album = Album.query.get(item_id)
         if action == 'flag':
             album.flagged = True
             flash('Flagged album','success')
@@ -119,14 +125,16 @@ def blacklist(way):
     if not(way) and not(request.args.get('user_id')):
         return render_template('admin/creator_blacklist.html')
     elif request.method == 'GET' and request.args.get('user_id') and not(way):
-        user = User.query.get(unquote(request.args.get('user_id')))
+        user = db.session.get(User, unquote(request.args.get('user_id')))
+        # user = User.query.get(unquote(request.args.get('user_id')))
         return render_template('admin/creator_blacklist.html',creator=user,filter=True)
     elif not(request.args.get('user_id')) and way:
         if way=='view':
             creators = Blacklist.query.order_by(Blacklist.time_added.desc()).all()
             return render_template('admin/sub-temp/blacklist.html',creators=creators)
     elif request.method == 'GET' and request.args.get('user_id') and way:
-        user = User.query.get(unquote(request.args.get('user_id')))
+        user = db.session.get(User, unquote(request.args.get('user_id')))
+        # user = User.query.get(unquote(request.args.get('user_id')))
         if way == 'add':
             db.session.add(Blacklist(creator_id=user.id)); db.session.commit()
         elif way == 'remove':

@@ -1,11 +1,11 @@
 # create admin
 def create_admin():
     from Musica.database.models import db, User, Library
-    user = User(id='admin@musica',password=hash('12345678'),f_name='Admin',l_name='',role='admin')
-    db.session.add(user)
-    db.session.add(Library(user_id=user.id))
-    db.session.commit()
-    print('admin created')
+    user = db.session.get(User, 'admin@musica')
+    if not user:
+        user = User(id='admin@musica',password=hash('12345678'),f_name='Admin',l_name='',role='admin')
+        db.session.add(user); db.session.add(Library(user_id=user.id)); db.session.commit()
+        print('admin created')
     return ''
 
 # password hashing
