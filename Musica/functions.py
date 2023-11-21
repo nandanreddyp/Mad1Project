@@ -92,33 +92,33 @@ def remove_file(type,file_name):
         try:
             file_path = os.path.join(cwd,'Musica','static','uploads','images','album_covers',file_name)
             os.remove(file_path)
-        except FileNotFoundError:
+        except Exception:
             pass
     elif type=='image/profile':
         try:
             file_path = os.path.join(cwd,'Musica','static','uploads','images','profile_covers',file_name)
             os.remove(file_path)
-        except FileNotFoundError:
+        except Exception:
             pass
     elif type=='image/song':
         try:
             file_path = os.path.join(cwd,'Musica','static','uploads','images','song_covers',file_name); 
             os.remove(file_path)
-        except FileNotFoundError:
+        except Exception:
             pass
     elif type=='lyrics':
         try:
             file_path = os.path.join(cwd,'Musica','static','uploads','lyrics',file_name)
             os.remove(file_path)
-        except FileNotFoundError:
+        except Exception:
             pass
     elif type=='song':
         try:
             file_path = os.path.join(cwd,'Musica','static','uploads','songs',file_name)
             os.remove(file_path)
-        except FileNotFoundError:
+        except Exception:
             pass
-    return 
+    return ''
 
 def get_lyrics(file_name):
     import os; cwd = os.getcwd();
