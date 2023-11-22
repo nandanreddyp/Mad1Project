@@ -6,7 +6,12 @@
 <div class="parentcenter">
     <h1 style="text-align: center; margin: 10px;">Become creator, and upload your songs.</h1>
     <form class="form" action="/get_creator_role" method="post">
-        <div class="inputCheck"><input type="checkbox" required><label>I agree to all conditions and want to become a creator.</label></div>
+        <h1 style="text-align: center;">Terms and conditions</h1>
+        <ul>
+            <li>Upload those songs which doesn't violate community.</li>
+            <li>Any violation can lead to flagging created content or removal by admins.</li>
+        </ul>
+        <div class="inputCheck" style="gap: 20px;"><input name="check" type="checkbox" required><label for="check">I agree to all conditions and want to become a creator.</label></div>
         <input type="submit" value="Get creator role">
     </form>
 </div>
