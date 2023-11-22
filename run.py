@@ -6,7 +6,7 @@ from Musica.functions import create_upload_folders, create_admin
 if __name__ == "__main__":
     create_upload_folders()
     db.create_all()
-    create_admin()
+    create_admin() # Admin; id='admin@musica' password='12345678'
     app.run(debug=True)
 
 # # run falsk on local network
