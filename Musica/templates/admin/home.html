@@ -34,19 +34,19 @@
     <h2 style="padding-bottom: 3px;">Users details</h2>
     <div class="wide-bar">
         <div class="sub-item">
-            <h3>Total no of users</h3>
-            <h3>{{count['total_users']}}</h3>
+            <h3>No of all users: {{count['total_users']}}</h3>
+            <h3>Premium: {{count['premium']}}, Basic: {{count['basic']}}</h3>
         </div>
         <div class="sub-item">
-            <h3>Total users: {{count['users']}}</h3>
-            <h3>Premium: {{count['premium']}}, Basic: {{count['users']-count['premium']}}</h3>
+            <h3>Total user roles</h3>
+            <h3>{{count['users']}}</h3>
         </div>
         <div class="sub-item">
             <h3>Total creators: {{count['creators']}}</h3>
-            <h3>Blacklist: {{count['blacklist']}}</h3>
+            <h3>Blacklisted: {{count['blacklist']}}</h3>
         </div>
         <div class="sub-item">
-            <h3>Total admin</h3>
+            <h3>Total admins</h3>
             <h3>{{count['admins']}}</h3>
         </div>
     </div>

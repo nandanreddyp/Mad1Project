@@ -15,6 +15,7 @@ def admin_home():
     count = {
         'users'   : User.query.filter(User.role=='user').count(),
         'premium' : User.query.filter(User.premium==True).count(),
+        'basic'   : User.query.filter(User.premium==False).count(),
         'admins'  : User.query.filter(User.role=='admin').count(),
         'creators': User.query.filter(User.role=='creator').count(),
         'blacklist': User.query.filter(User.blacklist).count(),
