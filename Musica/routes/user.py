@@ -213,12 +213,13 @@ def playlists(playlist_id):
         if playlist.user_id == current_user.id:
             current_ind = request.args.get('play',1,type=int)
             head = get_linked_list(playlist.songs)
-            if current_ind==1 or not(current_ind in range(len(playlist.songs)+1)): current=head
+            if current_ind==1 or not(current_ind in range(1,len(playlist.songs)+1)): current=head
             else:
                 for i in range(len(playlist.songs)):
                     current = head.next
-                    if current_ind == i+1:
+                    if current_ind == i+2:
                         break
+                    head = head.next
             return render_template('user/sub-temp/playlist.html',album=playlist,current=current,get_lyrics=get_lyrics,has_user_liked=has_user_liked)
         return redirect(url_for('creator_home'))
     elif request.method == 'POST':
