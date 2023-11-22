@@ -221,7 +221,7 @@ def playlists(playlist_id):
                         break
                     head = head.next
             return render_template('user/sub-temp/playlist.html',album=playlist,current=current,get_lyrics=get_lyrics,has_user_liked=has_user_liked)
-        return redirect(url_for('creator_home'))
+        return redirect(url_for('home'))
     elif request.method == 'POST':
         # return filtered results
         pass

@@ -95,7 +95,7 @@
         <div style="height: 100%; padding-top: 3px; padding-bottom: 60px; overflow: auto; border-radius: 9px; border: 1px solid black;">
         {% if album.songs %}
             {% for song in album.songs %}
-                <a style="height: 60px; width: 98%; display: flex; align-items: center; padding: 3px 6px; background-color: rgb(255, 212, 212); margin: 3px; border-radius: 9px; {% if current.song.id == song.id %}background-color: red; color: white;{% else %} border: 1px solid black;{% endif %}" class="normal" href="/albums/{{album.id}}?play={{loop.index}}">
+                <a style="height: 60px; width: 98%; display: flex; align-items: center; padding: 3px 6px; background-color: rgb(255, 212, 212); margin: 3px; border-radius: 9px; {% if current.song.id == song.id %}background-color: red; color: white;{% else %} border: 1px solid black;{% endif %}" class="normal" href="/playlists/{{album.id}}?play={{loop.index}}">
                     <div>{{loop.index}}</div>
                     <img class="song-cover" style="height: 60px;" src="{% if song.cover %}{{url_for('static',filename='uploads/images/song_covers/')}}{{song.cover}}{% else %}{{url_for('static',filename='images/default_song.png')}}{% endif %}">
                     <div style="width:90%; display: flex; flex-direction: row; justify-content: space-between;">
